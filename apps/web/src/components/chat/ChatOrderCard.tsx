@@ -3,7 +3,11 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ORDER_STATUS_SEQUENCE, type Locale, type Order } from '@attieke-chat/shared';
+import {
+  ORDER_STATUS_SEQUENCE,
+  type Locale,
+  type Order,
+} from '@attieke-chat/shared';
 import type { ChatDictionary, CommonDictionary } from '@/lib/i18n';
 import { formatDateTime, formatPriceYuan } from '@/lib/i18n';
 
@@ -30,53 +34,53 @@ export function ChatOrderCard({
   const isDelivered = order.status === 'delivered';
 
   return (
-    <div className="w-full max-w-md space-y-3">
-      {/* Carte 1 : Détails de la commande (fidèle à image-2.png) */}
-      <div className="overflow-hidden rounded-2xl border border-brand-ink/10 bg-white p-4 text-brand-ink shadow-sm">
-        <div className="flex items-center justify-between border-b border-brand-ink/10 pb-3">
+    <div className="w-full max-w-md space-y-2.5">
+      {/* Carte 1 : Détails de la commande (bulle spéciale même famille visuelle) */}
+      <div className="overflow-hidden rounded-wa-bubble border border-wa-border bg-wa-bubble-in p-3.5 text-wa-text-primary shadow-wa-bubble">
+        <div className="flex items-center justify-between border-b border-wa-border pb-2.5">
           <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-green text-xs text-white">
+            <span className="flex h-7 w-7 items-center justify-center rounded-wa-bubble bg-wa-header text-wa-meta text-white">
               📋
             </span>
-            <h3 className="text-sm font-extrabold text-brand-ink sm:text-base">
+            <h3 className="text-wa-contact font-medium text-wa-text-primary">
               {dict.title}
             </h3>
           </div>
-          <span className="rounded-full bg-brand-green-soft px-2.5 py-0.5 text-[11px] font-extrabold text-brand-green">
+          <span className="rounded-full bg-wa-accent/15 px-2.5 py-0.5 text-wa-meta font-semibold text-wa-dark-green dark:text-wa-accent">
             {statusDict[order.status]}
           </span>
         </div>
 
         {/* Liste des produits commandés */}
-        <ul className="divide-y divide-brand-ink/10 py-2">
+        <ul className="divide-y divide-wa-border py-1.5">
           {order.items.map((item) => (
             <li
               key={`${order.id}-${item.productId}`}
-              className="flex items-center justify-between gap-3 py-2.5"
+              className="flex items-center justify-between gap-3 py-2"
             >
-              <div className="flex items-center gap-3 min-w-0">
-                <div className="relative h-14 w-16 shrink-0 overflow-hidden rounded-xl bg-brand-cream-subtle">
+              <div className="flex min-w-0 items-center gap-2.5">
+                <div className="relative h-12 w-14 shrink-0 overflow-hidden rounded-wa-bubble bg-wa-composer">
                   <Image
                     src={item.productImage}
                     alt={item.productName[locale]}
                     fill
-                    sizes="64px"
+                    sizes="56px"
                     className="object-cover"
                   />
                 </div>
                 <div className="min-w-0">
-                  <p className="truncate text-xs font-extrabold text-brand-ink sm:text-sm">
+                  <p className="truncate text-wa-msg font-medium text-wa-text-primary">
                     {item.productName[locale]}
                   </p>
-                  <p className="text-[11px] text-brand-ink-muted">
+                  <p className="text-wa-meta text-wa-text-secondary">
                     {item.weightKg} kg
                   </p>
-                  <p className="text-xs font-extrabold text-brand-green">
+                  <p className="text-wa-preview font-semibold text-wa-dark-green dark:text-wa-accent">
                     {formatPriceYuan(item.unitPriceYuan, locale)}
                   </p>
                 </div>
               </div>
-              <span className="shrink-0 text-xs font-extrabold text-brand-ink">
+              <span className="shrink-0 text-wa-preview font-semibold text-wa-text-primary">
                 × {item.quantity}
               </span>
             </li>
@@ -84,50 +88,52 @@ export function ChatOrderCard({
         </ul>
 
         {/* Totaux */}
-        <div className="space-y-1.5 border-t border-brand-ink/10 pt-3 text-xs">
-          <div className="flex justify-between text-brand-ink-muted">
+        <div className="space-y-1 border-t border-wa-border pt-2.5 text-wa-preview">
+          <div className="flex justify-between text-wa-text-secondary">
             <span>{dict.subtotalLabel}</span>
-            <span className="font-bold text-brand-ink">
+            <span className="font-medium text-wa-text-primary">
               {formatPriceYuan(order.subtotalYuan, locale)}
             </span>
           </div>
-          <div className="flex justify-between text-brand-ink-muted">
+          <div className="flex justify-between text-wa-text-secondary">
             <span>{dict.shippingFeeLabel}</span>
-            <span className="font-bold text-brand-ink">
+            <span className="font-medium text-wa-text-primary">
               {formatPriceYuan(order.shippingFeeYuan, locale)}
             </span>
           </div>
-          <div className="mt-2 flex items-center justify-between rounded-xl bg-brand-green-soft/65 px-3 py-2 text-sm font-extrabold text-brand-green">
+          <div className="mt-1.5 flex items-center justify-between rounded-wa-bubble bg-wa-accent/12 px-3 py-1.5 text-wa-msg font-semibold text-wa-dark-green dark:text-wa-accent">
             <span>{dict.totalLabel}</span>
-            <span className="text-base">
+            <span className="text-wa-contact">
               {formatPriceYuan(order.totalYuan, locale)}
             </span>
           </div>
         </div>
 
         {/* Adresse de livraison en Chine */}
-        <div className="mt-3 rounded-xl bg-brand-cream/70 p-3 text-xs">
-          <p className="flex items-center gap-1.5 font-extrabold text-brand-green">
+        <div className="mt-2.5 rounded-wa-bubble bg-wa-composer p-2.5 text-wa-meta">
+          <p className="flex items-center gap-1.5 font-semibold text-wa-dark-green dark:text-wa-accent">
             <span aria-hidden="true">📍</span>
             <span>{dict.shippingAddressTitle}</span>
           </p>
-          <p className="mt-1 font-medium text-brand-ink leading-relaxed">
+          <p className="mt-0.5 text-wa-preview text-wa-text-primary">
             {order.shippingAddress.province} {order.shippingAddress.city}{' '}
-            {order.shippingAddress.district} {order.shippingAddress.streetAddress}
+            {order.shippingAddress.district}{' '}
+            {order.shippingAddress.streetAddress}
           </p>
-          <p className="mt-0.5 text-brand-ink-muted">
-            {order.shippingAddress.recipientName} · {order.shippingAddress.phone}
+          <p className="mt-0.5 text-wa-text-secondary">
+            {order.shippingAddress.recipientName} ·{' '}
+            {order.shippingAddress.phone}
           </p>
         </div>
 
-        {/* Bouton Confirmer la commande ou Simuler l'étape suivante */}
-        <div className="mt-3.5 space-y-2">
+        {/* Bouton Confirmer la commande (Jaune doré #F2B705) ou Simuler l'étape suivante */}
+        <div className="mt-3 space-y-2">
           {order.status === 'pending' ? (
             <button
               type="button"
               disabled={isBusy}
               onClick={() => void onConfirmOrder(order.id)}
-              className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-brand-green px-4 py-2.5 text-xs font-extrabold text-white shadow-sm transition-colors hover:bg-brand-green-dark disabled:opacity-60 sm:text-sm"
+              className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-wa-bubble bg-wa-commerce px-4 py-2 text-wa-preview font-semibold text-wa-commerce-text shadow-wa-bubble transition-colors duration-fast hover:bg-wa-commerce-hover disabled:opacity-60"
             >
               <span aria-hidden="true">✓</span>
               <span>
@@ -141,7 +147,7 @@ export function ChatOrderCard({
                   type="button"
                   disabled={isBusy}
                   onClick={() => void onAdvanceStep(order.id)}
-                  className="flex min-h-[40px] flex-1 items-center justify-center gap-1.5 rounded-xl border border-brand-ink bg-brand-gold px-3 py-2 text-xs font-extrabold text-brand-ink transition-colors hover:bg-brand-gold-hover disabled:opacity-60"
+                  className="flex min-h-[44px] flex-1 items-center justify-center gap-1.5 rounded-wa-bubble bg-wa-accent px-3 py-2 text-wa-preview font-semibold text-white transition-colors duration-fast hover:opacity-95 disabled:opacity-60"
                 >
                   <span aria-hidden="true">🚚</span>
                   <span>{dict.advanceStepButton}</span>
@@ -149,7 +155,7 @@ export function ChatOrderCard({
               )}
               <Link
                 href={`/${locale}/orders`}
-                className="flex min-h-[40px] items-center justify-center rounded-xl border border-brand-ink/15 bg-brand-cream px-3 py-2 text-xs font-bold text-brand-ink hover:bg-brand-green-soft"
+                className="flex min-h-[44px] items-center justify-center rounded-wa-bubble border border-wa-border bg-wa-composer px-3 py-2 text-wa-preview font-medium text-wa-text-primary hover:bg-wa-border/60"
               >
                 {dict.viewOrdersLink} →
               </Link>
@@ -158,21 +164,21 @@ export function ChatOrderCard({
         </div>
       </div>
 
-      {/* Carte 2 : Frise de suivi des 7 étapes dans le chat (fidèle à image-2.png) */}
-      <div className="overflow-hidden rounded-2xl border border-brand-ink/10 bg-white p-4 text-brand-ink shadow-sm">
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-brand-ink/10 pb-2.5">
-          <div className="flex items-center gap-2">
+      {/* Carte 2 : Frise de suivi des 7 étapes dans le chat */}
+      <div className="overflow-hidden rounded-wa-bubble border border-wa-border bg-wa-bubble-in p-3.5 text-wa-text-primary shadow-wa-bubble">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-wa-border pb-2">
+          <div className="flex items-center gap-1.5">
             <span aria-hidden="true">🚚</span>
-            <h4 className="text-xs font-extrabold text-brand-ink sm:text-sm">
+            <h4 className="text-wa-preview font-semibold text-wa-text-primary">
               {dict.trackingTitle}
             </h4>
           </div>
-          <span className="text-[10px] font-medium text-brand-ink-muted">
+          <span className="text-wa-meta text-wa-text-secondary">
             {dict.orderNumberLabel}: {order.orderNumber}
           </span>
         </div>
 
-        <ol className="mt-3 space-y-2.5">
+        <ol className="mt-2.5 space-y-2">
           {order.timeline.map((event, idx) => {
             const isStepCompleted = idx < currentStepIdx || isDelivered;
             const isStepCurrent = idx === currentStepIdx && !isDelivered;
@@ -180,47 +186,47 @@ export function ChatOrderCard({
             return (
               <li
                 key={event.id}
-                className={`flex items-start justify-between gap-2.5 rounded-xl px-2.5 py-1.5 text-xs ${
-                  isStepCurrent ? 'bg-brand-gold-light' : ''
+                className={`flex items-start justify-between gap-2 rounded-wa-bubble px-2 py-1 text-wa-meta ${
+                  isStepCurrent ? 'bg-wa-system-bg text-wa-system-text' : ''
                 }`}
               >
-                <div className="flex items-start gap-2.5 min-w-0">
+                <div className="flex min-w-0 items-start gap-2">
                   <span
-                    className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-extrabold ${
+                    className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-wa-meta font-semibold ${
                       isStepCompleted
-                        ? 'bg-brand-green text-white'
+                        ? 'bg-wa-accent text-white'
                         : isStepCurrent
-                        ? 'bg-brand-gold text-brand-ink'
-                        : 'bg-brand-cream-subtle text-brand-ink-muted'
+                        ? 'bg-wa-header text-white'
+                        : 'bg-wa-composer text-wa-text-secondary'
                     }`}
                   >
                     {isStepCompleted ? '✓' : idx + 1}
                   </span>
                   <div className="min-w-0">
                     <p
-                      className={`font-bold ${
+                      className={`text-wa-preview ${
                         isStepCurrent
-                          ? 'text-amber-900'
+                          ? 'font-semibold text-wa-text-primary'
                           : isStepCompleted
-                          ? 'text-brand-ink'
-                          : 'text-brand-ink-muted'
+                          ? 'font-medium text-wa-text-primary'
+                          : 'text-wa-text-secondary'
                       }`}
                     >
                       {idx + 1}. {statusDict[event.status]}
                     </p>
-                    <p className="text-[10px] text-brand-ink-muted truncate">
+                    <p className="truncate text-wa-meta text-wa-text-secondary">
                       {formatDateTime(event.timestamp, locale)}
                     </p>
                   </div>
                 </div>
 
                 <span
-                  className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-extrabold ${
+                  className={`shrink-0 rounded-full px-2 py-0.5 text-wa-meta font-medium ${
                     isStepCompleted
-                      ? 'text-brand-green'
+                      ? 'text-wa-accent'
                       : isStepCurrent
-                      ? 'bg-brand-gold/30 text-amber-900'
-                      : 'text-brand-ink-muted'
+                      ? 'font-semibold text-wa-dark-green dark:text-wa-accent'
+                      : 'text-wa-text-secondary'
                   }`}
                 >
                   {isStepCompleted
@@ -233,11 +239,6 @@ export function ChatOrderCard({
             );
           })}
         </ol>
-
-        <div className="mt-3 flex items-center gap-2 rounded-xl bg-brand-green-soft/60 px-3 py-2 text-[11px] font-semibold text-brand-green">
-          <span aria-hidden="true">ℹ️</span>
-          <span>{dict.customsBanner}</span>
-        </div>
       </div>
     </div>
   );

@@ -2,52 +2,197 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Vert profond principal (esprit WhatsApp Business / Côte d'Ivoire) - #0F4C3A */
-  --color-brand-green: 15 76 58;
-  /* Vert très sombre / charbon WhatsApp (#111B21 / #0A2E23) */
-  --color-brand-green-dark: 10 46 35;
-  /* Vert vif WhatsApp accent (#1DA851) */
-  --color-brand-green-light: 29 168 81;
-  /* Vert menthe bulle WhatsApp (#D9FDD3) */
-  --color-brand-green-soft: 217 253 211;
+/* ==========================================================================
+ * TOKENS DE DESIGN, THÈME CLAIR / SOMBRE & TYPOGRAPHIE
+ * Source de vérité CSS synchronisée avec `src/styles/theme.ts`.
+ * Canaux RGB ("R G B") pour supporter à la fois les couleurs pleines et les
+ * modificateurs d'opacité Tailwind (`bg-wa-accent/15`, `bg-wa-panel/90`, etc.).
+ * ========================================================================== */
 
-  /* Jaune doré (accent, boutons d'action) - #F4B41A */
-  --color-brand-gold: 244 180 26;
-  /* Jaune doré soutenu (hover) - #E09E07 */
-  --color-brand-gold-hover: 224 158 7;
-  /* Jaune doré très clair - #FEF6E0 */
-  --color-brand-gold-light: 254 246 224;
+:root,
+[data-theme='light'] {
+  /* Palette Thème Clair */
+  --wa-header-bg: 0 128 105;          /* #008069 — Barre d'en-tête / actions primaires */
+  --wa-accent-green: 37 211 102;      /* #25D366 — Vert d'accent (badges, envoyer, FAB) */
+  --wa-dark-green: 7 94 84;           /* #075E54 — Vert foncé (statuts, liens d'en-tête) */
+  --wa-chat-bg: 239 234 226;          /* #EFEAE2 — Fond de conversation */
+  --wa-bubble-out: 217 253 211;       /* #D9FDD3 — Bulle envoyée (client) */
+  --wa-bubble-in: 255 255 255;        /* #FFFFFF — Bulle reçue (vendeur) */
+  --wa-text-primary: 17 27 33;        /* #111B21 — Texte principal */
+  --wa-text-secondary: 102 119 129;   /* #667781 — Texte secondaire (heure, sous-titres) */
+  --wa-read-tick: 83 189 235;         /* #53BDEB — Coches "lu" */
+  --wa-panel-bg: 255 255 255;         /* #FFFFFF — Fond des panneaux et listes */
+  --wa-app-bg: 255 255 255;           /* #FFFFFF — Fond général de l'application */
+  --wa-border: 233 237 239;           /* #E9EDEF — Séparateurs fins */
+  --wa-composer-bg: 240 242 245;      /* #F0F2F5 — Fond barre de saisie & recherche pilule */
+  --wa-system-bg: 255 238 205;        /* #FFEECD — Bulle de message système (date, statut) */
+  --wa-system-text: 84 101 111;       /* #54656F — Texte de bulle système */
+  --wa-nav-pill-bg: 216 253 210;      /* #D8FDD2 — Capsule d'onglet actif en bas */
 
-  /* Blanc cassé signature WhatsApp.com (#FCF5EB) */
-  --color-brand-cream: 252 245 235;
-  /* Blanc pur carte (#FFFFFF) */
-  --color-brand-cream-card: 255 255 255;
-  /* Fond papier-peint chat WhatsApp (#EFEAE2) */
-  --color-brand-cream-subtle: 239 234 226;
+  /* Accent de marque exclusif pour les boutons de commerce (#F2B705) */
+  --wa-commerce-gold: 242 183 5;      /* #F2B705 */
+  --wa-commerce-gold-hover: 217 164 4;/* #D9A404 */
+  --wa-commerce-gold-text: 17 27 33;  /* #111B21 */
 
-  /* Encre principale WhatsApp.com (#111B21) */
-  --color-brand-ink: 17 27 33;
-  /* Texte secondaire accessible (#4A555C) */
-  --color-brand-ink-muted: 74 85 92;
+  /* Échelle typographique */
+  --wa-font-sans: "Segoe UI", "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", system-ui,
+    sans-serif;
+  --wa-fs-message: 14.2px;
+  --wa-lh-message: 19px;
+  --wa-fs-meta: 11px;
+  --wa-lh-meta: 15px;
+  --wa-fs-contact: 16px;
+  --wa-lh-contact: 21px;
+  --wa-fs-preview: 14px;
+  --wa-lh-preview: 19px;
+  --wa-fs-title: 19px;
+  --wa-lh-title: 24px;
+  --wa-fs-body: 15px;
+  --wa-lh-body: 1.45;
 }
 
-html {
-  scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
+.dark,
+[data-theme='dark'] {
+  /* Palette Thème Sombre (style natif WhatsApp Android & iOS) */
+  --wa-header-bg: 11 20 26;           /* #0B141A — En-tête sombre unifié */
+  --wa-accent-green: 37 211 102;      /* #25D366 — Vert vif (badges, heure non lue, FAB) */
+  --wa-dark-green: 0 168 132;         /* #00A884 — Vert secondaire */
+  --wa-chat-bg: 11 20 26;             /* #0B141A — Fond de conversation */
+  --wa-bubble-out: 0 92 75;           /* #005C4B — Bulle envoyée (client) */
+  --wa-bubble-in: 32 44 51;           /* #202C33 — Bulle reçue (vendeur) */
+  --wa-text-primary: 233 237 239;     /* #E9EDEF — Texte principal */
+  --wa-text-secondary: 134 150 160;   /* #8696A0 — Texte secondaire */
+  --wa-read-tick: 83 189 235;         /* #53BDEB — Coches "lu" */
+  --wa-panel-bg: 11 20 26;            /* #0B141A — Fond des listes et panneaux */
+  --wa-app-bg: 11 20 26;              /* #0B141A — Fond général */
+  --wa-border: 31 44 52;              /* #1F2C34 — Séparateurs fins en thème sombre */
+  --wa-composer-bg: 32 44 51;         /* #202C33 — Barre de recherche pilule & barre de saisie */
+  --wa-system-bg: 24 34 41;           /* #182229 — Bulle système en thème sombre */
+  --wa-system-text: 134 150 160;      /* #8696A0 — Texte bulle système en thème sombre */
+  --wa-nav-pill-bg: 16 54 41;         /* #103629 — Capsule d'onglet actif en bas */
+
+  /* Accent de marque exclusif pour les boutons de commerce (#F2B705) */
+  --wa-commerce-gold: 242 183 5;      /* #F2B705 */
+  --wa-commerce-gold-hover: 217 164 4;/* #D9A404 */
+  --wa-commerce-gold-text: 17 27 33;  /* #111B21 */
 }
 
-body {
-  background-color: rgb(var(--color-brand-cream));
-  color: rgb(var(--color-brand-ink));
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+@layer base {
+  html {
+    font-family: var(--wa-font-sans);
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    background-color: rgb(var(--wa-app-bg));
+    color: rgb(var(--wa-text-primary));
+  }
+
+  body {
+    font-family: var(--wa-font-sans);
+    font-size: var(--wa-fs-body);
+    line-height: var(--wa-lh-body);
+    background-color: rgb(var(--wa-app-bg));
+    color: rgb(var(--wa-text-primary));
+    overflow-x: hidden;
+  }
+
+  /* Rendu net des caractères chinois simplifiés (CJK) sans débordement */
+  :lang(zh) {
+    line-break: anywhere;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+
+  /* Focus clavier visible sur tous les éléments interactifs (WCAG AA) */
+  :focus-visible {
+    outline: 2px solid rgb(var(--wa-accent-green));
+    outline-offset: 2px;
+  }
 }
 
-/* Typographie chinoise propre sans débordement */
-:lang(zh) {
-  line-break: strict;
-  word-break: normal;
-  letter-spacing: 0.01em;
+/* Masquer l'en-tête global et la barre d'onglets sur mobile quand une discussion est ouverte en plein écran */
+@media (max-width: 767px) {
+  html[data-mobile-thread-open='true'] .wa-mobile-hide-in-thread {
+    display: none !important;
+  }
+}
+
+/* Classes utilitaires typographiques basées sur les tokens */
+@layer components {
+  .wa-text-message {
+    font-size: var(--wa-fs-message);
+    line-height: var(--wa-lh-message);
+    font-weight: 400;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .wa-text-meta {
+    font-size: var(--wa-fs-meta);
+    line-height: var(--wa-lh-meta);
+    font-weight: 400;
+  }
+
+  .wa-text-contact {
+    font-size: var(--wa-fs-contact);
+    line-height: var(--wa-lh-contact);
+    font-weight: 500;
+  }
+
+  .wa-text-preview {
+    font-size: var(--wa-fs-preview);
+    line-height: var(--wa-lh-preview);
+    font-weight: 400;
+    color: rgb(var(--wa-text-secondary));
+  }
+
+  .wa-text-title {
+    font-size: var(--wa-fs-title);
+    line-height: var(--wa-lh-title);
+    font-weight: 500;
+  }
+
+  .wa-text-body {
+    font-size: var(--wa-fs-body);
+    line-height: var(--wa-lh-body);
+    font-weight: 400;
+  }
+
+  /* Fond de conversation généré purement en CSS (aucune image propriétaire) */
+  .wa-chat-wallpaper {
+    background-color: rgb(var(--wa-chat-bg));
+    background-image: radial-gradient(
+        rgba(17, 27, 33, 0.04) 1px,
+        transparent 0
+      ),
+      radial-gradient(rgba(17, 27, 33, 0.03) 1px, transparent 0);
+    background-size: 24px 24px;
+    background-position: 0 0, 12px 12px;
+  }
+
+  .dark .wa-chat-wallpaper,
+  [data-theme='dark'] .wa-chat-wallpaper {
+    background-color: rgb(var(--wa-chat-bg));
+    background-image: radial-gradient(
+        rgba(233, 237, 239, 0.035) 1px,
+        transparent 0
+      ),
+      radial-gradient(rgba(233, 237, 239, 0.025) 1px, transparent 0);
+    background-size: 24px 24px;
+    background-position: 0 0, 12px 12px;
+  }
+}
+
+/* Respect strict de prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

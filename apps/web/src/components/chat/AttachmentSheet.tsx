@@ -4,17 +4,21 @@ import React, { useRef, useState } from 'react';
 import type {
   ContactAttachment,
   DocumentAttachment,
+  Locale,
   LocationAttachment,
 } from '@attieke-chat/shared';
 import type { ChatDictionary } from '@/lib/i18n';
 
 export interface AttachmentSheetProps {
+  locale: Locale;
   dict: ChatDictionary['attachments'];
   onPickImages: (files: FileList) => void;
   onSendDemoMultiGrid: () => void;
   onSendDocument: (doc: DocumentAttachment) => void;
   onSendLocation: (loc: LocationAttachment) => void;
   onSendContact: (contact: ContactAttachment) => void;
+  onSendQuickText: (text: string) => void;
+  onOpenCatalogDrawer: () => void;
   onClose: () => void;
 }
 
@@ -108,12 +112,15 @@ const PRESET_CONTACTS: readonly ContactAttachment[] = [
 ] as const;
 
 export function AttachmentSheet({
+  locale,
   dict,
   onPickImages,
   onSendDemoMultiGrid,
   onSendDocument,
   onSendLocation,
   onSendContact,
+  onSendQuickText,
+  onOpenCatalogDrawer,
   onClose,
 }: AttachmentSheetProps): React.JSX.Element {
   const [subView, setSubView] = useState<'main' | 'location' | 'contact'>(
@@ -123,6 +130,26 @@ export function AttachmentSheet({
 
   const photoInputRef = useRef<HTMLInputElement | null>(null);
   const docInputRef = useRef<HTMLInputElement | null>(null);
+
+  const labels = {
+    gallery:
+      locale === 'zh' ? '相册' : locale === 'en' ? 'Gallery' : 'Galerie',
+    camera: locale === 'zh' ? '相机' : locale === 'en' ? 'Camera' : 'Caméra',
+    location:
+      locale === 'zh' ? '位置' : locale === 'en' ? 'Location' : 'Localisation',
+    contact:
+      locale === 'zh' ? '名片' : locale === 'en' ? 'Contact' : 'Contact',
+    document:
+      locale === 'zh' ? '文件' : locale === 'en' ? 'Document' : 'Document',
+    poll: locale === 'zh' ? '投票' : locale === 'en' ? 'Poll' : 'Sondage',
+    event: locale === 'zh' ? '活动' : locale === 'en' ? 'Event' : 'Événement',
+    aiImages:
+      locale === 'zh'
+        ? 'AI 图像'
+        : locale === 'en'
+        ? 'AI Images'
+        : 'Images d’IA',
+  };
 
   const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const files = e.target.files;
@@ -162,21 +189,30 @@ export function AttachmentSheet({
     onClose();
   };
 
-  const handleSendDemoPdf = (): void => {
-    const doc: DocumentAttachment = {
-      id: `doc-demo-${Date.now()}`,
-      url: '/images/products/attieke-classic.jpg',
-      fileName: 'Facture-Douane-SF-Express-Abidjan-2026.pdf',
-      fileSizeBytes: 356400,
-      mimeType: 'application/pdf',
-      pageCount: 2,
-    };
-    onSendDocument(doc);
+  const handleSendPoll = (): void => {
+    const pollMsg =
+      locale === 'zh'
+        ? '📊 [投票] 本周科特迪瓦木薯套餐偏好：\n1. 经典木薯 1kg + 烤金枪鱼 Garba\n2. 家庭装 5kg 冷链直发\n3. 辣椒酱 + 炸芭蕉 Alloco 组合'
+        : locale === 'en'
+        ? '📊 [Poll] Preferred Ivorian Attiéké pack this week:\n1. Classic Attiéké 1kg + Grilled Tuna Garba\n2. Family Pack 5kg Cold Chain\n3. Chili + Alloco Plantain Combo'
+        : '📊 [Sondage] Quel pack Attiéké préférez-vous cette semaine ?\n1. Attiéké Classique 1kg + Thon Garba\n2. Pack Familial 5kg SF Cold Chain\n3. Duo Piment Frais + Alloco';
+    onSendQuickText(pollMsg);
+    onClose();
+  };
+
+  const handleSendEvent = (): void => {
+    const eventMsg =
+      locale === 'zh'
+        ? '📅 [活动预约] 顺丰冷链同城配送时间确认：本周六 14:00 - 16:00（北京朝阳区建国路88号）'
+        : locale === 'en'
+        ? '📅 [Event] SF Express Cold Chain Delivery Slot: Saturday 14:00 - 16:00 (Beijing Chaoyang)'
+        : '📅 [Événement] Créneau de réception SF Express Cold Chain : Samedi 14h00 - 16h00 (Pékin Chaoyang)';
+    onSendQuickText(eventMsg);
     onClose();
   };
 
   return (
-    <div className="border-t border-brand-ink/10 bg-white p-4 shadow-lg">
+    <div className=" rounded-t-3xl border-t border-wa-border bg-wa-panel px-4 pb-6 pt-3 shadow-wa-panel">
       <input
         ref={photoInputRef}
         type="file"
@@ -193,116 +229,219 @@ export function AttachmentSheet({
         className="hidden"
       />
 
-      <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-xs font-extrabold uppercase tracking-wider text-brand-green">
-          {subView === 'location'
-            ? dict.locationModalTitle
-            : subView === 'contact'
-            ? dict.contactModalTitle
-            : dict.sheetTitle}
-        </h3>
+      {/* Petite barre poignée grise centrée en haut (exactement comme sur image-1.png) */}
+      <div className="mb-5 flex justify-center">
         <button
           type="button"
           onClick={onClose}
-          className="rounded-full bg-brand-cream px-2.5 py-1 text-xs font-bold text-brand-ink"
-        >
-          ✕
-        </button>
+          aria-label="Fermer"
+          className="h-1.5 w-11 rounded-full bg-wa-text-secondary/50"
+        />
       </div>
 
       {sizeError && (
         <div
           role="alert"
-          className="mb-3 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs font-bold text-red-700"
+          className="mb-3 rounded-wa-bubble border border-red-300 bg-red-50 px-3 py-2 text-wa-meta font-semibold text-red-700"
         >
           {sizeError}
         </div>
       )}
 
       {subView === 'main' && (
-        <div className="space-y-2.5">
-          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-5">
-            <button
-              type="button"
-              onClick={() => photoInputRef.current?.click()}
-              className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-brand-ink/10 bg-brand-cream p-3 text-center transition-colors hover:bg-brand-green-soft"
-            >
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600 text-lg text-white">
-                🖼️
-              </span>
-              <span className="text-[11px] font-extrabold text-brand-ink">
-                {dict.photoGallery}
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                onSendDemoMultiGrid();
-                onClose();
-              }}
-              className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-brand-ink/10 bg-brand-cream p-3 text-center transition-colors hover:bg-brand-green-soft"
-            >
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-500 text-lg text-white">
-                📷
-              </span>
-              <span className="text-[11px] font-extrabold text-brand-ink">
-                {dict.cameraPhoto}
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => docInputRef.current?.click()}
-              className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-brand-ink/10 bg-brand-cream p-3 text-center transition-colors hover:bg-brand-green-soft"
-            >
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600 text-lg text-white">
-                📄
-              </span>
-              <span className="text-[11px] font-extrabold text-brand-ink">
-                {dict.documentPdf}
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setSubView('location')}
-              className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-brand-ink/10 bg-brand-cream p-3 text-center transition-colors hover:bg-brand-green-soft"
-            >
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-rose-600 text-lg text-white">
-                📍
-              </span>
-              <span className="text-[11px] font-extrabold text-brand-ink">
-                {dict.locationPin}
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setSubView('contact')}
-              className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-brand-ink/10 bg-brand-cream p-3 text-center transition-colors hover:bg-brand-green-soft"
-            >
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-600 text-lg text-white">
-                👤
-              </span>
-              <span className="text-[11px] font-extrabold text-brand-ink">
-                {dict.contactCard}
-              </span>
-            </button>
-          </div>
-
+        <div className="mx-auto grid max-w-md grid-cols-4 gap-x-3 gap-y-5">
+          {/* 1. Galerie (Bleu) */}
           <button
             type="button"
-            onClick={handleSendDemoPdf}
-            className="w-full rounded-xl border border-brand-green/25 bg-brand-green-soft/60 py-2 text-xs font-extrabold text-brand-green hover:bg-brand-green hover:text-white"
+            onClick={() => photoInputRef.current?.click()}
+            className="group flex flex-col items-center gap-2 focus:outline-none"
           >
-            {dict.demoPdfButton}
+            <span className="flex h-14 w-20 items-center justify-center rounded-full border border-wa-border bg-wa-composer transition-transform duration-fast group-active:scale-95">
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="h-6 w-6 text-[#1D9BF0]"
+                aria-hidden="true"
+              >
+                <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-1 14H6l3.5-4.5 2.5 3 3.5-4.5 2.5 6z" />
+              </svg>
+            </span>
+            <span className="text-wa-preview text-wa-text-secondary">
+              {labels.gallery}
+            </span>
+          </button>
+
+          {/* 2. Caméra (Rose/Rouge) */}
+          <button
+            type="button"
+            onClick={() => {
+              onSendDemoMultiGrid();
+              onClose();
+            }}
+            className="group flex flex-col items-center gap-2 focus:outline-none"
+          >
+            <span className="flex h-14 w-20 items-center justify-center rounded-full border border-wa-border bg-wa-composer transition-transform duration-fast group-active:scale-95">
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="h-6 w-6 text-[#FF2E74]"
+                aria-hidden="true"
+              >
+                <path d="M9 3 7.17 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.17L15 3H9zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+              </svg>
+            </span>
+            <span className="text-wa-preview text-wa-text-secondary">
+              {labels.camera}
+            </span>
+          </button>
+
+          {/* 3. Localisation (Vert) */}
+          <button
+            type="button"
+            onClick={() => setSubView('location')}
+            className="group flex flex-col items-center gap-2 focus:outline-none"
+          >
+            <span className="flex h-14 w-20 items-center justify-center rounded-full border border-wa-border bg-wa-composer transition-transform duration-fast group-active:scale-95">
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="h-6 w-6 text-[#00A884]"
+                aria-hidden="true"
+              >
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" />
+              </svg>
+            </span>
+            <span className="text-wa-preview text-wa-text-secondary">
+              {labels.location}
+            </span>
+          </button>
+
+          {/* 4. Contact (Bleu ciel) */}
+          <button
+            type="button"
+            onClick={() => setSubView('contact')}
+            className="group flex flex-col items-center gap-2 focus:outline-none"
+          >
+            <span className="flex h-14 w-20 items-center justify-center rounded-full border border-wa-border bg-wa-composer transition-transform duration-fast group-active:scale-95">
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="h-6 w-6 text-[#00B2FF]"
+                aria-hidden="true"
+              >
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+              </svg>
+            </span>
+            <span className="text-wa-preview text-wa-text-secondary">
+              {labels.contact}
+            </span>
+          </button>
+
+          {/* 5. Document (Violet) */}
+          <button
+            type="button"
+            onClick={() => docInputRef.current?.click()}
+            className="group flex flex-col items-center gap-2 focus:outline-none"
+          >
+            <span className="flex h-14 w-20 items-center justify-center rounded-full border border-wa-border bg-wa-composer transition-transform duration-fast group-active:scale-95">
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="h-6 w-6 text-[#7F66FF]"
+                aria-hidden="true"
+              >
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 7V3.5L18.5 9H13zm-5 4h8v2H8v-2zm0 4h5v2H8v-2z" />
+              </svg>
+            </span>
+            <span className="text-wa-preview text-wa-text-secondary">
+              {labels.document}
+            </span>
+          </button>
+
+          {/* 6. Sondage (Jaune/Ambre) */}
+          <button
+            type="button"
+            onClick={handleSendPoll}
+            className="group flex flex-col items-center gap-2 focus:outline-none"
+          >
+            <span className="flex h-14 w-20 items-center justify-center rounded-full border border-wa-border bg-wa-composer transition-transform duration-fast group-active:scale-95">
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="h-6 w-6 text-[#FFB300]"
+                aria-hidden="true"
+              >
+                <rect x="4" y="5" width="10" height="3" rx="1.5" />
+                <rect x="4" y="10.5" width="16" height="3" rx="1.5" />
+                <rect x="4" y="16" width="7" height="3" rx="1.5" />
+              </svg>
+            </span>
+            <span className="text-wa-preview text-wa-text-secondary">
+              {labels.poll}
+            </span>
+          </button>
+
+          {/* 7. Événement (Rose/Corail) */}
+          <button
+            type="button"
+            onClick={handleSendEvent}
+            className="group flex flex-col items-center gap-2 focus:outline-none"
+          >
+            <span className="flex h-14 w-20 items-center justify-center rounded-full border border-wa-border bg-wa-composer transition-transform duration-fast group-active:scale-95">
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="h-6 w-6 text-[#FF4081]"
+                aria-hidden="true"
+              >
+                <path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10zm-7-7h5v5h-5v-5z" />
+              </svg>
+            </span>
+            <span className="text-wa-preview text-wa-text-secondary">
+              {labels.event}
+            </span>
+          </button>
+
+          {/* 8. Images d'IA / Catalogue Produits (Bleu étoilé) */}
+          <button
+            type="button"
+            onClick={() => {
+              onOpenCatalogDrawer();
+              onClose();
+            }}
+            className="group flex flex-col items-center gap-2 focus:outline-none"
+          >
+            <span className="flex h-14 w-20 items-center justify-center rounded-full border border-wa-border bg-wa-composer transition-transform duration-fast group-active:scale-95">
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="h-6 w-6 text-[#2196F3]"
+                aria-hidden="true"
+              >
+                <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-2 6-1.25-2.75L13 5l2.75-1.25L17 1l1.25 2.75L21 5l-2.75 1.25L17 9zM6 17l3-4 2.25 3 3-4L18 17H6z" />
+              </svg>
+            </span>
+            <span className="text-wa-preview text-wa-text-secondary">
+              {labels.aiImages}
+            </span>
           </button>
         </div>
       )}
 
       {subView === 'location' && (
-        <div className="space-y-2">
+        <div className="mx-auto max-w-md space-y-2">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-wa-preview font-semibold text-wa-text-primary">
+              📍 {dict.locationModalTitle}
+            </span>
+            <button
+              type="button"
+              onClick={() => setSubView('main')}
+              className="text-wa-meta font-semibold text-wa-accent"
+            >
+              ← Retour
+            </button>
+          </div>
           {[
             { label: dict.locBeijing, item: PRESET_LOCATIONS[0] },
             { label: dict.locGuangzhou, item: PRESET_LOCATIONS[1] },
@@ -315,17 +454,29 @@ export function AttachmentSheet({
                 onSendLocation(entry.item);
                 onClose();
               }}
-              className="flex w-full items-center justify-between rounded-2xl border border-brand-ink/10 bg-brand-cream px-4 py-2.5 text-left text-xs font-extrabold text-brand-ink hover:bg-brand-green-soft"
+              className="flex w-full items-center justify-between rounded-wa-bubble border border-wa-border bg-wa-composer px-4 py-2.5 text-left text-wa-preview font-medium text-wa-text-primary hover:border-wa-accent"
             >
               <span>{entry.label}</span>
-              <span className="text-brand-green">➤</span>
+              <span className="text-wa-accent">➤</span>
             </button>
           ))}
         </div>
       )}
 
       {subView === 'contact' && (
-        <div className="space-y-2">
+        <div className="mx-auto max-w-md space-y-2">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-wa-preview font-semibold text-wa-text-primary">
+              👤 {dict.contactModalTitle}
+            </span>
+            <button
+              type="button"
+              onClick={() => setSubView('main')}
+              className="text-wa-meta font-semibold text-wa-accent"
+            >
+              ← Retour
+            </button>
+          </div>
           {[
             { label: dict.contactSfAgent, item: PRESET_CONTACTS[0] },
             { label: dict.contactChef, item: PRESET_CONTACTS[1] },
@@ -338,10 +489,10 @@ export function AttachmentSheet({
                 onSendContact(entry.item);
                 onClose();
               }}
-              className="flex w-full items-center justify-between rounded-2xl border border-brand-ink/10 bg-brand-cream px-4 py-2.5 text-left text-xs font-extrabold text-brand-ink hover:bg-brand-green-soft"
+              className="flex w-full items-center justify-between rounded-wa-bubble border border-wa-border bg-wa-composer px-4 py-2.5 text-left text-wa-preview font-medium text-wa-text-primary hover:border-wa-accent"
             >
               <span>{entry.label}</span>
-              <span className="text-brand-green">➤</span>
+              <span className="text-wa-accent">➤</span>
             </button>
           ))}
         </div>

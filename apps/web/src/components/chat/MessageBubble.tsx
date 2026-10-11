@@ -16,9 +16,11 @@ import type { ChatDictionary, CommonDictionary } from '@/lib/i18n';
 import { formatTimeShort } from '@/lib/i18n';
 import { ChatProductCard } from './ChatProductCard';
 import { ChatOrderCard } from './ChatOrderCard';
+import { ReactionBar } from './ReactionBar';
 
 export interface MessageBubbleProps {
   message: Message;
+  isFirstInSeries?: boolean;
   locale: Locale;
   vendorAvatarUrl: string;
   vendorName: string;
@@ -65,7 +67,7 @@ function highlightTextSegment(
     part.toLowerCase() === query.trim().toLowerCase() ? (
       <mark
         key={`${keyPrefix}-hl-${idx}`}
-        className="rounded bg-brand-gold px-0.5 font-extrabold text-brand-ink"
+        className="rounded bg-wa-commerce/60 px-0.5 font-semibold text-wa-text-primary"
       >
         {part}
       </mark>
@@ -75,9 +77,6 @@ function highlightTextSegment(
   );
 }
 
-/**
- * Rend le texte avec liens cliquables et surbrillance de recherche sans aucun dangerouslySetInnerHTML (anti-XSS).
- */
 function renderSafeRichText(
   text: string,
   searchQuery?: string
@@ -91,7 +90,7 @@ function renderSafeRichText(
           href={seg}
           target="_blank"
           rel="noopener noreferrer"
-          className="font-bold text-brand-green underline break-all hover:text-brand-green-dark"
+          className="font-medium text-wa-dark-green dark:text-wa-read-tick underline break-all"
           onClick={(e) => e.stopPropagation()}
         >
           {highlightTextSegment(seg, searchQuery, `url-${idx}`)}
@@ -115,13 +114,17 @@ function DeliveryStatusIndicator({
 }): React.JSX.Element {
   if (status === 'sending') {
     return (
-      <span
+      <svg
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
         aria-label={dict.sendingStatus}
-        title={dict.sendingStatus}
-        className="inline-flex items-center text-[11px] text-brand-ink-muted"
+        className="h-3.5 w-3.5 text-wa-text-secondary"
       >
-        🕒
-      </span>
+        <circle cx="8" cy="8" r="6" />
+        <path strokeLinecap="round" d="M8 4.5V8l2.5 1.5" />
+      </svg>
     );
   }
   if (status === 'failed') {
@@ -129,7 +132,7 @@ function DeliveryStatusIndicator({
       <span
         aria-label={dict.failedStatus}
         title={dict.failedStatus}
-        className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] font-extrabold text-white"
+        className="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full bg-red-600 text-wa-meta font-bold text-white"
       >
         !
       </span>
@@ -137,41 +140,51 @@ function DeliveryStatusIndicator({
   }
   if (status === 'sent') {
     return (
-      <span
+      <svg
+        viewBox="0 0 16 15"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
         aria-label={dict.sentStatus}
-        title={dict.sentStatus}
-        className="text-[11px] font-bold text-brand-ink-muted"
+        className="h-3.5 w-3.5 text-wa-text-secondary"
       >
-        ✓
-      </span>
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M2.5 8l3.5 3.5 7.5-7.5"
+        />
+      </svg>
     );
   }
-  if (status === 'delivered') {
-    return (
-      <span
-        aria-label={dict.deliveredStatus}
-        title={dict.deliveredStatus}
-        className="text-[11px] font-bold tracking-tighter text-brand-ink-muted"
-      >
-        ✓✓
-      </span>
-    );
-  }
+  const tickColor =
+    status === 'read' ? 'text-wa-read-tick' : 'text-wa-text-secondary';
   return (
-    <span
-      aria-label={dict.readStatus}
-      title={dict.readStatus}
-      className="text-[11px] font-extrabold tracking-tighter text-[#0284C7]"
+    <svg
+      viewBox="0 0 18 15"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      aria-label={status === 'read' ? dict.readStatus : dict.deliveredStatus}
+      className={`h-3.5 w-4 ${tickColor}`}
     >
-      ✓✓
-    </span>
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M1.5 8l3.2 3.2L11.5 4"
+      />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M6.5 8l3.2 3.2L16.5 4"
+      />
+    </svg>
   );
 }
 
 export function MessageBubble({
   message,
+  isFirstInSeries = true,
   locale,
-  vendorAvatarUrl,
   vendorName,
   product,
   order,
@@ -180,7 +193,6 @@ export function MessageBubble({
   isBusy,
   isHighlighted = false,
   searchQuery,
-  themeMode = 'light',
   fontSize = 'medium',
   onAddToOrder,
   onConfirmOrder,
@@ -205,6 +217,8 @@ export function MessageBubble({
   const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const touchStartXRef = useRef<number | null>(null);
   const [swipeOffset, setSwipeOffset] = useState<number>(0);
+  const [isExpandedText, setIsExpandedText] = useState<boolean>(false);
+  const [showHoverReactions, setShowHoverReactions] = useState<boolean>(false);
 
   useEffect(() => {
     return () => {
@@ -260,7 +274,7 @@ export function MessageBubble({
     if (onOpenContextMenu) {
       longPressTimerRef.current = setTimeout(() => {
         onOpenContextMenu(message);
-      }, 520);
+      }, 500);
     }
   };
 
@@ -294,12 +308,12 @@ export function MessageBubble({
 
   const fontSizeClass =
     fontSize === 'small'
-      ? 'text-xs'
+      ? 'text-wa-meta'
       : fontSize === 'large'
-      ? 'text-base'
-      : 'text-sm';
+      ? 'text-wa-contact font-normal'
+      : 'text-wa-msg';
 
-  // 1. Message système centré (événement de statut de commande)
+  // 1. Bulle de message système (date / statut de commande) : #FFEECD avec texte #54656F
   if (message.type === 'status_event' || message.sender === 'system') {
     const evt = message.statusEvent;
     const statusLabel = evt ? statusDict[evt.status] : '';
@@ -308,32 +322,25 @@ export function MessageBubble({
     return (
       <div
         id={`chat-msg-${message.id}`}
-        className="my-3 flex justify-center px-2"
+        className="my-2 flex justify-center px-2"
       >
-        <div className="inline-flex max-w-md flex-col items-center gap-1 rounded-2xl border border-brand-green/20 bg-white/95 px-4 py-2.5 text-center text-xs shadow-sm">
-          <span className="inline-flex items-center gap-1.5 font-extrabold text-brand-green">
-            <span aria-hidden="true">📦</span>
-            <span>
-              {chatDict.messages.systemEventPrefix} · {statusLabel}
-            </span>
+        <div className="inline-flex max-w-md flex-col items-center gap-0.5 rounded-wa-bubble bg-wa-system-bg px-3.5 py-2 text-center text-wa-meta text-wa-system-text shadow-wa-bubble">
+          <span className="font-semibold">
+            {chatDict.messages.systemEventPrefix} · {statusLabel}
           </span>
-          <p className="text-brand-ink-muted">
+          <p className="text-wa-preview text-wa-system-text">
             {renderSafeRichText(noteText, searchQuery)}
           </p>
-          <span className="text-[10px] text-brand-ink-muted/80">{timeText}</span>
+          <span className="text-wa-meta opacity-80">{timeText}</span>
         </div>
       </div>
     );
   }
 
   const isCustomer = message.sender === 'customer';
-  const bubbleBgClass = isCustomer
-    ? themeMode === 'dark'
-      ? 'bg-[#005C4B] text-white'
-      : 'bg-[#D9FDD3] text-brand-ink'
-    : themeMode === 'dark'
-    ? 'bg-[#202C33] text-white'
-    : 'bg-white text-brand-ink';
+  const bubbleColorClass = isCustomer
+    ? 'bg-wa-bubble-out text-wa-text-primary'
+    : 'bg-wa-bubble-in text-wa-text-primary';
 
   const imageItems: ImageAttachmentItem[] =
     message.images && message.images.length > 0
@@ -365,64 +372,110 @@ export function MessageBubble({
           ? { transform: `translateX(${swipeOffset}px)` }
           : undefined
       }
-      className={`group relative flex items-start gap-2 transition-all duration-200 ${
+      className={`group relative flex transition-transform duration-fast ${
         isCustomer ? 'justify-end' : 'justify-start'
       } ${
         isHighlighted
-          ? 'rounded-3xl bg-brand-gold/30 p-1.5 ring-2 ring-brand-gold'
+          ? 'rounded-wa-bubble bg-wa-commerce/25 p-1 ring-2 ring-wa-commerce'
           : ''
       }`}
     >
-      {/* Avatar Vendeur à gauche */}
-      {!isCustomer && (
-        <div className="relative mt-0.5 h-8 w-8 shrink-0 overflow-hidden rounded-full border border-brand-gold bg-brand-green shadow-xs sm:h-9 sm:w-9">
-          <Image
-            src={vendorAvatarUrl}
-            alt={vendorName}
-            fill
-            sizes="36px"
-            className="object-cover"
-          />
-        </div>
-      )}
-
+      {/* Conteneur de bulle : largeur max 80% sur mobile, 65% sur desktop */}
       <div
-        className={`relative flex max-w-[85%] flex-col sm:max-w-[72%] ${
+        className={`relative flex max-w-[80%] flex-col md:max-w-[65%] ${
           isCustomer ? 'items-end' : 'items-start'
         }`}
       >
-        {/* Petite queue de bulle SVG style WhatsApp */}
-        {message.type !== 'product_card' && message.type !== 'order_card' && (
-          <svg
-            viewBox="0 0 8 13"
-            width="8"
-            height="13"
-            aria-hidden="true"
-            className={`pointer-events-none absolute top-0 h-3 w-2 ${
-              isCustomer
-                ? `-right-1.5 ${
-                    themeMode === 'dark' ? 'text-[#005C4B]' : 'text-[#D9FDD3]'
-                  }`
-                : `-left-1.5 ${
-                    themeMode === 'dark' ? 'text-[#202C33]' : 'text-white'
-                  }`
+        {/* Petite queue SVG uniquement sur le premier message d'une série */}
+        {isFirstInSeries &&
+          message.type !== 'product_card' &&
+          message.type !== 'order_card' && (
+            <svg
+              viewBox="0 0 8 13"
+              width="8"
+              height="13"
+              aria-hidden="true"
+              className={`pointer-events-none absolute top-0 h-3 w-2 ${
+                isCustomer
+                  ? '-right-1.5 text-wa-bubble-out'
+                  : '-left-1.5 text-wa-bubble-in'
+              }`}
+            >
+              {isCustomer ? (
+                <path
+                  fill="currentColor"
+                  d="M5.188 1H0v11.193l6.467-8.625C7.526 2.156 6.958 1 5.188 1z"
+                />
+              ) : (
+                <path
+                  fill="currentColor"
+                  d="M1.533 3.568L8 12.193V1H2.812C1.042 1 .474 2.156 1.533 3.568z"
+                />
+              )}
+            </svg>
+          )}
+
+        {/* Bouton rond Réaction Smiley (😊) sur le côté de la bulle (exactement comme sur image-1.png Desktop) */}
+        {onToggleReaction && !message.deletedForEveryone && (
+          <div
+            className={`absolute top-1/2 z-20 -translate-y-1/2 ${
+              isCustomer ? '-left-9' : '-right-9'
             }`}
           >
-            {isCustomer ? (
-              <path
-                fill="currentColor"
-                d="M5.188 1H0v11.193l6.467-8.625C7.526 2.156 6.958 1 5.188 1z"
-              />
-            ) : (
-              <path
-                fill="currentColor"
-                d="M1.533 3.568L8 12.193V1H2.812C1.042 1 .474 2.156 1.533 3.568z"
-              />
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowHoverReactions((v) => !v);
+              }}
+              aria-label="Réagir avec un emoji"
+              className="flex h-7 w-7 items-center justify-center rounded-full border border-wa-border bg-wa-panel text-wa-text-secondary opacity-0 shadow-wa-bubble transition-opacity duration-fast group-hover:opacity-100 focus:opacity-100 hover:text-wa-text-primary"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className="h-4 w-4"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <path
+                  strokeLinecap="round"
+                  d="M8.5 14.5s1.5 2 3.5 2 3.5-2 3.5-2"
+                />
+                <circle cx="9" cy="9.5" r="1" fill="currentColor" />
+                <circle cx="15" cy="9.5" r="1" fill="currentColor" />
+              </svg>
+            </button>
+
+            {showHoverReactions && (
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className={`absolute bottom-9 z-30 ${
+                  isCustomer ? 'right-0' : 'left-0'
+                }`}
+              >
+                <ReactionBar
+                  selectedEmoji={
+                    message.reactions?.find((r) => r.sender === 'customer')
+                      ?.emoji
+                  }
+                  onSelectEmoji={(emoji) => {
+                    setShowHoverReactions(false);
+                    onToggleReaction(message.id, emoji);
+                  }}
+                  onOpenFullPicker={() => {
+                    setShowHoverReactions(false);
+                    onToggleReaction(message.id, '❤️');
+                  }}
+                />
+              </div>
             )}
-          </svg>
+          </div>
         )}
 
-        {/* Bouton d'ouverture rapide du menu d'actions (survol ou focus) */}
+        {/* Bouton discret d'ouverture du menu d'actions (chevron ▾ en haut à droite de la bulle) */}
         {onOpenContextMenu && !message.deletedForEveryone && (
           <button
             type="button"
@@ -431,28 +484,35 @@ export function MessageBubble({
               onOpenContextMenu(message);
             }}
             aria-label={chatDict.messages.moreActionsAria}
-            className={`absolute top-1.5 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-black/10 text-[11px] font-bold opacity-80 transition-opacity hover:bg-black/20 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100 ${
-              isCustomer ? 'left-1.5' : 'right-1.5'
-            }`}
+            className="absolute right-1.5 top-1 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-wa-panel/80 text-wa-meta text-wa-text-secondary opacity-85 transition-opacity duration-fast hover:text-wa-text-primary sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100"
           >
             ▾
           </button>
         )}
 
-        {/* A. Bulle Texte / Vocal / Document / Position / Contact */}
+        {/* A. Bulle Texte / Vocal / Document / Position / Contact : coins 7,5px, ombre très légère */}
         {(message.type === 'text' ||
           message.type === 'voice' ||
           message.type === 'document' ||
           message.type === 'location' ||
           message.type === 'contact') && (
           <div
-            className={`relative rounded-2xl px-3.5 py-2.5 leading-relaxed shadow-xs ${fontSizeClass} ${
-              isCustomer ? 'rounded-tr-none' : 'rounded-tl-none'
-            } ${bubbleBgClass}`}
+            onClick={() => {
+              if (message.type === 'text' && onOpenContextMenu) {
+                onOpenContextMenu(message);
+              }
+            }}
+            className={`relative cursor-pointer rounded-wa-bubble px-2.5 pb-1.5 pt-1.5 shadow-wa-bubble ${fontSizeClass} ${
+              isFirstInSeries
+                ? isCustomer
+                  ? 'rounded-tr-none'
+                  : 'rounded-tl-none'
+                : ''
+            } ${bubbleColorClass}`}
           >
             {/* Badge "↪ Transféré" */}
             {message.forwarded && (
-              <p className="mb-1 text-[11px] italic opacity-75">
+              <p className="mb-0.5 text-wa-meta italic text-wa-text-secondary">
                 {chatDict.messages.forwardedBadge}
               </p>
             )}
@@ -464,15 +524,15 @@ export function MessageBubble({
                 onClick={() =>
                   onJumpToMessage && onJumpToMessage(message.replyTo!.messageId)
                 }
-                className="mb-2 flex w-full items-center gap-2 rounded-xl border-l-4 border-brand-green bg-black/8 px-3 py-1.5 text-left text-xs transition-colors hover:bg-black/12"
+                className="mb-1.5 flex w-full items-center gap-2 rounded-wa-bubble border-l-4 border-wa-accent bg-black/5 dark:bg-white/5 px-2.5 py-1 text-left text-wa-meta transition-colors duration-fast hover:bg-black/10"
               >
                 <div className="min-w-0 flex-1">
-                  <p className="font-extrabold text-brand-green">
+                  <p className="font-semibold text-wa-dark-green dark:text-wa-accent">
                     {message.replyTo.sender === 'customer'
                       ? chatDict.conversationList.youPrefix
                       : vendorName}
                   </p>
-                  <p className="truncate opacity-85">
+                  <p className="truncate text-wa-text-secondary">
                     {message.replyTo.previewText[locale]}
                   </p>
                 </div>
@@ -481,7 +541,7 @@ export function MessageBubble({
                   <img
                     src={message.replyTo.thumbnailUrl}
                     alt=""
-                    className="h-9 w-9 shrink-0 rounded-lg object-cover"
+                    className="h-8 w-8 shrink-0 rounded object-cover"
                   />
                 )}
               </button>
@@ -491,7 +551,7 @@ export function MessageBubble({
             {message.type === 'voice' &&
               message.voice &&
               !message.deletedForEveryone && (
-                <div className="flex items-center gap-2.5 py-1 min-w-[210px] sm:min-w-[250px]">
+                <div className="flex min-w-[210px] items-center gap-2.5 py-1 sm:min-w-[240px]">
                   <button
                     type="button"
                     onClick={() => setIsPlayingVoice((p) => !p)}
@@ -500,13 +560,13 @@ export function MessageBubble({
                         ? chatDict.messages.voicePauseAria
                         : chatDict.messages.voicePlayAria
                     }
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-green text-xs font-extrabold text-white shadow-xs hover:bg-brand-green-dark"
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-wa-accent text-wa-meta font-semibold text-white transition-transform duration-fast active:scale-95"
                   >
                     {isPlayingVoice ? '⏸' : '▶'}
                   </button>
 
                   <div className="flex flex-1 flex-col gap-1">
-                    <div className="flex h-6 items-end gap-0.5">
+                    <div className="flex h-5 items-end gap-0.5">
                       {message.voice.waveform.slice(0, 24).map((val, idx) => {
                         const pct = (idx / 24) * 100;
                         const isPlayed = pct <= voiceProgress;
@@ -516,17 +576,17 @@ export function MessageBubble({
                             type="button"
                             onClick={() => setVoiceProgress(pct)}
                             style={{ height: `${Math.max(22, val)}%` }}
-                            className={`w-1.5 rounded-full transition-colors ${
+                            className={`w-1.5 rounded-full transition-colors duration-fast ${
                               isPlayed
-                                ? 'bg-brand-green'
-                                : 'bg-brand-green/35 hover:bg-brand-green/60'
+                                ? 'bg-wa-accent'
+                                : 'bg-wa-text-secondary/35 hover:bg-wa-text-secondary/60'
                             }`}
                           />
                         );
                       })}
                     </div>
-                    <div className="flex items-center justify-between text-[10px] opacity-75">
-                      <span className="font-mono font-bold">
+                    <div className="flex items-center justify-between text-wa-meta text-wa-text-secondary">
+                      <span className="font-mono">
                         0:
                         {String(
                           isPlayingVoice
@@ -540,7 +600,7 @@ export function MessageBubble({
                       <button
                         type="button"
                         onClick={toggleCycleSpeed}
-                        className="rounded-full bg-black/10 px-2 py-0.2 font-extrabold hover:bg-black/20"
+                        className="rounded-full bg-black/10 dark:bg-white/10 px-2 py-0.2 font-semibold text-wa-text-primary"
                       >
                         {playbackRate}x
                       </button>
@@ -553,18 +613,18 @@ export function MessageBubble({
             {message.type === 'document' &&
               message.document &&
               !message.deletedForEveryone && (
-                <div className="mb-1.5 flex items-center gap-3 rounded-xl border border-black/10 bg-black/5 p-2.5 text-xs">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-600 text-xs font-extrabold text-white">
+                <div className="mb-1 flex items-center gap-2.5 rounded-wa-bubble border border-wa-border bg-black/5 dark:bg-white/5 p-2 text-wa-preview">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-wa-bubble bg-red-600 text-wa-meta font-semibold text-white">
                     PDF
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-extrabold">
+                    <p className="truncate font-medium text-wa-text-primary">
                       {renderSafeRichText(
                         message.document.fileName,
                         searchQuery
                       )}
                     </p>
-                    <p className="text-[10px] opacity-75">
+                    <p className="text-wa-meta text-wa-text-secondary">
                       {Math.round(message.document.fileSizeBytes / 1024)} KB
                       {message.document.pageCount
                         ? ` · ${message.document.pageCount} p.`
@@ -574,32 +634,28 @@ export function MessageBubble({
                 </div>
               )}
 
-            {/* Pièce jointe Position géographique (Carte simple mockée) */}
+            {/* Pièce jointe Position géographique */}
             {message.type === 'location' &&
               message.location &&
               !message.deletedForEveryone && (
-                <div className="mb-1 overflow-hidden rounded-xl border border-brand-green/25 bg-brand-green-soft/40">
-                  <div className="relative flex h-24 w-full items-center justify-center bg-gradient-to-br from-emerald-100 via-teal-50 to-amber-50 text-brand-green">
-                    <div
-                      aria-hidden="true"
-                      className="absolute inset-0 opacity-25 [background-image:radial-gradient(#0F4C3A_1px,transparent_1px)] [background-size:12px_12px]"
-                    />
+                <div className="mb-1 overflow-hidden rounded-wa-bubble border border-wa-border bg-wa-composer">
+                  <div className="relative flex h-24 w-full items-center justify-center bg-wa-chat-bg">
                     <div className="relative flex flex-col items-center">
-                      <span className="text-2xl drop-shadow">📍</span>
-                      <span className="rounded-full bg-white/90 px-2 py-0.5 font-mono text-[10px] font-bold text-brand-ink shadow-xs">
+                      <span className="text-xl">📍</span>
+                      <span className="rounded-full bg-wa-panel px-2 py-0.5 font-mono text-wa-meta text-wa-text-primary shadow-wa-bubble">
                         {message.location.latitude.toFixed(4)},{' '}
                         {message.location.longitude.toFixed(4)}
                       </span>
                     </div>
                   </div>
-                  <div className="p-2.5 text-xs">
-                    <p className="font-extrabold text-brand-green">
+                  <div className="p-2 text-wa-preview">
+                    <p className="font-medium text-wa-dark-green dark:text-wa-accent">
                       {renderSafeRichText(
                         message.location.title[locale],
                         searchQuery
                       )}
                     </p>
-                    <p className="mt-0.5 text-[11px] opacity-80">
+                    <p className="mt-0.5 text-wa-meta text-wa-text-secondary">
                       {message.location.address[locale]}
                     </p>
                   </div>
@@ -610,19 +666,19 @@ export function MessageBubble({
             {message.type === 'contact' &&
               message.contact &&
               !message.deletedForEveryone && (
-                <div className="mb-1 rounded-xl border border-black/10 bg-black/5 p-3 text-xs">
+                <div className="mb-1 rounded-wa-bubble border border-wa-border bg-black/5 dark:bg-white/5 p-2.5 text-wa-preview">
                   <div className="flex items-center gap-2.5">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-green text-sm font-extrabold text-white">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-wa-header text-wa-meta text-white">
                       👤
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="truncate font-extrabold">
+                      <p className="truncate font-medium text-wa-text-primary">
                         {message.contact.name}
                       </p>
-                      <p className="truncate text-[11px] font-semibold text-brand-green">
+                      <p className="truncate text-wa-meta text-wa-dark-green dark:text-wa-accent">
                         {message.contact.role[locale]}
                       </p>
-                      <p className="font-mono text-[11px] opacity-80">
+                      <p className="font-mono text-wa-meta text-wa-text-secondary">
                         {message.contact.phone}
                       </p>
                     </div>
@@ -635,42 +691,79 @@ export function MessageBubble({
                           `${message.contact!.name} (${message.contact!.phone})`
                         )
                       }
-                      className="mt-2 w-full rounded-lg bg-brand-green/15 py-1 text-center text-[11px] font-extrabold text-brand-green hover:bg-brand-green hover:text-white"
+                      className="mt-2 w-full rounded-wa-bubble border-t border-wa-border pt-1.5 text-center text-wa-meta font-semibold text-wa-dark-green dark:text-wa-accent hover:underline"
                     >
-                      💬 {chatDict.messages.messageContactButton}
+                      {chatDict.messages.messageContactButton}
                     </button>
                   )}
                 </div>
               )}
 
-            {/* Contenu texte principal */}
-            {message.text && (
-              <p
-                className={`whitespace-pre-wrap break-words ${
-                  message.deletedForEveryone ? 'italic opacity-70' : ''
-                }`}
-              >
-                {renderSafeRichText(message.text[locale], searchQuery)}
-              </p>
-            )}
+            {/* Contenu texte (14,2px / interligne 19px) avec bouton "Voir plus" en vert gras sur les longs messages (comme sur image-1.png) + Heure & coches alignées en bas à droite */}
+            <div className="flex flex-wrap items-end justify-end gap-x-2">
+              {message.text && (() => {
+                const rawText = message.text[locale];
+                const isLongText =
+                  !message.deletedForEveryone && rawText.length > 220;
+                const displayedText =
+                  isLongText && !isExpandedText
+                    ? `${rawText.slice(0, 220)}... `
+                    : rawText;
+                const readMoreLabel =
+                  locale === 'zh'
+                    ? '展开'
+                    : locale === 'en'
+                    ? 'Read more'
+                    : 'Voir plus';
+                const readLessLabel =
+                  locale === 'zh'
+                    ? '收起'
+                    : locale === 'en'
+                    ? 'Show less'
+                    : 'Voir moins';
 
-            {/* Pied de bulle : étoile + heure + accusé de réception */}
-            <div className="mt-1 flex items-center justify-end gap-1 text-[10px] opacity-75">
-              {message.starred && (
-                <span
-                  aria-label={chatDict.messages.starredAria}
-                  className="text-amber-500"
-                >
-                  ★
-                </span>
-              )}
-              <span>{timeText}</span>
-              {isCustomer && (
-                <DeliveryStatusIndicator
-                  status={message.deliveryStatus}
-                  dict={chatDict.messages}
-                />
-              )}
+                return (
+                  <p
+                    className={`wa-text-message flex-1 whitespace-pre-wrap break-words text-left ${
+                      message.deletedForEveryone
+                        ? 'italic text-wa-text-secondary'
+                        : ''
+                    }`}
+                  >
+                    {renderSafeRichText(displayedText, searchQuery)}
+                    {isLongText && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIsExpandedText((prev) => !prev);
+                        }}
+                        className="inline font-semibold text-wa-dark-green hover:underline dark:text-wa-accent"
+                      >
+                        {isExpandedText ? ` ${readLessLabel}` : readMoreLabel}
+                      </button>
+                    )}
+                  </p>
+                );
+              })()}
+
+              <span className="ml-auto inline-flex shrink-0 items-center gap-1 select-none text-wa-meta text-wa-text-secondary">
+                {message.starred && (
+                  <span
+                    aria-label={chatDict.messages.starredAria}
+                    className="text-wa-text-secondary"
+                  >
+                    ★
+                  </span>
+                )}
+                <span>{timeText}</span>
+                {isCustomer && (
+                  <DeliveryStatusIndicator
+                    status={message.deliveryStatus}
+                    dict={chatDict.messages}
+                  />
+                )}
+              </span>
             </div>
           </div>
         )}
@@ -678,9 +771,13 @@ export function MessageBubble({
         {/* B. Bulle Image (Photo unique ou Grille multi-images avec Visionneuse) */}
         {message.type === 'image' && imageItems.length > 0 && (
           <div
-            className={`overflow-hidden rounded-2xl p-2 shadow-xs ${
-              isCustomer ? 'rounded-tr-none' : 'rounded-tl-none'
-            } ${bubbleBgClass}`}
+            className={`overflow-hidden rounded-wa-bubble p-1.5 shadow-wa-bubble ${
+              isFirstInSeries
+                ? isCustomer
+                  ? 'rounded-tr-none'
+                  : 'rounded-tl-none'
+                : ''
+            } ${bubbleColorClass}`}
           >
             {imageItems.length === 1 ? (
               <button
@@ -693,7 +790,7 @@ export function MessageBubble({
                     message.imageCaption?.[locale]
                   )
                 }
-                className="relative block aspect-[4/3] w-60 overflow-hidden rounded-xl bg-brand-cream-subtle sm:w-72"
+                className="relative block aspect-[4/3] w-60 overflow-hidden rounded-wa-bubble bg-wa-composer sm:w-72"
               >
                 {imageItems[0].url.startsWith('data:') ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -703,7 +800,7 @@ export function MessageBubble({
                       message.imageCaption?.[locale] ??
                       chatDict.messages.imageSentAlt
                     }
-                    className="h-full w-full object-cover transition-transform hover:scale-105"
+                    className="h-full w-full object-cover transition-transform duration-normal hover:scale-105"
                   />
                 ) : (
                   <Image
@@ -714,12 +811,12 @@ export function MessageBubble({
                     }
                     fill
                     sizes="288px"
-                    className="object-cover transition-transform hover:scale-105"
+                    className="object-cover transition-transform duration-normal hover:scale-105"
                   />
                 )}
               </button>
             ) : (
-              <div className="grid w-64 grid-cols-2 gap-1.5 sm:w-72">
+              <div className="grid w-64 grid-cols-2 gap-1 sm:w-72">
                 {imageItems.slice(0, 4).map((item, idx) => (
                   <button
                     key={item.id}
@@ -732,16 +829,16 @@ export function MessageBubble({
                         message.imageCaption?.[locale]
                       )
                     }
-                    className="relative aspect-square overflow-hidden rounded-xl bg-brand-cream-subtle"
+                    className="relative aspect-square overflow-hidden rounded-wa-bubble bg-wa-composer"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={item.thumbnailUrl ?? item.url}
                       alt=""
-                      className="h-full w-full object-cover transition-transform hover:scale-105"
+                      className="h-full w-full object-cover transition-transform duration-normal hover:scale-105"
                     />
                     {idx === 3 && imageItems.length > 4 && (
-                      <span className="absolute inset-0 flex items-center justify-center bg-black/55 text-sm font-extrabold text-white">
+                      <span className="absolute inset-0 flex items-center justify-center bg-black/55 text-wa-contact text-white">
                         +{imageItems.length - 4}
                       </span>
                     )}
@@ -750,20 +847,25 @@ export function MessageBubble({
               </div>
             )}
 
-            {message.imageCaption && (
-              <p className="mt-2 max-w-[270px] px-1 text-xs font-medium">
-                {renderSafeRichText(message.imageCaption[locale], searchQuery)}
-              </p>
-            )}
-            <div className="mt-1 flex items-center justify-end gap-1 px-1 text-[10px] opacity-75">
-              {message.starred && <span className="text-amber-500">★</span>}
-              <span>{timeText}</span>
-              {isCustomer && (
-                <DeliveryStatusIndicator
-                  status={message.deliveryStatus}
-                  dict={chatDict.messages}
-                />
+            <div className="mt-1 flex flex-wrap items-end justify-end gap-x-2 px-1">
+              {message.imageCaption && (
+                <p className="wa-text-message max-w-[260px] flex-1 text-left">
+                  {renderSafeRichText(
+                    message.imageCaption[locale],
+                    searchQuery
+                  )}
+                </p>
               )}
+              <span className="ml-auto inline-flex shrink-0 items-center gap-1 text-wa-meta text-wa-text-secondary">
+                {message.starred && <span>★</span>}
+                <span>{timeText}</span>
+                {isCustomer && (
+                  <DeliveryStatusIndicator
+                    status={message.deliveryStatus}
+                    dict={chatDict.messages}
+                  />
+                )}
+              </span>
             </div>
           </div>
         )}
@@ -773,9 +875,11 @@ export function MessageBubble({
           <div className="space-y-1.5">
             {message.text && (
               <div
-                className={`rounded-2xl rounded-tl-none px-4 py-2.5 shadow-xs ${fontSizeClass} ${bubbleBgClass}`}
+                className={`rounded-wa-bubble rounded-tl-none px-3 py-2 shadow-wa-bubble ${fontSizeClass} ${bubbleColorClass}`}
               >
-                <p>{renderSafeRichText(message.text[locale], searchQuery)}</p>
+                <p className="wa-text-message">
+                  {renderSafeRichText(message.text[locale], searchQuery)}
+                </p>
               </div>
             )}
             <ChatProductCard
@@ -785,7 +889,7 @@ export function MessageBubble({
               isBusy={isBusy}
               onAddToOrder={onAddToOrder}
             />
-            <span className="block px-1 text-[10px] text-brand-ink-muted">
+            <span className="block px-1 text-wa-meta text-wa-text-secondary">
               {timeText}
             </span>
           </div>
@@ -803,7 +907,7 @@ export function MessageBubble({
               onConfirmOrder={onConfirmOrder}
               onAdvanceStep={onAdvanceStep}
             />
-            <span className="block px-1 text-[10px] text-brand-ink-muted">
+            <span className="block px-1 text-wa-meta text-wa-text-secondary">
               {timeText}
             </span>
           </div>
@@ -812,13 +916,13 @@ export function MessageBubble({
         {/* Bouton "Renvoyer" si le message est en échec (failed) */}
         {message.deliveryStatus === 'failed' && onRetryMessage && (
           <div className="mt-1 flex items-center gap-2">
-            <span className="text-[11px] font-bold text-red-600">
+            <span className="text-wa-meta font-medium text-red-600">
               {chatDict.messages.failedStatus}
             </span>
             <button
               type="button"
               onClick={() => onRetryMessage(message.id)}
-              className="rounded-full bg-red-600 px-3 py-0.5 text-[11px] font-extrabold text-white shadow-xs hover:bg-red-700"
+              className="rounded-full bg-red-600 px-3 py-0.5 text-wa-meta font-semibold text-white shadow-wa-bubble hover:bg-red-700"
             >
               ↻ {chatDict.messages.retryButton}
             </button>
@@ -827,7 +931,7 @@ export function MessageBubble({
 
         {/* Pastille des réactions par emoji sous la bulle */}
         {message.reactions && message.reactions.length > 0 && (
-          <div className="-mt-1.5 z-10 flex items-center gap-1 rounded-full border border-brand-ink/15 bg-white px-2 py-0.5 text-xs shadow-xs">
+          <div className="-mt-1.5 z-10 flex items-center gap-1 rounded-full border border-wa-border bg-wa-panel px-2 py-0.5 text-wa-meta shadow-wa-bubble">
             {message.reactions.map((r, i) => (
               <button
                 key={`${r.emoji}-${i}`}
@@ -835,7 +939,7 @@ export function MessageBubble({
                 onClick={() =>
                   onToggleReaction && onToggleReaction(message.id, r.emoji)
                 }
-                className="transition-transform hover:scale-125"
+                className="transition-transform duration-fast hover:scale-125"
               >
                 {r.emoji}
               </button>

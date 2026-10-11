@@ -1,19 +1,16 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
-import type {
-  CallType,
-  ChatRealtimeEvent,
-} from '@/services';
-import type { Conversation, Locale } from '@attieke-chat/shared';
+import type { CallType, ChatRealtimeEvent } from '@/services';
+import type { Conversation, Locale, Message } from '@attieke-chat/shared';
 import type { ChatDictionary } from '@/lib/i18n';
 import { usePresence } from '@/hooks/usePresence';
 
 export interface ChatHeaderProps {
   locale: Locale;
   conversation: Conversation | null;
+  selectedMessage?: Message | null;
   totalUnreadCount: number;
   isOnlineNetwork: boolean;
   isSearchOpen: boolean;
@@ -25,12 +22,22 @@ export interface ChatHeaderProps {
   onToggleOfflineMode: () => void;
   onToggleCatalogDrawer: () => void;
   onRestoreDemo: () => void;
+  onClearSelectedMessage?: () => void;
+  onReplySelectedMessage?: (message: Message) => void;
+  onStarSelectedMessage?: (messageId: string) => void;
+  onDeleteSelectedMessage?: (message: Message) => void;
+  onForwardSelectedMessage?: (message: Message) => void;
+  onInfoSelectedMessage?: (message: Message) => void;
+  onCopySelectedMessage?: (message: Message) => void;
+  onPinSelectedMessage?: (message: Message) => void;
+  onVerifySecurityCode?: () => void;
   _unusedEvent?: ChatRealtimeEvent;
 }
 
 export function ChatHeader({
   locale,
   conversation,
+  selectedMessage,
   totalUnreadCount,
   isOnlineNetwork,
   isSearchOpen,
@@ -42,41 +49,305 @@ export function ChatHeader({
   onToggleOfflineMode,
   onToggleCatalogDrawer,
   onRestoreDemo,
+  onClearSelectedMessage,
+  onReplySelectedMessage,
+  onStarSelectedMessage,
+  onDeleteSelectedMessage,
+  onForwardSelectedMessage,
+  onInfoSelectedMessage,
+  onCopySelectedMessage,
+  onPinSelectedMessage,
+  onVerifySecurityCode,
 }: ChatHeaderProps): React.JSX.Element {
+  const [showOverflowMenu, setShowOverflowMenu] = useState<boolean>(false);
+  const [showHeaderMenu, setShowHeaderMenu] = useState<boolean>(false);
+
   const { isOnline, isTyping, isRecordingVoice, statusLabel } = usePresence(
     conversation,
     locale,
     dict.presence
   );
 
+  const verifyLabel =
+    locale === 'zh'
+      ? '验证安全码'
+      : locale === 'en'
+      ? 'Verify security code'
+      : 'Vérifier le code de sécurité';
+  const pinLabel =
+    locale === 'zh' ? '置顶' : locale === 'en' ? 'Pin' : 'Épingler';
+
+  // Mode Sélection d'un message : Barre d'actions contextuelle en haut + menu ⋮ (comme sur image-3.png)
+  if (selectedMessage) {
+    return (
+      <header className="relative z-30 flex min-h-[60px] items-center justify-between border-b border-wa-border bg-wa-panel px-2.5 py-2 text-wa-text-primary sm:px-4">
+        {/* Gauche : Flèche retour ← + Compteur "1" */}
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => {
+              setShowOverflowMenu(false);
+              onClearSelectedMessage?.();
+            }}
+            aria-label={dict.contextMenu.closeMenu}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-wa-text-primary hover:bg-wa-composer"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              className="h-5 w-5"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19 12H5m7-7-7 7 7 7"
+              />
+            </svg>
+          </button>
+          <span className="text-wa-header font-semibold text-wa-text-primary">
+            1
+          </span>
+        </div>
+
+        {/* Droite : Répondre (↩) + Étoile (☆) + Supprimer (🗑️) + Transférer (↪) + Menu (⋮) */}
+        <div className="flex items-center gap-1 sm:gap-1.5">
+          {/* Répondre ↩ */}
+          <button
+            type="button"
+            onClick={() => {
+              setShowOverflowMenu(false);
+              onReplySelectedMessage?.(selectedMessage);
+            }}
+            aria-label={dict.contextMenu.reply}
+            title={dict.contextMenu.reply}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-wa-text-primary hover:bg-wa-composer"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              className="h-5 w-5"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 17 4 12l5-5"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M20 18v-2a4 4 0 0 0-4-4H4"
+              />
+            </svg>
+          </button>
+
+          {/* Important ☆ / ★ */}
+          <button
+            type="button"
+            onClick={() => {
+              setShowOverflowMenu(false);
+              onStarSelectedMessage?.(selectedMessage.id);
+            }}
+            aria-label={
+              selectedMessage.starred
+                ? dict.contextMenu.unstar
+                : dict.contextMenu.star
+            }
+            title={
+              selectedMessage.starred
+                ? dict.contextMenu.unstar
+                : dict.contextMenu.star
+            }
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-wa-text-primary hover:bg-wa-composer"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill={selectedMessage.starred ? 'currentColor' : 'none'}
+              stroke="currentColor"
+              strokeWidth="2"
+              className="h-5 w-5"
+              aria-hidden="true"
+            >
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+          </button>
+
+          {/* Supprimer 🗑️ */}
+          <button
+            type="button"
+            onClick={() => {
+              setShowOverflowMenu(false);
+              onDeleteSelectedMessage?.(selectedMessage);
+            }}
+            aria-label={dict.contextMenu.deleteForMe}
+            title={dict.contextMenu.deleteForMe}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-wa-text-primary hover:bg-wa-composer"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              className="h-5 w-5"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+              />
+            </svg>
+          </button>
+
+          {/* Transférer ↪ */}
+          <button
+            type="button"
+            onClick={() => {
+              setShowOverflowMenu(false);
+              onForwardSelectedMessage?.(selectedMessage);
+            }}
+            aria-label={dict.contextMenu.forward}
+            title={dict.contextMenu.forward}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-wa-text-primary hover:bg-wa-composer"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              className="h-5 w-5"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m15 17 5-5-5-5"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 18v-2a4 4 0 0 1 4-4h12"
+              />
+            </svg>
+          </button>
+
+          {/* Menu 3 points verticaux ⋮ */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setShowOverflowMenu((v) => !v)}
+              aria-label="Plus d'options"
+              aria-expanded={showOverflowMenu}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full text-wa-text-primary hover:bg-wa-composer"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="h-5 w-5"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="5" r="1.8" />
+                <circle cx="12" cy="12" r="1.8" />
+                <circle cx="12" cy="19" r="1.8" />
+              </svg>
+            </button>
+
+            {showOverflowMenu && (
+              <div
+                role="menu"
+                className="absolute right-0 top-12 z-50 w-60 overflow-hidden rounded-2xl border border-wa-border bg-wa-composer py-1.5 shadow-wa-panel"
+              >
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setShowOverflowMenu(false);
+                    onVerifySecurityCode?.();
+                  }}
+                  className="flex w-full items-center px-4 py-3 text-left text-wa-contact font-normal text-wa-text-primary hover:bg-wa-panel"
+                >
+                  {verifyLabel}
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setShowOverflowMenu(false);
+                    onInfoSelectedMessage?.(selectedMessage);
+                  }}
+                  className="flex w-full items-center px-4 py-3 text-left text-wa-contact font-normal text-wa-text-primary hover:bg-wa-panel"
+                >
+                  {dict.contextMenu.info}
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setShowOverflowMenu(false);
+                    onCopySelectedMessage?.(selectedMessage);
+                  }}
+                  className="flex w-full items-center px-4 py-3 text-left text-wa-contact font-normal text-wa-text-primary hover:bg-wa-panel"
+                >
+                  {dict.contextMenu.copy}
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setShowOverflowMenu(false);
+                    onPinSelectedMessage?.(selectedMessage);
+                  }}
+                  className="flex w-full items-center px-4 py-3 text-left text-wa-contact font-normal text-wa-text-primary hover:bg-wa-panel"
+                >
+                  {pinLabel}
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </header>
+    );
+  }
+
   return (
-    <header className="flex items-center justify-between bg-brand-green px-3 py-2.5 text-white shadow-sm sm:px-4">
-      {/* Gauche : Retour mobile (liste conversations) / Retour accueil + Avatar + Nom + Présence */}
+    <header className="relative z-20 flex min-h-[60px] items-center justify-between border-b border-wa-border bg-wa-header px-3 py-2 text-white md:bg-wa-panel md:text-wa-text-primary sm:px-4">
+      {/* Gauche : Retour mobile + Avatar rond 40 px + Nom (16px/500) + Statut ("en ligne" / "écrit…") */}
       <div className="flex min-w-0 items-center gap-2.5">
         <button
           type="button"
           onClick={onShowMobileConversationList}
           aria-label={dict.conversationList.backToConversationsAria}
-          className="relative inline-flex h-9 shrink-0 items-center justify-center gap-1 rounded-full bg-white/15 px-2.5 text-xs font-extrabold text-white transition-colors hover:bg-white/25 md:hidden"
+          className="relative inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-full text-white transition-colors duration-fast hover:bg-white/15 md:hidden"
         >
-          <span>←</span>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            className="h-5 w-5"
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19 12H5m7-7-7 7 7 7"
+            />
+          </svg>
           {totalUnreadCount > 0 && (
-            <span className="inline-flex min-w-[18px] items-center justify-center rounded-full bg-brand-gold px-1 text-[10px] font-extrabold text-brand-ink">
+            <span className="absolute right-0.5 top-1 inline-flex min-w-[16px] items-center justify-center rounded-full bg-wa-accent px-1 text-wa-meta font-semibold text-white">
               {totalUnreadCount}
             </span>
           )}
         </button>
 
-        <Link
-          href={`/${locale}`}
-          aria-label={dict.header.backToHomeAria}
-          className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 md:inline-flex"
-        >
-          ←
-        </Link>
-
+        {/* Avatar rond 40 px exactement */}
         <div className="relative h-10 w-10 shrink-0">
-          <div className="relative h-10 w-10 overflow-hidden rounded-full border-2 border-brand-gold bg-brand-green-dark">
+          <div className="relative h-10 w-10 overflow-hidden rounded-full bg-wa-dark-green">
             <Image
               src={
                 conversation?.vendorAvatarUrl ?? '/images/avatars/vendor.jpg'
@@ -90,33 +361,21 @@ export function ChatHeader({
           {isOnline && (
             <span
               aria-hidden="true"
-              className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-brand-green bg-[#25D366]"
+              className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-wa-header bg-wa-accent md:border-wa-panel"
             />
           )}
         </div>
 
         <div className="min-w-0">
-          <div className="flex items-center gap-1.5">
-            <h2 className="truncate text-sm font-extrabold leading-tight sm:text-base">
-              {conversation?.vendorName ?? dict.header.vendorName}
-            </h2>
-            {conversation?.muted && (
-              <span
-                aria-label={dict.conversationList.mutedBadge}
-                className="text-xs text-white/70"
-              >
-                🔇
-              </span>
-            )}
-          </div>
+          <h2 className="truncate text-wa-contact font-medium text-white md:text-wa-text-primary">
+            {conversation?.vendorName ?? dict.header.vendorName}
+          </h2>
           <p
             aria-live="polite"
-            className={`truncate text-xs ${
+            className={`truncate text-wa-meta ${
               isTyping || isRecordingVoice
-                ? 'font-extrabold text-brand-gold'
-                : isOnline
-                ? 'text-emerald-300'
-                : 'text-white/75'
+                ? 'font-medium text-wa-accent'
+                : 'text-white/80 md:text-wa-text-secondary'
             }`}
           >
             {statusLabel}
@@ -124,142 +383,182 @@ export function ChatHeader({
         </div>
       </div>
 
-      {/* Droite : Actions WhatsApp (Appel vocal, Appel vidéo, Recherche, Catalogue, Thème, Hors-ligne, Démo) */}
-      <div className="flex shrink-0 items-center gap-1 sm:gap-1.5">
-        {/* Appel vocal simulé */}
-        <button
-          type="button"
-          onClick={() => onStartCall('audio')}
-          aria-label={dict.header.audioCallAria}
-          title={dict.header.audioCallAria}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            className="h-4 w-4"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-            />
-          </svg>
-        </button>
-
-        {/* Appel vidéo simulé */}
+      {/* Droite : Appel vidéo, Appel vocal, Loupe Recherche (🔍) et Menu 3 points (⋮) exactement comme sur image-1.png */}
+      <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
+        {/* Appel vidéo */}
         <button
           type="button"
           onClick={() => onStartCall('video')}
           aria-label={dict.header.videoCallAria}
           title={dict.header.videoCallAria}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+          className="inline-flex min-h-[40px] min-w-[40px] items-center justify-center rounded-full text-white transition-colors duration-fast hover:bg-white/15 md:text-wa-text-secondary md:hover:bg-wa-composer md:hover:text-wa-text-primary"
         >
           <svg
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
-            className="h-4 w-4"
+            strokeWidth="1.9"
+            className="h-5 w-5"
+            aria-hidden="true"
+          >
+            <rect x="2" y="6" width="14" height="12" rx="2.5" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="m22 8-6 4 6 4V8z"
+            />
+          </svg>
+        </button>
+
+        {/* Appel vocal */}
+        <button
+          type="button"
+          onClick={() => onStartCall('audio')}
+          aria-label={dict.header.audioCallAria}
+          title={dict.header.audioCallAria}
+          className="inline-flex min-h-[40px] min-w-[40px] items-center justify-center rounded-full text-white transition-colors duration-fast hover:bg-white/15 md:text-wa-text-secondary md:hover:bg-wa-composer md:hover:text-wa-text-primary"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.9"
+            className="h-5 w-5"
             aria-hidden="true"
           >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+              d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.58 2.81.7A2 2 0 0 1 22 16.92z"
             />
           </svg>
         </button>
 
-        {/* Recherche dans la conversation */}
+        {/* Recherche dans la conversation (🔍) */}
         <button
           type="button"
           onClick={onToggleSearch}
           aria-pressed={isSearchOpen}
           aria-label={dict.header.searchInChatAria}
           title={dict.header.searchInChatAria}
-          className={`inline-flex h-9 w-9 items-center justify-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold ${
+          className={`inline-flex min-h-[40px] min-w-[40px] items-center justify-center rounded-full transition-colors duration-fast ${
             isSearchOpen
-              ? 'bg-brand-gold text-brand-ink'
-              : 'bg-white/10 text-white hover:bg-white/20'
+              ? 'bg-white/25 text-white md:bg-wa-composer md:text-wa-text-primary'
+              : 'text-white hover:bg-white/15 md:text-wa-text-secondary md:hover:bg-wa-composer md:hover:text-wa-text-primary'
           }`}
         >
           <svg
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            className="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            className="h-5 w-5"
             aria-hidden="true"
           >
-            <path
-              fillRule="evenodd"
-              d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
-              clipRule="evenodd"
-            />
+            <circle cx="11" cy="11" r="7.5" />
+            <path strokeLinecap="round" d="m20 20-3.8-3.8" />
           </svg>
         </button>
 
-        {/* Interrupteur Mode Hors-Ligne / En Ligne */}
-        <button
-          type="button"
-          onClick={onToggleOfflineMode}
-          aria-pressed={!isOnlineNetwork}
-          title={
-            isOnlineNetwork
-              ? dict.header.offlineToggleLabel
-              : dict.header.onlineToggleLabel
-          }
-          className={`hidden sm:inline-flex h-9 items-center gap-1 rounded-full px-2.5 text-[11px] font-extrabold transition-colors ${
-            isOnlineNetwork
-              ? 'bg-white/10 text-emerald-300 hover:bg-white/20'
-              : 'bg-amber-400 text-brand-ink shadow-xs'
-          }`}
-        >
-          <span aria-hidden="true">{isOnlineNetwork ? '📶' : '✈️'}</span>
-          <span className="hidden lg:inline">
-            {isOnlineNetwork
-              ? dict.header.onlineToggleLabel
-              : dict.header.offlineToggleLabel}
-          </span>
-        </button>
+        {/* Menu 3 points verticaux (⋮) en haut à droite (comme sur image-1.png) */}
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setShowHeaderMenu((v) => !v)}
+            aria-expanded={showHeaderMenu}
+            aria-label="Menu"
+            className="inline-flex min-h-[40px] min-w-[40px] items-center justify-center rounded-full text-white transition-colors duration-fast hover:bg-white/15 md:text-wa-text-secondary md:hover:bg-wa-composer md:hover:text-wa-text-primary"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="h-5 w-5"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="5" r="1.8" />
+              <circle cx="12" cy="12" r="1.8" />
+              <circle cx="12" cy="19" r="1.8" />
+            </svg>
+          </button>
 
-        {/* Personnalisation Thème / Fond / Police / Notifications */}
-        <button
-          type="button"
-          onClick={onOpenSettings}
-          aria-label={dict.header.appearanceAria}
-          title={dict.header.appearanceAria}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-        >
-          <span aria-hidden="true" className="text-sm">
-            🎨
-          </span>
-        </button>
+          {showHeaderMenu && (
+            <div
+              role="menu"
+              className="absolute right-0 top-12 z-50 w-60 overflow-hidden rounded-2xl border border-wa-border bg-wa-panel py-1.5 text-wa-text-primary shadow-wa-panel"
+            >
+              <button
+                type="button"
+                role="menuitem"
+                onClick={() => {
+                  setShowHeaderMenu(false);
+                  onToggleCatalogDrawer();
+                }}
+                className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-wa-preview text-wa-text-primary hover:bg-wa-composer"
+              >
+                <span>🍲</span>
+                <span>{dict.header.catalogDrawerButton}</span>
+              </button>
 
-        {/* Tiroir Catalogue rapide */}
-        <button
-          type="button"
-          onClick={onToggleCatalogDrawer}
-          className="inline-flex min-h-[36px] items-center gap-1 rounded-full border border-brand-ink bg-brand-gold px-2.5 py-1 text-xs font-extrabold text-brand-ink transition-colors hover:bg-brand-gold-hover sm:px-3"
-        >
-          <span aria-hidden="true">🍲</span>
-          <span className="hidden xl:inline">
-            {dict.header.catalogDrawerButton}
-          </span>
-        </button>
+              <button
+                type="button"
+                role="menuitem"
+                onClick={() => {
+                  setShowHeaderMenu(false);
+                  onVerifySecurityCode?.();
+                }}
+                className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-wa-preview text-wa-text-primary hover:bg-wa-composer"
+              >
+                <span>🔒</span>
+                <span>{verifyLabel}</span>
+              </button>
 
-        {/* Restaurer la démo */}
-        <button
-          type="button"
-          onClick={onRestoreDemo}
-          title={dict.header.resetDemoButton}
-          aria-label={dict.header.resetDemoButton}
-          className="inline-flex h-9 items-center rounded-full bg-white/15 px-2.5 text-xs font-bold text-white hover:bg-white/25"
-        >
-          ↺
-        </button>
+              <button
+                type="button"
+                role="menuitem"
+                onClick={() => {
+                  setShowHeaderMenu(false);
+                  onOpenSettings();
+                }}
+                className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-wa-preview text-wa-text-primary hover:bg-wa-composer"
+              >
+                <span>🎨</span>
+                <span>{dict.header.appearanceAria}</span>
+              </button>
+
+              <button
+                type="button"
+                role="menuitem"
+                onClick={() => {
+                  setShowHeaderMenu(false);
+                  onToggleOfflineMode();
+                }}
+                className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-wa-preview text-wa-text-primary hover:bg-wa-composer"
+              >
+                <span>{isOnlineNetwork ? '📡' : '📶'}</span>
+                <span>
+                  {isOnlineNetwork
+                    ? dict.header.offlineToggleLabel
+                    : dict.header.onlineToggleLabel}
+                </span>
+              </button>
+
+              <div className="my-1 border-t border-wa-border" />
+
+              <button
+                type="button"
+                role="menuitem"
+                onClick={() => {
+                  setShowHeaderMenu(false);
+                  onRestoreDemo();
+                }}
+                className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-wa-preview text-wa-text-primary hover:bg-wa-composer"
+              >
+                <span>🔄</span>
+                <span>{dict.header.resetDemoButton}</span>
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );

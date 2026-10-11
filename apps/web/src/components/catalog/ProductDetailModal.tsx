@@ -58,11 +58,11 @@ export function ProductDetailModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="product-modal-title"
-      className="fixed inset-0 z-50 flex items-end justify-center bg-brand-ink/60 p-0 backdrop-blur-sm sm:items-center sm:p-4"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/55 p-0 backdrop-blur-xs sm:items-center sm:p-4"
       onClick={onClose}
     >
       <div
-        className="relative max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-t-[2rem] bg-brand-cream-card p-5 shadow-2xl sm:rounded-[2rem] sm:p-7"
+        className="relative max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-t-2xl border border-wa-border bg-wa-panel p-5 text-wa-text-primary shadow-wa-panel sm:rounded-2xl sm:p-6"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Bouton Fermer */}
@@ -70,13 +70,13 @@ export function ProductDetailModal({
           type="button"
           onClick={onClose}
           aria-label={dict.closeAria}
-          className="absolute right-4 top-4 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-brand-ink/15 bg-white text-sm font-extrabold text-brand-ink shadow-sm hover:bg-brand-cream"
+          className="absolute right-4 top-4 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-wa-border bg-wa-panel text-wa-preview font-semibold text-wa-text-primary shadow-wa-bubble hover:bg-wa-composer"
         >
           ✕
         </button>
 
         {/* Image HD du produit */}
-        <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-brand-cream-subtle">
+        <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-wa-composer">
           <Image
             src={product.imageSrc}
             alt={name}
@@ -84,78 +84,78 @@ export function ProductDetailModal({
             sizes="(max-width: 640px) 100vw, 560px"
             className="object-cover"
           />
-          <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-brand-ink/85 px-3 py-1 text-xs font-bold text-[#25D366]">
+          <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-wa-panel/90 px-3 py-1 text-wa-meta font-semibold text-wa-accent">
             ● {cardDict.inStock}
           </span>
         </div>
 
         {/* Titre & Prix */}
-        <div className="mt-5">
+        <div className="mt-4">
           <div className="flex items-start justify-between gap-3">
             <h2
               id="product-modal-title"
-              className="text-xl font-extrabold text-brand-ink sm:text-2xl"
+              className="wa-text-title text-wa-text-primary"
             >
               {name}
             </h2>
-            <span className="shrink-0 text-2xl font-extrabold text-brand-green">
+            <span className="shrink-0 text-wa-title font-semibold text-wa-dark-green dark:text-wa-accent">
               {totalPrice}
             </span>
           </div>
 
-          <p className="mt-3 text-sm leading-relaxed text-brand-ink-muted">
+          <p className="mt-2.5 text-wa-body text-wa-text-secondary">
             {fullDesc}
           </p>
 
           {/* Caractéristiques : Format & Poids */}
-          <dl className="mt-4 grid grid-cols-2 gap-3 rounded-2xl border border-brand-ink/10 bg-brand-cream p-3.5 text-xs">
+          <dl className="mt-4 grid grid-cols-2 gap-3 rounded-xl border border-wa-border bg-wa-composer p-3 text-wa-preview">
             <div>
-              <dt className="font-semibold text-brand-ink-muted">
+              <dt className="text-wa-meta text-wa-text-secondary">
                 {dict.formatLabel}
               </dt>
-              <dd className="mt-0.5 font-extrabold text-brand-ink">
+              <dd className="mt-0.5 font-medium text-wa-text-primary">
                 {formatLabel}
               </dd>
             </div>
             <div>
-              <dt className="font-semibold text-brand-ink-muted">
+              <dt className="text-wa-meta text-wa-text-secondary">
                 {dict.weightLabel}
               </dt>
-              <dd className="mt-0.5 font-extrabold text-brand-ink">
+              <dd className="mt-0.5 font-medium text-wa-text-primary">
                 {product.weightKg} {cardDict.weightUnit}
               </dd>
             </div>
           </dl>
 
           {/* Conseils de préparation */}
-          <div className="mt-4 rounded-2xl bg-brand-green-soft/60 p-3.5 text-xs">
-            <p className="font-extrabold text-brand-green">
+          <div className="mt-3.5 rounded-xl bg-wa-bubble-out p-3.5 text-wa-preview">
+            <p className="font-semibold text-wa-dark-green dark:text-wa-accent">
               🍳 {dict.prepTipsTitle}
             </p>
-            <p className="mt-1 leading-relaxed text-brand-ink">{prepTips}</p>
+            <p className="mt-1 text-wa-text-primary">{prepTips}</p>
           </div>
 
           {/* Sélecteur de quantité */}
-          <div className="mt-5 flex items-center justify-between">
-            <span className="text-sm font-bold text-brand-ink">
+          <div className="mt-4 flex items-center justify-between">
+            <span className="text-wa-preview font-medium text-wa-text-primary">
               {dict.quantityLabel}
             </span>
-            <div className="inline-flex items-center gap-3 rounded-full border border-brand-ink/15 bg-brand-cream px-3 py-1">
+            <div className="inline-flex items-center gap-3 rounded-full border border-wa-border bg-wa-composer px-3 py-1">
               <button
                 type="button"
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-base font-extrabold text-brand-ink shadow-sm"
+                className="flex h-7 w-7 items-center justify-center rounded-full bg-wa-panel text-wa-contact font-semibold text-wa-text-primary shadow-wa-bubble"
                 aria-label="-"
               >
                 −
               </button>
-              <span className="min-w-[24px] text-center text-sm font-extrabold">
+              <span className="min-w-[24px] text-center text-wa-preview font-semibold">
                 {quantity}
               </span>
               <button
                 type="button"
                 onClick={() => setQuantity((q) => Math.min(10, q + 1))}
-                className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-base font-extrabold text-brand-ink shadow-sm"
+                className="flex h-7 w-7 items-center justify-center rounded-full bg-wa-panel text-wa-contact font-semibold text-wa-text-primary shadow-wa-bubble"
                 aria-label="+"
               >
                 +
@@ -163,18 +163,20 @@ export function ProductDetailModal({
             </div>
           </div>
 
-          {/* Bouton principal : Commander par chat */}
-          <div className="mt-6">
+          {/* Bouton principal de commerce : Jaune doré #F2B705 ("Commander par chat") */}
+          <div className="mt-5">
             <Link
-              href={`/${locale}/chat?product=${encodeURIComponent(product.slug)}`}
+              href={`/${locale}/chat?product=${encodeURIComponent(
+                product.slug
+              )}`}
               onClick={onClose}
-              className="flex min-h-[52px] w-full items-center justify-center gap-2.5 rounded-full border border-brand-ink bg-brand-gold px-6 py-3.5 text-base font-extrabold text-brand-ink shadow-cta transition-transform hover:-translate-y-0.5 hover:bg-brand-gold-hover"
+              className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-wa-bubble bg-wa-commerce px-6 py-3 text-wa-contact font-semibold text-wa-commerce-text shadow-wa-bubble transition-colors duration-fast hover:bg-wa-commerce-hover"
             >
               <span aria-hidden="true">💬</span>
               <span>{dict.orderByChatCta}</span>
               <span aria-hidden="true">→</span>
             </Link>
-            <p className="mt-2 text-center text-[11px] text-brand-ink-muted">
+            <p className="mt-2 text-center text-wa-meta text-wa-text-secondary">
               {dict.directChatNote}
             </p>
           </div>

@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import type { ImageAttachmentItem, Locale } from '@attieke-chat/shared';
+import type { ImageAttachmentItem, Locale, Message } from '@attieke-chat/shared';
 import {
   formatPriceYuan,
   type ChatDictionary,
@@ -130,16 +130,51 @@ export function ChatWindow({
     onJumpToMessage: scrollToMessageElement,
   });
 
+  // Sur mobile (Android / iOS), afficher par défaut la liste des discussions (comme sur la capture)
+  // sauf si l'utilisateur vient de cliquer sur un produit du catalogue (?product=...)
   const [showMobileConversationList, setShowMobileConversationList] =
-    useState<boolean>(false);
+    useState<boolean>(!initialProductSlug);
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const [showCatalogDrawer, setShowCatalogDrawer] = useState<boolean>(false);
+  const [deletingMessage, setDeletingMessage] = useState<Message | null>(null);
+  const [securityCodeModalOpen, setSecurityCodeModalOpen] =
+    useState<boolean>(false);
+  const [pinnedMessage, setPinnedMessage] = useState<Message | null>(null);
   const [viewerState, setViewerState] = useState<{
     images: ImageAttachmentItem[];
     index: number;
     caption?: string;
   } | null>(null);
+
+  // Synchroniser l'attribut data-mobile-thread-open pour masquer la barre du bas sur mobile quand un fil est ouvert
+  useEffect(() => {
+    if (typeof document === 'undefined') {
+      return;
+    }
+    const root = document.documentElement;
+    if (!showMobileConversationList) {
+      root.setAttribute('data-mobile-thread-open', 'true');
+    } else {
+      root.removeAttribute('data-mobile-thread-open');
+    }
+    return () => {
+      root.removeAttribute('data-mobile-thread-open');
+    };
+  }, [showMobileConversationList]);
+
+  // Écouter le clic sur l'onglet "Chat / Discussions" pour revenir à la liste des discussions sur mobile
+  useEffect(() => {
+    const handleShowList = (): void => {
+      setShowMobileConversationList(true);
+    };
+    window.addEventListener('attieke:show-conversation-list', handleShowList);
+    return () =>
+      window.removeEventListener(
+        'attieke:show-conversation-list',
+        handleShowList
+      );
+  }, []);
 
   const handleSendQuickOrderInquiry = async (): Promise<void> => {
     await sendText(
@@ -162,12 +197,18 @@ export function ChatWindow({
   };
 
   return (
-    <div className="mx-auto flex h-[calc(100vh-5rem)] max-w-7xl overflow-hidden rounded-3xl border border-brand-ink/10 bg-white shadow-card">
-      {/* PANNEAU GAUCHE : Liste des conversations (Sous-phase A) */}
+    <div
+      className={`flex w-full overflow-hidden bg-wa-panel md:h-screen ${
+        showMobileConversationList
+          ? 'h-[calc(100dvh-7.25rem)]'
+          : 'h-[100dvh]'
+      }`}
+    >
+      {/* PANNEAU GAUCHE : Liste des discussions (plein écran par défaut sur mobile Android/iOS, colonne 380px-420px sur ordinateur) */}
       <div
         className={`${
           showMobileConversationList ? 'flex w-full' : 'hidden'
-        } md:flex md:w-[330px] lg:w-[360px] shrink-0 h-full`}
+        } md:flex md:w-[380px] lg:w-[420px] shrink-0 h-full`}
       >
         <ConversationList
           locale={locale}
@@ -188,19 +229,24 @@ export function ChatWindow({
           onTogglePin={(convId) => void togglePinConversation(convId)}
           onToggleMute={(convId) => void toggleMuteConversation(convId)}
           onMarkRead={(convId) => void markConversationRead(convId)}
+          onOpenCatalogDrawer={() => {
+            setShowMobileConversationList(false);
+            setShowCatalogDrawer(true);
+          }}
         />
       </div>
 
-      {/* PANNEAU DROIT : Fil de conversation actif (Sous-phases B, C, D, E, F) */}
+      {/* PANNEAU DROIT : Fil de conversation actif */}
       <div
         className={`${
           showMobileConversationList ? 'hidden md:flex' : 'flex'
         } relative flex-1 flex-col h-full min-w-0 overflow-hidden`}
       >
-        {/* 1. En-tête de la conversation active */}
+        {/* 1. En-tête de la conversation active OU Barre d'actions de sélection (image-3.png) */}
         <ChatHeader
           locale={locale}
           conversation={activeConversation}
+          selectedMessage={activeContextMenuMessage}
           totalUnreadCount={totalUnreadCount}
           isOnlineNetwork={isOnlineNetwork}
           isSearchOpen={isSearchOpen}
@@ -221,13 +267,62 @@ export function ChatWindow({
           onToggleOfflineMode={() => void toggleOfflineMode()}
           onToggleCatalogDrawer={() => setShowCatalogDrawer((v) => !v)}
           onRestoreDemo={() => void resetDemo()}
+          onClearSelectedMessage={closeContextMenu}
+          onReplySelectedMessage={(msg) => startReplyTo(msg)}
+          onStarSelectedMessage={(msgId) => void toggleStar(msgId)}
+          onDeleteSelectedMessage={(msg) => {
+            closeContextMenu();
+            setDeletingMessage(msg);
+          }}
+          onForwardSelectedMessage={(msg) => openForwardModal(msg)}
+          onInfoSelectedMessage={(msg) => openInfoModal(msg)}
+          onCopySelectedMessage={(msg) =>
+            void copyMessageText(msg, chatDict.contextMenu.copiedToast)
+          }
+          onPinSelectedMessage={(msg) => {
+            setPinnedMessage((prev) => (prev?.id === msg.id ? null : msg));
+            closeContextMenu();
+          }}
+          onVerifySecurityCode={() => {
+            closeContextMenu();
+            setSecurityCodeModalOpen(true);
+          }}
         />
+
+        {/* 1b. Bandeau de message épinglé (lorsqu'un message est épinglé depuis le menu ⋮ "Épingler") */}
+        {pinnedMessage && (
+          <div className="flex items-center justify-between gap-2 border-b border-wa-border bg-wa-panel px-4 py-2 text-wa-preview">
+            <button
+              type="button"
+              onClick={() => jumpToMessage(pinnedMessage.id)}
+              className="flex min-w-0 flex-1 items-center gap-2 text-left"
+            >
+              <span className="text-wa-accent" aria-hidden="true">
+                📌
+              </span>
+              <span className="truncate font-medium text-wa-text-primary">
+                {pinnedMessage.text?.[locale] ??
+                  pinnedMessage.imageCaption?.[locale] ??
+                  pinnedMessage.document?.fileName ??
+                  'Message épinglé'}
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setPinnedMessage(null)}
+              aria-label="Désépingler"
+              className="flex h-7 w-7 items-center justify-center rounded-full text-wa-text-secondary hover:text-wa-text-primary"
+            >
+              ✕
+            </button>
+          </div>
+        )}
 
         {/* 2. Bandeau Mode Hors-Ligne ("connexion en cours…") avec file d'attente */}
         {!isOnlineNetwork && (
           <div
             role="status"
-            className="flex flex-wrap items-center justify-between gap-2 bg-amber-400 px-4 py-2 text-xs font-extrabold text-brand-ink shadow-xs"
+            className="flex flex-wrap items-center justify-between gap-2 border-b border-wa-border bg-wa-system-bg px-4 py-2 text-wa-meta font-semibold text-wa-system-text"
           >
             <div className="flex items-center gap-2">
               <span aria-hidden="true" className="animate-spin">
@@ -241,7 +336,7 @@ export function ChatWindow({
             <button
               type="button"
               onClick={() => void toggleOfflineMode()}
-              className="rounded-full bg-brand-ink px-3 py-1 text-[11px] font-extrabold text-brand-gold hover:bg-brand-green"
+              className="rounded-full bg-wa-accent px-3 py-1 text-wa-meta font-semibold text-wa-commerce-text"
             >
               📶 {chatDict.offlineBanner.reconnectNowButton}
             </button>
@@ -277,27 +372,27 @@ export function ChatWindow({
 
         {/* 4. Tiroir Catalogue Rapide pour mentionner un produit dans le chat */}
         {showCatalogDrawer && (
-          <div className="border-b border-brand-ink/10 bg-brand-cream p-3.5 shadow-inner">
-            <div className="mb-2.5 flex items-center justify-between">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-brand-green">
+          <div className="border-b border-wa-border bg-wa-composer p-3">
+            <div className="mb-2 flex items-center justify-between">
+              <span className="text-wa-preview font-semibold text-wa-dark-green dark:text-wa-accent">
                 🍲 {chatDict.quickCatalog.title}
               </span>
               <button
                 type="button"
                 aria-label={chatDict.quickCatalog.closeAria}
                 onClick={() => setShowCatalogDrawer(false)}
-                className="text-xs font-bold text-brand-ink-muted hover:text-brand-ink"
+                className="flex h-7 w-7 items-center justify-center rounded-full text-wa-text-secondary hover:text-wa-text-primary"
               >
                 ✕
               </button>
             </div>
-            <div className="flex gap-3 overflow-x-auto pb-1">
+            <div className="flex gap-2.5 overflow-x-auto pb-1">
               {allProducts.map((prod) => (
                 <div
                   key={prod.id}
-                  className="flex w-56 shrink-0 items-center gap-2.5 rounded-2xl border border-brand-ink/10 bg-white p-2.5 shadow-xs"
+                  className="flex w-56 shrink-0 items-center gap-2.5 rounded-wa-bubble border border-wa-border bg-wa-panel p-2 shadow-wa-bubble"
                 >
-                  <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-brand-cream-subtle">
+                  <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-wa-bubble bg-wa-composer">
                     <Image
                       src={prod.imageSrc}
                       alt={prod.name[locale]}
@@ -307,10 +402,10 @@ export function ChatWindow({
                     />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-xs font-extrabold text-brand-ink">
+                    <p className="truncate text-wa-preview font-medium text-wa-text-primary">
                       {prod.name[locale]}
                     </p>
-                    <p className="text-xs font-extrabold text-brand-green">
+                    <p className="text-wa-preview font-semibold text-wa-dark-green dark:text-wa-accent">
                       {formatPriceYuan(prod.priceYuan, locale)}
                     </p>
                     <button
@@ -320,7 +415,7 @@ export function ChatWindow({
                         void sendProductInquiry(prod.id);
                         setShowCatalogDrawer(false);
                       }}
-                      className="mt-1 rounded-full bg-brand-green-soft px-2.5 py-0.5 text-[11px] font-bold text-brand-green hover:bg-brand-green hover:text-white"
+                      className="mt-1 rounded-full bg-wa-commerce px-2.5 py-0.5 text-wa-meta font-semibold text-wa-commerce-text hover:bg-wa-commerce-hover"
                     >
                       {chatDict.quickCatalog.sendToChatButton}
                     </button>
@@ -335,16 +430,17 @@ export function ChatWindow({
         {actionToast && (
           <div
             role="status"
-            className="pointer-events-none absolute left-1/2 top-16 z-30 -translate-x-1/2 rounded-full bg-brand-ink/90 px-4 py-1.5 text-xs font-extrabold text-brand-gold shadow-lg"
+            className="pointer-events-none absolute left-1/2 top-16 z-30 -translate-x-1/2 rounded-full bg-wa-composer px-4 py-1.5 text-wa-meta font-semibold text-wa-text-primary shadow-wa-panel"
           >
             ✓ {actionToast}
           </div>
         )}
 
-        {/* 6. Liste des messages avec séparateurs de date, pagination haut et bouton flottant bas */}
+        {/* 6. Liste des messages */}
         <MessageList
           messages={messages}
           conversation={activeConversation}
+          selectedMessage={activeContextMenuMessage}
           locale={locale}
           productsMap={productsMap}
           ordersMap={ordersMap}
@@ -361,7 +457,13 @@ export function ChatWindow({
           onAddToOrder={addToOrderFromChat}
           onConfirmOrder={confirmOrderFromChat}
           onAdvanceStep={advanceOrderStepFromChat}
-          onOpenContextMenu={openContextMenu}
+          onOpenContextMenu={(msg) => {
+            if (activeContextMenuMessage?.id === msg.id) {
+              closeContextMenu();
+            } else {
+              openContextMenu(msg);
+            }
+          }}
           onReply={startReplyTo}
           onToggleReaction={(messageId, emoji) =>
             void toggleReaction(messageId, emoji)
@@ -374,7 +476,7 @@ export function ChatWindow({
           onQuickReplyText={(txt) => void sendText(txt)}
         />
 
-        {/* 7. Zone de saisie complète (Composer + Emojis + Vocaux + Pièces jointes + Raccourcis) */}
+        {/* 7. Barre de saisie (Composer) */}
         <Composer
           locale={locale}
           vendorName={
@@ -399,11 +501,16 @@ export function ChatWindow({
           }
         />
 
-        {/* 8. Menu contextuel sur un message + Modales Transférer & Infos */}
+        {/* 8. Modales Transférer, Infos, Supprimer & Vérifier le code de sécurité */}
         <ContextMenu
           message={activeContextMenuMessage}
           forwardingMessage={forwardingMessage}
           infoModalMessage={infoModalMessage}
+          deletingMessage={deletingMessage}
+          securityCodeModalOpen={securityCodeModalOpen}
+          vendorName={
+            activeConversation?.vendorName ?? chatDict.header.vendorName
+          }
           conversations={conversations}
           locale={locale}
           dict={chatDict}
@@ -424,11 +531,13 @@ export function ChatWindow({
           onToggleStar={(messageId) => void toggleStar(messageId)}
           onOpenInfo={openInfoModal}
           onCloseInfo={closeInfoModal}
+          onCloseDeleteModal={() => setDeletingMessage(null)}
+          onCloseSecurityCodeModal={() => setSecurityCodeModalOpen(false)}
           onDeleteForMe={(messageId) => void deleteForMe(messageId)}
           onDeleteForEveryone={(messageId) => void deleteForEveryone(messageId)}
         />
 
-        {/* 9. Visionneuse d'images plein écran avec zoom et navigation */}
+        {/* 9. Visionneuse d'images plein écran */}
         {viewerState && (
           <ImageViewer
             images={viewerState.images}
@@ -439,7 +548,7 @@ export function ChatWindow({
           />
         )}
 
-        {/* 10. Écran d'appel vocal / vidéo simulé (CallService) */}
+        {/* 10. Écran d'appel vocal / vidéo simulé */}
         <CallScreen
           session={activeCall}
           dict={chatDict.callScreen}

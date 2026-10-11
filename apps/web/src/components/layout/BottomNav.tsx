@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { Locale } from '@attieke-chat/shared';
@@ -25,25 +26,27 @@ export function BottomNav({ locale, dict }: BottomNavProps): React.JSX.Element {
     }
   }, [isHydrated, hydrateSession]);
 
+  // 4 onglets style mobile Android / iOS : Discussions (Chat), Catalogue, Commandes, Profil
   const items: ReadonlyArray<{
-    key: 'home' | 'chat' | 'orders' | 'profile';
+    key: 'chat' | 'catalog' | 'orders' | 'profile';
     href: string;
     label: string;
     badgeCount?: number;
     isActive: boolean;
   }> = [
     {
-      key: 'home',
-      href: `/${locale}`,
-      label: dict.home,
-      isActive: pathname === `/${locale}`,
-    },
-    {
       key: 'chat',
       href: `/${locale}/chat`,
       label: dict.chat,
       badgeCount: unreadChatCount,
-      isActive: pathname.startsWith(`/${locale}/chat`),
+      isActive:
+        pathname === `/${locale}` || pathname.startsWith(`/${locale}/chat`),
+    },
+    {
+      key: 'catalog',
+      href: `/${locale}/catalog`,
+      label: dict.catalog,
+      isActive: pathname.startsWith(`/${locale}/catalog`),
     },
     {
       key: 'orders',
@@ -65,7 +68,7 @@ export function BottomNav({ locale, dict }: BottomNavProps): React.JSX.Element {
   return (
     <nav
       aria-label={dict.bottomNavAriaLabel}
-      className="fixed bottom-0 left-0 right-0 z-40 border-t border-brand-ink/10 bg-brand-cream-card/95 backdrop-blur-md md:hidden"
+      className="wa-mobile-hide-in-thread fixed bottom-0 left-0 right-0 z-40 border-t border-wa-border bg-wa-panel md:hidden"
     >
       <ul className="mx-auto grid max-w-md grid-cols-4 px-2 py-1.5">
         {items.map((item) => (
@@ -73,34 +76,27 @@ export function BottomNav({ locale, dict }: BottomNavProps): React.JSX.Element {
             <Link
               href={item.href}
               aria-current={item.isActive ? 'page' : undefined}
-              className={`relative flex min-h-[52px] flex-col items-center justify-center gap-1 rounded-2xl px-1 py-1 text-xs font-bold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-green ${
+              onClick={() => {
+                if (item.key === 'chat' && typeof window !== 'undefined') {
+                  window.dispatchEvent(
+                    new CustomEvent('attieke:show-conversation-list')
+                  );
+                }
+              }}
+              className={`relative flex min-h-[54px] flex-col items-center justify-center gap-1 rounded-xl px-1 py-1 text-wa-meta transition-colors duration-fast focus:outline-none focus-visible:ring-2 focus-visible:ring-wa-accent ${
                 item.isActive
-                  ? 'text-brand-green'
-                  : 'text-brand-ink-muted hover:text-brand-ink'
+                  ? 'font-bold text-wa-text-primary'
+                  : 'font-medium text-wa-text-secondary hover:text-wa-text-primary'
               }`}
             >
+              {/* Capsule active arrondie autour de l'icône (exactement comme sur la capture Android/iOS) */}
               <span
-                className={`relative flex h-7 w-12 items-center justify-center rounded-full transition-colors ${
-                  item.isActive ? 'bg-brand-green-soft text-brand-green' : ''
+                className={`relative flex h-8 w-16 items-center justify-center rounded-full transition-colors duration-fast ${
+                  item.isActive
+                    ? 'bg-wa-nav-pill text-wa-accent'
+                    : 'text-wa-text-primary'
                 }`}
               >
-                {item.key === 'home' && (
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill={item.isActive ? 'currentColor' : 'none'}
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    className="h-5 w-5"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5.5v-6h-5v6H4a1 1 0 0 1-1-1v-9.5z"
-                    />
-                  </svg>
-                )}
-
                 {item.key === 'chat' && (
                   <svg
                     viewBox="0 0 24 24"
@@ -113,7 +109,36 @@ export function BottomNav({ locale, dict }: BottomNavProps): React.JSX.Element {
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      d="M12 3C6.48 3 2 6.92 2 11.75c0 2.18.91 4.17 2.41 5.7L3.2 21l4.65-1.25c1.3.42 2.7.65 4.15.65 5.52 0 10-3.92 10-8.65S17.52 3 12 3z"
+                      d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2Z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      stroke={item.isActive ? '#0B141A' : 'currentColor'}
+                      strokeWidth="2"
+                      d="M8 9h8M8 13h5"
+                    />
+                  </svg>
+                )}
+
+                {item.key === 'catalog' && (
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    className="h-5 w-5"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"
+                    />
+                    <path strokeLinecap="round" d="M3 6h18" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M16 10a4 4 0 0 1-8 0"
                     />
                   </svg>
                 )}
@@ -121,7 +146,7 @@ export function BottomNav({ locale, dict }: BottomNavProps): React.JSX.Element {
                 {item.key === 'orders' && (
                   <svg
                     viewBox="0 0 24 24"
-                    fill={item.isActive ? 'currentColor' : 'none'}
+                    fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
                     className="h-5 w-5"
@@ -136,30 +161,32 @@ export function BottomNav({ locale, dict }: BottomNavProps): React.JSX.Element {
                 )}
 
                 {item.key === 'profile' && (
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill={item.isActive ? 'currentColor' : 'none'}
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    className="h-5 w-5"
-                    aria-hidden="true"
+                  <span
+                    className={`relative h-6 w-6 overflow-hidden rounded-full ${
+                      item.isActive
+                        ? 'ring-2 ring-wa-accent'
+                        : 'ring-1 ring-wa-border'
+                    }`}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7z"
+                    <Image
+                      src="/images/avatars/vendor.jpg"
+                      alt={item.label}
+                      fill
+                      sizes="24px"
+                      className="object-cover"
                     />
-                  </svg>
+                  </span>
                 )}
 
+                {/* Badge vert vif (#25D366) en haut à droite de la capsule (comme le badge 99+ sur la capture) */}
                 {typeof item.badgeCount === 'number' && item.badgeCount > 0 && (
-                  <span className="absolute -right-0.5 -top-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-brand-gold px-1 text-[10px] font-extrabold text-brand-ink shadow-sm">
+                  <span className="absolute -right-0.5 -top-1 flex h-4 min-w-[18px] items-center justify-center rounded-full bg-wa-accent px-1.5 text-wa-meta font-bold text-wa-commerce-text">
                     {item.badgeCount}
                   </span>
                 )}
               </span>
 
-              <span className="truncate max-w-[76px]">{item.label}</span>
+              <span className="truncate max-w-[78px]">{item.label}</span>
             </Link>
           </li>
         ))}

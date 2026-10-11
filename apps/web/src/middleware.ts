@@ -14,8 +14,18 @@ export function middleware(request: NextRequest): NextResponse {
     return NextResponse.next();
   }
 
-  const pathnameHasLocale = SUPPORTED_LOCALES.some(
-    (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)
+  // Rediriger la racine de chaque langue (ex: /zh, /fr, /en) directement vers /chat
+  const matchedRootLocale = SUPPORTED_LOCALES.find(
+    (locale) => pathname === `/${locale}`
+  );
+  if (matchedRootLocale) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${matchedRootLocale}/chat`;
+    return NextResponse.redirect(url);
+  }
+
+  const pathnameHasLocale = SUPPORTED_LOCALES.some((locale) =>
+    pathname.startsWith(`/${locale}/`)
   );
 
   if (pathnameHasLocale) {
@@ -24,12 +34,14 @@ export function middleware(request: NextRequest): NextResponse {
 
   const cookieLocale = request.cookies.get('NEXT_LOCALE')?.value;
   const targetLocale =
-    cookieLocale && (SUPPORTED_LOCALES as readonly string[]).includes(cookieLocale)
+    cookieLocale &&
+    (SUPPORTED_LOCALES as readonly string[]).includes(cookieLocale)
       ? cookieLocale
       : DEFAULT_LOCALE;
 
   const url = request.nextUrl.clone();
-  url.pathname = `/${targetLocale}${pathname === '/' ? '' : pathname}`;
+  url.pathname =
+    pathname === '/' ? `/${targetLocale}/chat` : `/${targetLocale}${pathname}`;
   return NextResponse.redirect(url);
 }
 

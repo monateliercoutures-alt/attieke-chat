@@ -55,26 +55,38 @@ export function CatalogView({
   }, [products, searchQuery, locale]);
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+    <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
       {/* En-tête du Catalogue */}
-      <div className="mx-auto max-w-2xl text-center">
-        <span className="inline-flex items-center rounded-full border border-brand-ink/15 bg-white px-3.5 py-1 text-xs font-extrabold text-brand-green">
-          {dict.header.badge}
-        </span>
-        <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-ink sm:text-4xl">
-          {dict.header.title}
-        </h1>
-        <p className="mt-3 text-sm leading-relaxed text-brand-ink-muted sm:text-base">
-          {dict.header.subtitle}
-        </p>
-      </div>
+      <div className="overflow-hidden rounded-2xl border border-wa-border bg-wa-panel p-6 shadow-wa-panel">
+        <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+          <div>
+            <span className="inline-flex items-center rounded-full bg-wa-accent/15 px-3 py-0.5 text-wa-meta font-semibold text-wa-dark-green dark:text-wa-accent">
+              {dict.header.badge}
+            </span>
+            <h1 className="mt-1.5 wa-text-title text-wa-text-primary">
+              {dict.header.title}
+            </h1>
+            <p className="mt-1 text-wa-body text-wa-text-secondary">
+              {dict.header.subtitle}
+            </p>
+          </div>
 
-      {/* Barre de recherche & Filtres par catégorie */}
-      <div className="mt-8 flex flex-col items-center justify-between gap-4 md:flex-row">
+          <div className="relative w-full md:w-72">
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder={dict.filters.searchPlaceholder}
+              className="min-h-[44px] w-full rounded-xl border border-wa-border bg-wa-composer px-4 py-2 text-wa-preview text-wa-text-primary placeholder:text-wa-text-secondary focus:outline-none focus:ring-2 focus:ring-wa-accent"
+            />
+          </div>
+        </div>
+
+        {/* Filtres par catégorie */}
         <div
           role="group"
           aria-label={dict.filters.categoriesAria}
-          className="flex w-full flex-wrap items-center justify-center gap-2 md:w-auto md:justify-start"
+          className="mt-5 flex flex-wrap items-center gap-2 border-t border-wa-border pt-4"
         >
           {categories.map((cat) => {
             const isSelected = selectedCategory === cat.key;
@@ -84,26 +96,16 @@ export function CatalogView({
                 type="button"
                 aria-pressed={isSelected}
                 onClick={() => setSelectedCategory(cat.key)}
-                className={`min-h-[40px] rounded-full border px-4 py-2 text-xs font-extrabold transition-all sm:text-sm ${
+                className={`min-h-[40px] rounded-full px-4 py-1.5 text-wa-preview font-semibold transition-colors duration-fast ${
                   isSelected
-                    ? 'border-brand-ink bg-brand-green text-white shadow-sm'
-                    : 'border-brand-ink/15 bg-white text-brand-ink hover:bg-brand-green-soft'
+                    ? 'bg-wa-accent text-white shadow-wa-bubble'
+                    : 'bg-wa-composer text-wa-text-secondary hover:text-wa-text-primary'
                 }`}
               >
                 {cat.label}
               </button>
             );
           })}
-        </div>
-
-        <div className="relative w-full md:w-72">
-          <input
-            type="search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={dict.filters.searchPlaceholder}
-            className="min-h-[42px] w-full rounded-full border border-brand-ink/15 bg-white px-4 py-2 text-sm text-brand-ink placeholder:text-brand-ink-muted focus:border-brand-green focus:outline-none focus:ring-2 focus:ring-brand-green"
-          />
         </div>
       </div>
 
@@ -112,17 +114,17 @@ export function CatalogView({
         <div
           role="status"
           aria-label={dict.states.loading}
-          className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
+          className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4"
         >
           {[0, 1, 2, 3].map((idx) => (
             <div
               key={idx}
-              className="rounded-[2rem] border border-brand-ink/10 bg-white p-4 shadow-sm animate-pulse"
+              className="rounded-2xl border border-wa-border bg-wa-panel p-4 shadow-wa-bubble animate-pulse"
             >
-              <div className="aspect-[16/10] w-full rounded-2xl bg-brand-cream-subtle" />
-              <div className="mt-4 h-5 w-3/4 rounded bg-brand-cream-subtle" />
-              <div className="mt-2 h-4 w-full rounded bg-brand-cream-subtle" />
-              <div className="mt-5 h-10 w-full rounded-full bg-brand-cream-subtle" />
+              <div className="aspect-[16/10] w-full rounded-xl bg-wa-composer" />
+              <div className="mt-4 h-5 w-3/4 rounded bg-wa-composer" />
+              <div className="mt-2 h-4 w-full rounded bg-wa-composer" />
+              <div className="mt-5 h-10 w-full rounded-full bg-wa-composer" />
             </div>
           ))}
         </div>
@@ -132,13 +134,15 @@ export function CatalogView({
       {!isLoading && error && (
         <div
           role="alert"
-          className="mx-auto mt-10 max-w-md rounded-3xl border border-red-200 bg-white p-6 text-center"
+          className="mx-auto mt-8 max-w-md rounded-2xl border border-red-300 bg-wa-panel p-6 text-center shadow-wa-bubble"
         >
-          <p className="text-sm font-bold text-red-700">{dict.states.error}</p>
+          <p className="text-wa-preview font-semibold text-red-600">
+            {dict.states.error}
+          </p>
           <button
             type="button"
             onClick={() => void reload()}
-            className="mt-4 rounded-full bg-brand-gold px-5 py-2 text-xs font-extrabold text-brand-ink"
+            className="mt-4 min-h-[44px] rounded-full bg-wa-header px-5 py-2 text-wa-preview font-semibold text-white"
           >
             {dict.states.retry}
           </button>
@@ -147,11 +151,11 @@ export function CatalogView({
 
       {/* État vide */}
       {!isLoading && !error && filteredProducts.length === 0 && (
-        <div className="mx-auto mt-12 max-w-md rounded-3xl border border-brand-ink/10 bg-white p-8 text-center shadow-sm">
-          <p className="text-base font-extrabold text-brand-ink">
+        <div className="mx-auto mt-10 max-w-md rounded-2xl border border-wa-border bg-wa-panel p-8 text-center shadow-wa-bubble">
+          <p className="text-wa-contact font-medium text-wa-text-primary">
             {dict.states.emptyTitle}
           </p>
-          <p className="mt-1 text-xs text-brand-ink-muted">
+          <p className="mt-1 text-wa-preview text-wa-text-secondary">
             {dict.states.emptySubtitle}
           </p>
           <button
@@ -160,7 +164,7 @@ export function CatalogView({
               setSelectedCategory('all');
               setSearchQuery('');
             }}
-            className="mt-4 rounded-full border border-brand-ink bg-brand-gold px-5 py-2 text-xs font-extrabold text-brand-ink"
+            className="mt-4 min-h-[44px] rounded-full bg-wa-header px-5 py-2 text-wa-preview font-semibold text-white"
           >
             {dict.states.resetFilters}
           </button>
@@ -169,7 +173,7 @@ export function CatalogView({
 
       {/* Grille des 8 produits */}
       {!isLoading && !error && filteredProducts.length > 0 && (
-        <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {filteredProducts.map((product) => {
             const name = product.name[locale];
             const shortDesc = product.shortDescription[locale];
@@ -178,12 +182,12 @@ export function CatalogView({
             return (
               <article
                 key={product.id}
-                className="group flex flex-col justify-between overflow-hidden rounded-[2rem] border border-brand-ink/10 bg-brand-cream-card shadow-card transition-all duration-200 hover:-translate-y-1"
+                className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-wa-border bg-wa-panel shadow-wa-bubble transition-transform duration-fast hover:-translate-y-0.5"
               >
                 <div>
                   <div
                     onClick={() => setActiveProduct(product)}
-                    className="relative aspect-[16/10] w-full cursor-pointer overflow-hidden bg-brand-cream-subtle"
+                    className="relative aspect-[16/10] w-full cursor-pointer overflow-hidden bg-wa-composer"
                   >
                     <Image
                       src={product.imageSrc}
@@ -191,53 +195,56 @@ export function CatalogView({
                       fill
                       loading="lazy"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 280px"
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      className="object-cover transition-transform duration-normal group-hover:scale-105"
                     />
                     {product.featured && (
-                      <span className="absolute top-3 left-3 rounded-full border border-brand-ink bg-brand-gold px-2.5 py-0.5 text-[11px] font-extrabold text-brand-ink">
+                      <span className="absolute top-2.5 left-2.5 rounded-full bg-wa-system-bg px-2.5 py-0.5 text-wa-meta font-semibold text-wa-system-text shadow-wa-bubble">
                         ★ {dict.card.popular}
                       </span>
                     )}
-                    <span className="absolute bottom-2.5 left-2.5 rounded-full bg-brand-ink/80 px-2.5 py-0.5 text-[10px] font-bold text-[#25D366]">
+                    <span className="absolute bottom-2.5 left-2.5 rounded-full bg-wa-panel/90 px-2.5 py-0.5 text-wa-meta font-semibold text-wa-accent">
                       ● {dict.card.inStock}
                     </span>
                   </div>
 
-                  <div className="p-5">
+                  <div className="p-4">
                     <div className="flex items-start justify-between gap-2">
-                      <h2 className="text-base font-extrabold text-brand-ink">
+                      <h2 className="text-wa-contact font-medium text-wa-text-primary">
                         {name}
                       </h2>
-                      <span className="shrink-0 rounded-full bg-brand-cream px-2.5 py-0.5 text-[11px] font-bold text-brand-ink">
+                      <span className="shrink-0 rounded-full bg-wa-composer px-2.5 py-0.5 text-wa-meta font-medium text-wa-text-secondary">
                         {product.weightKg} {dict.card.weightUnit}
                       </span>
                     </div>
-                    <p className="mt-1 text-[11px] font-semibold text-brand-green">
+                    <p className="mt-0.5 text-wa-meta font-medium text-wa-dark-green dark:text-wa-accent">
                       {formatLabel}
                     </p>
-                    <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-brand-ink-muted">
+                    <p className="mt-2 line-clamp-2 text-wa-preview text-wa-text-secondary">
                       {shortDesc}
                     </p>
                   </div>
                 </div>
 
-                <div className="border-t border-brand-ink/10 p-5 pt-3.5">
+                <div className="border-t border-wa-border p-4 pt-3">
                   <div className="mb-3 flex items-baseline justify-between">
                     <button
                       type="button"
                       onClick={() => setActiveProduct(product)}
-                      className="text-xs font-extrabold text-brand-green underline hover:text-brand-green-dark"
+                      className="text-wa-meta font-semibold text-wa-dark-green dark:text-wa-accent underline hover:opacity-80"
                     >
                       {dict.card.viewDetailsButton}
                     </button>
-                    <span className="text-xl font-extrabold text-brand-green">
+                    <span className="text-wa-title font-semibold text-wa-dark-green dark:text-wa-accent">
                       {formatPriceYuan(product.priceYuan, locale)}
                     </span>
                   </div>
 
+                  {/* Bouton de commerce : Jaune doré #F2B705 ("Commander par chat") */}
                   <Link
-                    href={`/${locale}/chat?product=${encodeURIComponent(product.slug)}`}
-                    className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full border border-brand-ink bg-brand-gold px-4 py-2.5 text-xs font-extrabold text-brand-ink transition-colors hover:bg-brand-gold-hover sm:text-sm"
+                    href={`/${locale}/chat?product=${encodeURIComponent(
+                      product.slug
+                    )}`}
+                    className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-wa-bubble bg-wa-commerce px-4 py-2 text-wa-preview font-semibold text-wa-commerce-text shadow-wa-bubble transition-colors duration-fast hover:bg-wa-commerce-hover"
                   >
                     <span aria-hidden="true">💬</span>
                     <span>{dict.card.orderByChatButton}</span>

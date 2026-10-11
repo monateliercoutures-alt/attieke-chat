@@ -3,7 +3,11 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
-import { SUPPORTED_LOCALES, type Address, type Locale } from '@attieke-chat/shared';
+import {
+  SUPPORTED_LOCALES,
+  type Address,
+  type Locale,
+} from '@attieke-chat/shared';
 import type { ProfileDictionary } from '@/lib/i18n';
 import { useAuth } from '@/hooks/useAuth';
 import { AuthView } from '@/components/auth/AuthView';
@@ -198,8 +202,8 @@ export function ProfileView({
 
   if (isLoading) {
     return (
-      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="h-96 animate-pulse rounded-3xl bg-white/80" />
+      <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="h-96 animate-pulse rounded-2xl bg-wa-panel" />
       </section>
     );
   }
@@ -209,21 +213,21 @@ export function ProfileView({
   }
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+    <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
       {/* En-tête du profil */}
-      <div className="flex flex-col justify-between gap-4 rounded-[2rem] border border-brand-ink/10 bg-white p-6 shadow-card sm:flex-row sm:items-center sm:p-8">
+      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-wa-border bg-wa-panel p-6 shadow-wa-panel sm:flex-row sm:items-center">
         <div className="flex items-center gap-4">
-          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-brand-green text-2xl font-extrabold text-brand-gold shadow-sm">
+          <div className="flex h-[49px] w-[49px] shrink-0 items-center justify-center rounded-full bg-wa-header text-wa-title text-white shadow-wa-bubble">
             {user.name.charAt(0).toUpperCase()}
           </div>
           <div>
-            <span className="inline-flex items-center rounded-full bg-brand-green-soft px-3 py-0.5 text-[11px] font-extrabold text-brand-green">
+            <span className="inline-flex items-center rounded-full bg-wa-accent/15 px-2.5 py-0.5 text-wa-meta font-semibold text-wa-dark-green dark:text-wa-accent">
               {dict.header.badge}
             </span>
-            <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-brand-ink sm:text-3xl">
+            <h1 className="mt-1 wa-text-title text-wa-text-primary">
               {user.name}
             </h1>
-            <p className="text-xs font-semibold text-brand-ink-muted sm:text-sm">
+            <p className="text-wa-preview text-wa-text-secondary">
               {user.phone}{' '}
               {user.wechatId
                 ? `• ${dict.profileForm.wechatLabel}: ${user.wechatId}`
@@ -232,19 +236,19 @@ export function ProfileView({
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
             disabled={isSaving}
             onClick={() => void handleResetDemo()}
-            className="inline-flex min-h-[42px] items-center justify-center rounded-full border border-brand-ink/15 bg-brand-cream px-4 py-2 text-xs font-extrabold text-brand-ink transition-colors hover:bg-brand-green-soft disabled:opacity-60"
+            className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-wa-border bg-wa-composer px-4 py-2 text-wa-preview font-medium text-wa-text-primary transition-colors duration-fast hover:bg-wa-border/60 disabled:opacity-60"
           >
             ↺ {dict.profileForm.resetDemoButton}
           </button>
           <button
             type="button"
             onClick={() => void logout()}
-            className="inline-flex min-h-[42px] items-center justify-center rounded-full border border-red-200 bg-red-50 px-5 py-2 text-xs font-extrabold text-red-700 transition-colors hover:bg-red-100"
+            className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-red-200 bg-red-50 px-5 py-2 text-wa-preview font-semibold text-red-700 transition-colors duration-fast hover:bg-red-100"
           >
             {dict.profileForm.logoutButton}
           </button>
@@ -252,14 +256,14 @@ export function ProfileView({
       </div>
 
       {/* Grille principale : Informations personnelles + Adresses en Chine */}
-      <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-12">
+      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Colonne Gauche : Formulaire d'informations personnelles & Langue */}
         <div className="lg:col-span-5">
-          <div className="rounded-[2rem] border border-brand-ink/10 bg-white p-6 shadow-card sm:p-7">
-            <h2 className="text-lg font-extrabold text-brand-ink">
+          <div className="rounded-2xl border border-wa-border bg-wa-panel p-6 shadow-wa-panel">
+            <h2 className="wa-text-title text-wa-text-primary">
               {dict.profileForm.sectionTitle}
             </h2>
-            <p className="mt-1 text-xs text-brand-ink-muted">
+            <p className="mt-1 text-wa-preview text-wa-text-secondary">
               {dict.header.subtitle}
             </p>
 
@@ -267,7 +271,7 @@ export function ProfileView({
               <div
                 role="status"
                 aria-live="polite"
-                className="mt-4 rounded-2xl border border-brand-green/30 bg-brand-green-soft px-4 py-3 text-xs font-extrabold text-brand-green"
+                className="mt-4 rounded-xl bg-wa-bubble-out px-4 py-3 text-wa-preview font-medium text-wa-text-primary"
               >
                 ✓ {profileFeedback}
               </div>
@@ -276,7 +280,7 @@ export function ProfileView({
             {profileError && (
               <div
                 role="alert"
-                className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-xs font-bold text-red-700"
+                className="mt-4 rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-wa-preview font-semibold text-red-700"
               >
                 {profileError}
               </div>
@@ -289,7 +293,7 @@ export function ProfileView({
               <div>
                 <label
                   htmlFor="profile-name"
-                  className="block text-xs font-extrabold text-brand-ink"
+                  className="block text-wa-preview font-medium text-wa-text-primary"
                 >
                   {dict.profileForm.nameLabel}
                 </label>
@@ -299,14 +303,14 @@ export function ProfileView({
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="mt-1.5 min-h-[44px] w-full rounded-2xl border border-brand-ink/15 bg-brand-cream px-4 py-2.5 text-sm font-semibold text-brand-ink focus:border-brand-green focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-green"
+                  className="mt-1 min-h-[44px] w-full rounded-xl border border-wa-border bg-wa-composer px-4 py-2 text-wa-msg text-wa-text-primary focus:outline-none focus:ring-2 focus:ring-wa-accent"
                 />
               </div>
 
               <div>
                 <label
                   htmlFor="profile-phone"
-                  className="block text-xs font-extrabold text-brand-ink"
+                  className="block text-wa-preview font-medium text-wa-text-primary"
                 >
                   {dict.profileForm.phoneLabel}
                 </label>
@@ -316,7 +320,7 @@ export function ProfileView({
                   required
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="mt-1.5 min-h-[44px] w-full rounded-2xl border border-brand-ink/15 bg-brand-cream px-4 py-2.5 text-sm font-semibold text-brand-ink focus:border-brand-green focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-green"
+                  className="mt-1 min-h-[44px] w-full rounded-xl border border-wa-border bg-wa-composer px-4 py-2 text-wa-msg text-wa-text-primary focus:outline-none focus:ring-2 focus:ring-wa-accent"
                 />
               </div>
 
@@ -324,7 +328,7 @@ export function ProfileView({
                 <div>
                   <label
                     htmlFor="profile-email"
-                    className="block text-xs font-extrabold text-brand-ink"
+                    className="block text-wa-preview font-medium text-wa-text-primary"
                   >
                     {dict.profileForm.emailLabel}
                   </label>
@@ -333,14 +337,14 @@ export function ProfileView({
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="mt-1.5 min-h-[44px] w-full rounded-2xl border border-brand-ink/15 bg-brand-cream px-3.5 py-2 text-sm text-brand-ink focus:border-brand-green focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-green"
+                    className="mt-1 min-h-[44px] w-full rounded-xl border border-wa-border bg-wa-composer px-3.5 py-2 text-wa-msg text-wa-text-primary focus:outline-none focus:ring-2 focus:ring-wa-accent"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="profile-wechat"
-                    className="block text-xs font-extrabold text-brand-ink"
+                    className="block text-wa-preview font-medium text-wa-text-primary"
                   >
                     {dict.profileForm.wechatLabel}
                   </label>
@@ -349,7 +353,7 @@ export function ProfileView({
                     type="text"
                     value={wechatId}
                     onChange={(e) => setWechatId(e.target.value)}
-                    className="mt-1.5 min-h-[44px] w-full rounded-2xl border border-brand-ink/15 bg-brand-cream px-3.5 py-2 text-sm text-brand-ink focus:border-brand-green focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-green"
+                    className="mt-1 min-h-[44px] w-full rounded-xl border border-wa-border bg-wa-composer px-3.5 py-2 text-wa-msg text-wa-text-primary focus:outline-none focus:ring-2 focus:ring-wa-accent"
                   />
                 </div>
               </div>
@@ -357,7 +361,7 @@ export function ProfileView({
               <div>
                 <label
                   htmlFor="profile-locale"
-                  className="block text-xs font-extrabold text-brand-ink"
+                  className="block text-wa-preview font-medium text-wa-text-primary"
                 >
                   {dict.profileForm.languageLabel}
                 </label>
@@ -365,7 +369,7 @@ export function ProfileView({
                   id="profile-locale"
                   value={preferredLocale}
                   onChange={(e) => setPreferredLocale(e.target.value as Locale)}
-                  className="mt-1.5 min-h-[44px] w-full rounded-2xl border border-brand-ink/15 bg-brand-cream px-4 py-2.5 text-sm font-bold text-brand-ink focus:border-brand-green focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-green"
+                  className="mt-1 min-h-[44px] w-full rounded-xl border border-wa-border bg-wa-composer px-4 py-2 text-wa-msg text-wa-text-primary focus:outline-none focus:ring-2 focus:ring-wa-accent"
                 >
                   {SUPPORTED_LOCALES.map((loc) => (
                     <option key={loc} value={loc}>
@@ -375,10 +379,11 @@ export function ProfileView({
                 </select>
               </div>
 
+              {/* Action non-commerce : vert primaire #008069 (bg-wa-header) */}
               <button
                 type="submit"
                 disabled={isSaving}
-                className="flex min-h-[48px] w-full items-center justify-center rounded-full border border-brand-ink bg-brand-gold px-6 py-3 text-sm font-extrabold text-brand-ink shadow-cta transition-all hover:bg-brand-gold-hover disabled:opacity-60"
+                className="flex min-h-[44px] w-full items-center justify-center rounded-wa-bubble bg-wa-header px-6 py-2.5 text-wa-preview font-semibold text-white shadow-wa-bubble transition-opacity duration-fast hover:opacity-95 disabled:opacity-60"
               >
                 {isSaving
                   ? dict.profileForm.savingButton
@@ -390,10 +395,10 @@ export function ProfileView({
 
         {/* Colonne Droite : Gestionnaire d'adresses de livraison en Chine */}
         <div className="lg:col-span-7">
-          <div className="rounded-[2rem] border border-brand-ink/10 bg-white p-6 shadow-card sm:p-7">
+          <div className="rounded-2xl border border-wa-border bg-wa-panel p-6 shadow-wa-panel">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <h2 className="text-lg font-extrabold text-brand-ink">
+                <h2 className="wa-text-title text-wa-text-primary">
                   {dict.addresses.sectionTitle}
                 </h2>
               </div>
@@ -402,7 +407,7 @@ export function ProfileView({
                 <button
                   type="button"
                   onClick={openNewAddressForm}
-                  className="inline-flex min-h-[40px] items-center justify-center rounded-full bg-brand-green px-4 py-2 text-xs font-extrabold text-white shadow-sm hover:bg-brand-green-dark"
+                  className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-wa-accent px-4 py-2 text-wa-preview font-semibold text-white shadow-wa-bubble hover:opacity-95"
                 >
                   {dict.addresses.addNewButton}
                 </button>
@@ -413,9 +418,9 @@ export function ProfileView({
             {isAddressFormOpen && (
               <form
                 onSubmit={(e) => void handleSaveAddress(e)}
-                className="mt-6 rounded-3xl border border-brand-green/25 bg-brand-cream p-5"
+                className="mt-5 rounded-xl border border-wa-border bg-wa-composer p-5"
               >
-                <h3 className="text-sm font-extrabold text-brand-ink">
+                <h3 className="text-wa-contact font-medium text-wa-text-primary">
                   {editingAddressId
                     ? dict.addresses.form.editTitle
                     : dict.addresses.form.addTitle}
@@ -424,7 +429,7 @@ export function ProfileView({
                 {addressError && (
                   <div
                     role="alert"
-                    className="mt-3 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs font-bold text-red-700"
+                    className="mt-3 rounded-xl border border-red-300 bg-red-50 px-3 py-2 text-wa-meta font-semibold text-red-700"
                   >
                     {addressError}
                   </div>
@@ -434,7 +439,7 @@ export function ProfileView({
                   <div>
                     <label
                       htmlFor="addr-label"
-                      className="block text-xs font-bold text-brand-ink"
+                      className="block text-wa-meta font-medium text-wa-text-primary"
                     >
                       {dict.addresses.form.labelField} *
                     </label>
@@ -444,14 +449,14 @@ export function ProfileView({
                       required
                       value={addrLabel}
                       onChange={(e) => setAddrLabel(e.target.value)}
-                      className="mt-1 min-h-[40px] w-full rounded-xl border border-brand-ink/15 bg-white px-3 py-2 text-xs font-semibold text-brand-ink focus:border-brand-green focus:outline-none focus:ring-2 focus:ring-brand-green"
+                      className="mt-1 min-h-[40px] w-full rounded-lg border border-wa-border bg-wa-panel px-3 py-2 text-wa-preview text-wa-text-primary focus:outline-none focus:ring-2 focus:ring-wa-accent"
                     />
                   </div>
 
                   <div>
                     <label
                       htmlFor="addr-recipient"
-                      className="block text-xs font-bold text-brand-ink"
+                      className="block text-wa-meta font-medium text-wa-text-primary"
                     >
                       {dict.addresses.form.recipientField} *
                     </label>
@@ -461,14 +466,14 @@ export function ProfileView({
                       required
                       value={addrRecipient}
                       onChange={(e) => setAddrRecipient(e.target.value)}
-                      className="mt-1 min-h-[40px] w-full rounded-xl border border-brand-ink/15 bg-white px-3 py-2 text-xs font-semibold text-brand-ink focus:border-brand-green focus:outline-none focus:ring-2 focus:ring-brand-green"
+                      className="mt-1 min-h-[40px] w-full rounded-lg border border-wa-border bg-wa-panel px-3 py-2 text-wa-preview text-wa-text-primary focus:outline-none focus:ring-2 focus:ring-wa-accent"
                     />
                   </div>
 
                   <div>
                     <label
                       htmlFor="addr-phone"
-                      className="block text-xs font-bold text-brand-ink"
+                      className="block text-wa-meta font-medium text-wa-text-primary"
                     >
                       {dict.addresses.form.phoneField} *
                     </label>
@@ -478,14 +483,14 @@ export function ProfileView({
                       required
                       value={addrPhone}
                       onChange={(e) => setAddrPhone(e.target.value)}
-                      className="mt-1 min-h-[40px] w-full rounded-xl border border-brand-ink/15 bg-white px-3 py-2 text-xs font-semibold text-brand-ink focus:border-brand-green focus:outline-none focus:ring-2 focus:ring-brand-green"
+                      className="mt-1 min-h-[40px] w-full rounded-lg border border-wa-border bg-wa-panel px-3 py-2 text-wa-preview text-wa-text-primary focus:outline-none focus:ring-2 focus:ring-wa-accent"
                     />
                   </div>
 
                   <div>
                     <label
                       htmlFor="addr-postal"
-                      className="block text-xs font-bold text-brand-ink"
+                      className="block text-wa-meta font-medium text-wa-text-primary"
                     >
                       {dict.addresses.form.postalCodeField}
                     </label>
@@ -494,14 +499,14 @@ export function ProfileView({
                       type="text"
                       value={addrPostalCode}
                       onChange={(e) => setAddrPostalCode(e.target.value)}
-                      className="mt-1 min-h-[40px] w-full rounded-xl border border-brand-ink/15 bg-white px-3 py-2 text-xs font-semibold text-brand-ink focus:border-brand-green focus:outline-none focus:ring-2 focus:ring-brand-green"
+                      className="mt-1 min-h-[40px] w-full rounded-lg border border-wa-border bg-wa-panel px-3 py-2 text-wa-preview text-wa-text-primary focus:outline-none focus:ring-2 focus:ring-wa-accent"
                     />
                   </div>
 
                   <div>
                     <label
                       htmlFor="addr-province"
-                      className="block text-xs font-bold text-brand-ink"
+                      className="block text-wa-meta font-medium text-wa-text-primary"
                     >
                       {dict.addresses.form.provinceField} *
                     </label>
@@ -511,14 +516,14 @@ export function ProfileView({
                       required
                       value={addrProvince}
                       onChange={(e) => setAddrProvince(e.target.value)}
-                      className="mt-1 min-h-[40px] w-full rounded-xl border border-brand-ink/15 bg-white px-3 py-2 text-xs font-semibold text-brand-ink focus:border-brand-green focus:outline-none focus:ring-2 focus:ring-brand-green"
+                      className="mt-1 min-h-[40px] w-full rounded-lg border border-wa-border bg-wa-panel px-3 py-2 text-wa-preview text-wa-text-primary focus:outline-none focus:ring-2 focus:ring-wa-accent"
                     />
                   </div>
 
                   <div>
                     <label
                       htmlFor="addr-city"
-                      className="block text-xs font-bold text-brand-ink"
+                      className="block text-wa-meta font-medium text-wa-text-primary"
                     >
                       {dict.addresses.form.cityField} *
                     </label>
@@ -528,14 +533,14 @@ export function ProfileView({
                       required
                       value={addrCity}
                       onChange={(e) => setAddrCity(e.target.value)}
-                      className="mt-1 min-h-[40px] w-full rounded-xl border border-brand-ink/15 bg-white px-3 py-2 text-xs font-semibold text-brand-ink focus:border-brand-green focus:outline-none focus:ring-2 focus:ring-brand-green"
+                      className="mt-1 min-h-[40px] w-full rounded-lg border border-wa-border bg-wa-panel px-3 py-2 text-wa-preview text-wa-text-primary focus:outline-none focus:ring-2 focus:ring-wa-accent"
                     />
                   </div>
 
                   <div className="sm:col-span-2">
                     <label
                       htmlFor="addr-district"
-                      className="block text-xs font-bold text-brand-ink"
+                      className="block text-wa-meta font-medium text-wa-text-primary"
                     >
                       {dict.addresses.form.districtField} *
                     </label>
@@ -545,14 +550,14 @@ export function ProfileView({
                       required
                       value={addrDistrict}
                       onChange={(e) => setAddrDistrict(e.target.value)}
-                      className="mt-1 min-h-[40px] w-full rounded-xl border border-brand-ink/15 bg-white px-3 py-2 text-xs font-semibold text-brand-ink focus:border-brand-green focus:outline-none focus:ring-2 focus:ring-brand-green"
+                      className="mt-1 min-h-[40px] w-full rounded-lg border border-wa-border bg-wa-panel px-3 py-2 text-wa-preview text-wa-text-primary focus:outline-none focus:ring-2 focus:ring-wa-accent"
                     />
                   </div>
 
                   <div className="sm:col-span-2">
                     <label
                       htmlFor="addr-street"
-                      className="block text-xs font-bold text-brand-ink"
+                      className="block text-wa-meta font-medium text-wa-text-primary"
                     >
                       {dict.addresses.form.streetField} *
                     </label>
@@ -562,33 +567,33 @@ export function ProfileView({
                       required
                       value={addrStreet}
                       onChange={(e) => setAddrStreet(e.target.value)}
-                      className="mt-1 min-h-[40px] w-full rounded-xl border border-brand-ink/15 bg-white px-3 py-2 text-xs font-semibold text-brand-ink focus:border-brand-green focus:outline-none focus:ring-2 focus:ring-brand-green"
+                      className="mt-1 min-h-[40px] w-full rounded-lg border border-wa-border bg-wa-panel px-3 py-2 text-wa-preview text-wa-text-primary focus:outline-none focus:ring-2 focus:ring-wa-accent"
                     />
                   </div>
                 </div>
 
-                <label className="mt-4 flex cursor-pointer items-center gap-2.5 text-xs font-bold text-brand-ink">
+                <label className="mt-4 flex cursor-pointer items-center gap-2.5 text-wa-preview font-medium text-wa-text-primary">
                   <input
                     type="checkbox"
                     checked={addrIsDefault}
                     onChange={(e) => setAddrIsDefault(e.target.checked)}
-                    className="h-4 w-4 rounded border-brand-ink/30 text-brand-green focus:ring-brand-green"
+                    className="h-4 w-4 rounded border-wa-border text-wa-accent focus:ring-wa-accent"
                   />
                   {dict.addresses.setDefaultLabel}
                 </label>
 
-                <div className="mt-5 flex flex-wrap items-center justify-end gap-2.5">
+                <div className="mt-4 flex flex-wrap items-center justify-end gap-2.5">
                   <button
                     type="button"
                     onClick={() => setIsAddressFormOpen(false)}
-                    className="min-h-[40px] rounded-full border border-brand-ink/15 bg-white px-4 py-2 text-xs font-bold text-brand-ink hover:bg-brand-cream"
+                    className="min-h-[40px] rounded-full border border-wa-border bg-wa-panel px-4 py-2 text-wa-preview font-medium text-wa-text-primary hover:bg-wa-composer"
                   >
                     {dict.addresses.form.cancelButton}
                   </button>
                   <button
                     type="submit"
                     disabled={isSaving}
-                    className="min-h-[40px] rounded-full bg-brand-green px-5 py-2 text-xs font-extrabold text-white shadow-sm hover:bg-brand-green-dark disabled:opacity-60"
+                    className="min-h-[40px] rounded-full bg-wa-header px-5 py-2 text-wa-preview font-semibold text-white shadow-wa-bubble hover:opacity-95 disabled:opacity-60"
                   >
                     {dict.addresses.form.saveAddressButton}
                   </button>
@@ -598,27 +603,23 @@ export function ProfileView({
 
             {/* Liste des adresses en Chine */}
             {user.addresses.length === 0 ? (
-              <p className="mt-6 rounded-2xl border border-dashed border-brand-ink/15 p-6 text-center text-xs text-brand-ink-muted">
+              <p className="mt-5 rounded-xl border border-dashed border-wa-border p-6 text-center text-wa-preview text-wa-text-secondary">
                 {dict.addresses.emptyMessage}
               </p>
             ) : (
-              <div className="mt-6 space-y-4">
+              <div className="mt-5 divide-y divide-wa-border">
                 {user.addresses.map((addr) => (
                   <div
                     key={addr.id}
-                    className={`rounded-3xl border p-5 transition-all ${
-                      addr.isDefault
-                        ? 'border-brand-green bg-brand-green-soft/30'
-                        : 'border-brand-ink/10 bg-brand-cream/40'
-                    }`}
+                    className="py-4 first:pt-0 last:pb-0"
                   >
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-extrabold text-brand-ink">
+                        <span className="text-wa-contact font-medium text-wa-text-primary">
                           📍 {addr.label}
                         </span>
                         {addr.isDefault && (
-                          <span className="rounded-full bg-brand-green px-2.5 py-0.5 text-[11px] font-extrabold text-white">
+                          <span className="rounded-full bg-wa-accent px-2.5 py-0.5 text-wa-meta font-semibold text-white">
                             {dict.addresses.defaultBadge}
                           </span>
                         )}
@@ -629,7 +630,7 @@ export function ProfileView({
                           <button
                             type="button"
                             onClick={() => void handleSetDefaultAddress(addr)}
-                            className="rounded-full border border-brand-green/30 bg-white px-3 py-1 text-[11px] font-bold text-brand-green hover:bg-brand-green-soft"
+                            className="rounded-full border border-wa-border bg-wa-composer px-3 py-1 text-wa-meta font-semibold text-wa-dark-green dark:text-wa-accent hover:bg-wa-border"
                           >
                             ★ {dict.addresses.defaultBadge}
                           </button>
@@ -637,7 +638,7 @@ export function ProfileView({
                         <button
                           type="button"
                           onClick={() => openEditAddressForm(addr)}
-                          className="rounded-full border border-brand-ink/15 bg-white px-3 py-1 text-[11px] font-bold text-brand-ink hover:bg-brand-cream"
+                          className="rounded-full border border-wa-border bg-wa-composer px-3 py-1 text-wa-meta font-semibold text-wa-text-primary hover:bg-wa-border"
                         >
                           {dict.addresses.editButton}
                         </button>
@@ -645,7 +646,7 @@ export function ProfileView({
                           <button
                             type="button"
                             onClick={() => void deleteAddress(addr.id)}
-                            className="rounded-full border border-red-200 bg-red-50 px-3 py-1 text-[11px] font-bold text-red-700 hover:bg-red-100"
+                            className="rounded-full border border-red-200 bg-red-50 px-3 py-1 text-wa-meta font-semibold text-red-700 hover:bg-red-100"
                           >
                             {dict.addresses.deleteButton}
                           </button>
@@ -653,10 +654,10 @@ export function ProfileView({
                       </div>
                     </div>
 
-                    <p className="mt-2 text-xs font-extrabold text-brand-ink">
+                    <p className="mt-1.5 text-wa-preview font-medium text-wa-text-primary">
                       {addr.recipientName} • {addr.phone}
                     </p>
-                    <p className="mt-1 text-xs leading-relaxed text-brand-ink-muted">
+                    <p className="mt-0.5 text-wa-preview text-wa-text-secondary">
                       {addr.streetAddress}, {addr.district}, {addr.city},{' '}
                       {addr.province}
                       {addr.postalCode ? ` (${addr.postalCode})` : ''}

@@ -735,9 +735,9 @@ export function buildInitialMessages(
       sender: 'customer',
       type: 'text',
       text: {
-        zh: '好的，我马上确认上面的 #OD20261011054321 订单！',
-        fr: 'Parfait, je vais confirmer la commande #OD20261011054321 juste au-dessus !',
-        en: 'Great, I am going to confirm order #OD20261011054321 right above!',
+        zh: '太好了，我马上确认上面的 #OD20261011054321 订单！\n1. 收货地址：北京市朝阳区三里屯国际公寓 B 座 1208 室\n2. 配送要求：顺丰冷链直达，到了请先发消息通知\n3. 备注内容：家庭装 2.5kg 请分装成 5 袋真空小包，配双份辣椒酱与洋葱番茄配料，非常感谢阿比让合作社团队！',
+        fr: 'Parfait, je vais confirmer la commande #OD20261011054321 juste au-dessus !\n1. Adresse de livraison : Appartement 1208, Bâtiment B, Sanlitun, District de Chaoyang, Pékin\n2. Mode d’expédition : Chaîne du froid SF Express prioritaire avec notification à l’arrivée\n3. Critères & préparation : Conditionner le format familial 2,5 kg en 5 sachets sous vide avec double portion de piment moyo et alloco chaud.',
+        en: 'Great, I am going to confirm order #OD20261011054321 right above!\n1. Delivery address: Apt 1208, Building B, Sanlitun, Chaoyang District, Beijing\n2. Shipping method: Priority SF Express Cold Chain with arrival notification\n3. Preparation notes: Please pack the 2.5 kg Family Pack into 5 vacuum-sealed pouches with double homemade moyo chili sauce and ripe plantains.',
       },
       createdAt: '2026-10-11T10:25:00.000Z',
       sentAt: '2026-10-11T10:25:01.000Z',

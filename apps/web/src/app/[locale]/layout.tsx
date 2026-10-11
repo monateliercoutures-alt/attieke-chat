@@ -5,9 +5,8 @@ import { SUPPORTED_LOCALES, type Locale } from '@attieke-chat/shared';
 import { getHomeDictionary } from '@/data/mock/home';
 import { getCommonDictionary, isValidLocale } from '@/lib/i18n';
 import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
 import { BottomNav } from '@/components/layout/BottomNav';
-import { FloatingChatButton } from '@/components/layout/FloatingChatButton';
+import { ThemeProvider } from '@/components/layout/ThemeProvider';
 import '@/app/globals.css';
 
 interface LocaleLayoutProps {
@@ -24,7 +23,7 @@ export function generateStaticParams(): Array<{ locale: Locale }> {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#0F4C3A',
+  themeColor: '#0B141A',
 };
 
 export function generateMetadata({
@@ -46,18 +45,18 @@ export function generateMetadata({
     title: dict.meta.title,
     description: dict.meta.description,
     alternates: {
-      canonical: `/${locale}`,
+      canonical: `/${locale}/chat`,
       languages: {
-        'zh-CN': '/zh',
-        fr: '/fr',
-        en: '/en',
-        'x-default': '/zh',
+        'zh-CN': '/zh/chat',
+        fr: '/fr/chat',
+        en: '/en/chat',
+        'x-default': '/zh/chat',
       },
     },
     openGraph: {
       title: dict.meta.ogTitle,
       description: dict.meta.ogDescription,
-      url: `/${locale}`,
+      url: `/${locale}/chat`,
       siteName: dict.meta.siteName,
       locale: localeMap[locale],
       type: 'website',
@@ -86,29 +85,28 @@ export default function LocaleLayout({
   const commonDict = getCommonDictionary(locale);
 
   return (
-    <html lang={locale}>
-      <body className="min-h-screen flex flex-col bg-brand-cream text-brand-ink font-sans antialiased pb-16 md:pb-0 selection:bg-brand-gold selection:text-brand-ink">
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-full focus:border-2 focus:border-brand-ink focus:bg-brand-gold focus:px-5 focus:py-2.5 focus:text-xs focus:font-extrabold focus:text-brand-ink focus:shadow-cta"
-        >
-          {commonDict.nav.skipToContent}
-        </a>
-        <Header
-          locale={locale}
-          dict={homeDict.header}
-          navDict={commonDict.nav}
-        />
-        <main id="main-content" className="flex-1 focus:outline-none">
-          {children}
-        </main>
-        <Footer
-          locale={locale}
-          footerDict={homeDict.footer}
-          headerDict={homeDict.header}
-        />
-        <FloatingChatButton locale={locale} dict={homeDict.floatingChat} />
-        <BottomNav locale={locale} dict={commonDict.nav} />
+    <html lang={locale} data-theme="light" suppressHydrationWarning>
+      <body className="min-h-screen flex flex-col md:flex-row md:h-screen md:overflow-hidden bg-wa-app-bg text-wa-text-primary font-sans text-wa-body antialiased pb-16 md:pb-0 selection:bg-wa-commerce selection:text-wa-commerce-text">
+        <ThemeProvider>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-full focus:border-2 focus:border-wa-text-primary focus:bg-wa-commerce focus:px-5 focus:py-2.5 focus:text-xs focus:font-bold focus:text-wa-commerce-text focus:shadow-cta"
+          >
+            {commonDict.nav.skipToContent}
+          </a>
+          <Header
+            locale={locale}
+            dict={homeDict.header}
+            navDict={commonDict.nav}
+          />
+          <main
+            id="main-content"
+            className="flex-1 min-w-0 md:h-screen md:overflow-y-auto focus:outline-none"
+          >
+            {children}
+          </main>
+          <BottomNav locale={locale} dict={commonDict.nav} />
+        </ThemeProvider>
       </body>
     </html>
   );

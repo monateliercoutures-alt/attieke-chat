@@ -48,14 +48,14 @@ export function CallScreen({
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex flex-col items-center justify-between bg-gradient-to-b from-brand-green-dark via-brand-green to-brand-ink px-6 py-10 text-white"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-between bg-wa-dark-green px-6 py-10 text-white"
     >
       {/* En-tête de l'appel */}
       <div className="text-center">
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3.5 py-1 text-[11px] font-bold text-brand-gold">
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3.5 py-1 text-wa-meta font-medium text-white">
           🔒 {dict.simulatedBadge}
         </span>
-        <p className="mt-2 text-xs font-semibold text-white/80">
+        <p className="mt-2 text-wa-preview text-white/80">
           {session.type === 'video'
             ? dict.videoCallTitle
             : dict.audioCallTitle}
@@ -68,10 +68,10 @@ export function CallScreen({
           {session.status === 'ringing' && (
             <span
               aria-hidden="true"
-              className="absolute -inset-4 animate-ping rounded-full bg-brand-gold/30"
+              className="absolute -inset-4 animate-ping rounded-full bg-wa-accent/30"
             />
           )}
-          <div className="relative h-32 w-32 overflow-hidden rounded-full border-4 border-brand-gold shadow-2xl sm:h-40 sm:w-40">
+          <div className="relative h-32 w-32 overflow-hidden rounded-full border-4 border-wa-accent shadow-wa-panel sm:h-40 sm:w-40">
             <Image
               src={session.vendorAvatarUrl}
               alt={session.vendorName}
@@ -81,7 +81,7 @@ export function CallScreen({
             />
           </div>
           {session.type === 'video' && session.isCameraOn && (
-            <div className="absolute -bottom-3 -right-6 h-20 w-16 overflow-hidden rounded-2xl border-2 border-white bg-brand-ink shadow-lg">
+            <div className="absolute -bottom-3 -right-6 h-20 w-16 overflow-hidden rounded-xl border-2 border-white bg-wa-header shadow-wa-panel">
               <Image
                 src="/images/hero/hero-bowl.jpg"
                 alt=""
@@ -93,11 +93,9 @@ export function CallScreen({
           )}
         </div>
 
-        <h2 className="mt-6 text-xl font-extrabold sm:text-2xl">
-          {session.vendorName}
-        </h2>
+        <h2 className="mt-6 text-wa-title text-white">{session.vendorName}</h2>
 
-        <p className="mt-1.5 text-sm font-bold text-emerald-300">
+        <p className="mt-1.5 text-wa-preview font-medium text-white/90">
           {session.status === 'ringing'
             ? dict.statusRinging
             : session.status === 'connected'
@@ -112,16 +110,16 @@ export function CallScreen({
           type="button"
           onClick={onToggleMute}
           aria-pressed={session.isMuted}
-          className={`flex h-14 w-14 flex-col items-center justify-center rounded-full border transition-colors ${
+          className={`flex h-14 w-14 flex-col items-center justify-center rounded-full border transition-colors duration-fast ${
             session.isMuted
-              ? 'border-brand-gold bg-brand-gold text-brand-ink'
+              ? 'border-white bg-white text-wa-dark-green'
               : 'border-white/25 bg-white/15 text-white hover:bg-white/25'
           }`}
         >
-          <span className="text-lg" aria-hidden="true">
+          <span className="text-wa-contact" aria-hidden="true">
             {session.isMuted ? '🔇' : '🎤'}
           </span>
-          <span className="text-[9px] font-bold">
+          <span className="text-wa-meta">
             {session.isMuted ? dict.muteButton : dict.unmuteButton}
           </span>
         </button>
@@ -130,16 +128,16 @@ export function CallScreen({
           type="button"
           onClick={onToggleSpeaker}
           aria-pressed={session.isSpeakerOn}
-          className={`flex h-14 w-14 flex-col items-center justify-center rounded-full border transition-colors ${
+          className={`flex h-14 w-14 flex-col items-center justify-center rounded-full border transition-colors duration-fast ${
             session.isSpeakerOn
-              ? 'border-brand-gold bg-brand-gold text-brand-ink'
+              ? 'border-white bg-white text-wa-dark-green'
               : 'border-white/25 bg-white/15 text-white hover:bg-white/25'
           }`}
         >
-          <span className="text-lg" aria-hidden="true">
+          <span className="text-wa-contact" aria-hidden="true">
             🔊
           </span>
-          <span className="text-[9px] font-bold">{dict.speakerButton}</span>
+          <span className="text-wa-meta">{dict.speakerButton}</span>
         </button>
 
         {session.type === 'video' && (
@@ -147,16 +145,16 @@ export function CallScreen({
             type="button"
             onClick={onToggleCamera}
             aria-pressed={session.isCameraOn}
-            className={`flex h-14 w-14 flex-col items-center justify-center rounded-full border transition-colors ${
+            className={`flex h-14 w-14 flex-col items-center justify-center rounded-full border transition-colors duration-fast ${
               session.isCameraOn
-                ? 'border-brand-gold bg-brand-gold text-brand-ink'
+                ? 'border-white bg-white text-wa-dark-green'
                 : 'border-white/25 bg-white/15 text-white hover:bg-white/25'
             }`}
           >
-            <span className="text-lg" aria-hidden="true">
+            <span className="text-wa-contact" aria-hidden="true">
               📹
             </span>
-            <span className="text-[9px] font-bold">{dict.cameraButton}</span>
+            <span className="text-wa-meta">{dict.cameraButton}</span>
           </button>
         )}
 
@@ -164,7 +162,7 @@ export function CallScreen({
           <button
             type="button"
             onClick={onAccept}
-            className="flex h-14 items-center gap-2 rounded-full bg-[#25D366] px-6 text-sm font-extrabold text-brand-ink shadow-lg hover:brightness-105"
+            className="flex h-14 items-center gap-2 rounded-full bg-wa-accent px-6 text-wa-preview font-semibold text-white shadow-wa-panel hover:opacity-95"
           >
             <span aria-hidden="true">📞</span>
             <span>{dict.acceptCallButton}</span>
@@ -174,7 +172,7 @@ export function CallScreen({
         <button
           type="button"
           onClick={onEnd}
-          className="flex h-14 items-center gap-2 rounded-full bg-red-600 px-6 text-sm font-extrabold text-white shadow-lg hover:bg-red-700"
+          className="flex h-14 items-center gap-2 rounded-full bg-red-600 px-6 text-wa-preview font-semibold text-white shadow-wa-panel hover:bg-red-700"
         >
           <span aria-hidden="true">☎️</span>
           <span>{dict.hangupButton}</span>

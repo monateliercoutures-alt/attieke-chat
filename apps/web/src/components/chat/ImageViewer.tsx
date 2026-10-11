@@ -61,7 +61,7 @@ export function ImageViewer({
         className="flex items-center justify-between px-4 py-3 sm:px-6"
         onClick={(e) => e.stopPropagation()}
       >
-        <span className="text-xs font-extrabold">
+        <span className="text-wa-preview font-semibold">
           {dict.imageCounter} {currentIndex + 1} / {images.length}
         </span>
 
@@ -70,18 +70,18 @@ export function ImageViewer({
             type="button"
             onClick={() => setZoom((z) => Math.max(1, z - 0.5))}
             aria-label={dict.zoomOutAria}
-            className="rounded-full bg-white/15 px-3 py-1 text-xs font-extrabold hover:bg-white/25"
+            className="rounded-full bg-white/15 px-3 py-1 text-wa-preview font-semibold hover:bg-white/25"
           >
             −
           </button>
-          <span className="min-w-[40px] text-center text-xs font-bold">
+          <span className="min-w-[40px] text-center text-wa-meta font-semibold">
             {Math.round(zoom * 100)}%
           </span>
           <button
             type="button"
             onClick={() => setZoom((z) => Math.min(3, z + 0.5))}
             aria-label={dict.zoomInAria}
-            className="rounded-full bg-white/15 px-3 py-1 text-xs font-extrabold hover:bg-white/25"
+            className="rounded-full bg-white/15 px-3 py-1 text-wa-preview font-semibold hover:bg-white/25"
           >
             +
           </button>
@@ -89,7 +89,7 @@ export function ImageViewer({
             type="button"
             onClick={onClose}
             aria-label={dict.closeAria}
-            className="ml-2 rounded-full bg-white/20 px-3 py-1 text-xs font-extrabold hover:bg-white/30"
+            className="ml-2 rounded-full bg-white/20 px-3 py-1 text-wa-preview font-semibold hover:bg-white/30"
           >
             ✕
           </button>
@@ -111,7 +111,7 @@ export function ImageViewer({
               setZoom(1);
             }}
             aria-label={dict.prevImageAria}
-            className="absolute left-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-lg font-extrabold text-white hover:bg-white/30"
+            className="absolute left-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-wa-title font-semibold text-white hover:bg-white/30"
           >
             ‹
           </button>
@@ -123,7 +123,7 @@ export function ImageViewer({
           alt={caption ?? dict.imageCounter}
           onDoubleClick={() => setZoom((z) => (z === 1 ? 2 : 1))}
           style={{ transform: `scale(${zoom})` }}
-          className="max-h-[75vh] max-w-[88vw] rounded-2xl object-contain transition-transform duration-200 cursor-zoom-in"
+          className="max-h-[75vh] max-w-[88vw] rounded-xl object-contain transition-transform duration-normal cursor-zoom-in"
         />
 
         {images.length > 1 && (
@@ -136,7 +136,7 @@ export function ImageViewer({
               setZoom(1);
             }}
             aria-label={dict.nextImageAria}
-            className="absolute right-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-lg font-extrabold text-white hover:bg-white/30"
+            className="absolute right-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-wa-title font-semibold text-white hover:bg-white/30"
           >
             ›
           </button>
@@ -149,9 +149,7 @@ export function ImageViewer({
         onClick={(e) => e.stopPropagation()}
       >
         {caption && (
-          <p className="max-w-xl text-xs font-medium text-white/90 sm:text-sm">
-            {caption}
-          </p>
+          <p className="max-w-xl text-wa-msg text-white/90">{caption}</p>
         )}
         {images.length > 1 && (
           <div className="flex items-center gap-2 pt-1">
@@ -163,9 +161,9 @@ export function ImageViewer({
                   setCurrentIndex(idx);
                   setZoom(1);
                 }}
-                className={`h-12 w-12 overflow-hidden rounded-xl border-2 transition-all ${
+                className={`h-12 w-12 overflow-hidden rounded-wa-bubble border-2 transition-all duration-fast ${
                   idx === currentIndex
-                    ? 'border-brand-gold scale-105'
+                    ? 'border-wa-accent scale-105'
                     : 'border-white/25 opacity-60 hover:opacity-100'
                 }`}
               >

@@ -16,10 +16,12 @@ import {
   type CommonDictionary,
 } from '@/lib/i18n';
 import { MessageBubble } from './MessageBubble';
+import { ReactionBar } from './ReactionBar';
 
 export interface MessageListProps {
   messages: Message[];
   conversation: Conversation | null;
+  selectedMessage?: Message | null;
   locale: Locale;
   productsMap: Map<string, Product>;
   ordersMap: Map<string, Order>;
@@ -49,28 +51,10 @@ export interface MessageListProps {
   onQuickReplyText: (text: string) => void;
 }
 
-function getWallpaperClasses(preferences: ChatPreferences): string {
-  if (preferences.theme === 'dark') {
-    return 'bg-[#0B141A] text-white [background-image:radial-gradient(#1F2C34_1px,transparent_1px)] [background-size:20px_20px]';
-  }
-  switch (preferences.wallpaper) {
-    case 'emerald_mist':
-      return 'bg-[#E6F4ED] [background-image:radial-gradient(#0F4C3A18_1px,transparent_1px)] [background-size:18px_18px]';
-    case 'warm_sand':
-      return 'bg-[#F6ECDC] [background-image:radial-gradient(#8A6A3218_1px,transparent_1px)] [background-size:18px_18px]';
-    case 'night_forest':
-      return 'bg-[#0D261E] text-white [background-image:radial-gradient(#ffffff14_1px,transparent_1px)] [background-size:18px_18px]';
-    case 'plain_cream':
-      return 'bg-[#FAF6EE]';
-    case 'ivory_pattern':
-    default:
-      return 'bg-[#EFEAE2] [background-image:radial-gradient(#0F4C3A14_1px,transparent_1px)] [background-size:18px_18px]';
-  }
-}
-
 export function MessageList({
   messages,
   conversation,
+  selectedMessage,
   locale,
   productsMap,
   ordersMap,
@@ -123,14 +107,17 @@ export function MessageList({
     setShowScrollBottomButton(false);
   };
 
+  // Calcul des séparateurs de date + détection du premier message d'une série (isFirstInSeries)
   const itemsWithDateGrouping = useMemo(() => {
     const result: Array<{
       message: Message;
       dateSeparatorLabel: string | null;
       isFirstUnread: boolean;
+      isFirstInSeries: boolean;
     }> = [];
 
     let lastDateKey = '';
+    let lastSender: Message['sender'] | null = null;
     const unreadCount = conversation?.unreadCount ?? 0;
     const firstUnreadIndex =
       unreadCount > 0 ? Math.max(0, messages.length - unreadCount) : -1;
@@ -149,26 +136,22 @@ export function MessageList({
           chatDict.dateLabels
         );
         lastDateKey = dayKey;
+        lastSender = null;
       }
+
+      const isFirstInSeries = lastSender !== msg.sender;
+      lastSender = msg.sender;
 
       result.push({
         message: msg,
         dateSeparatorLabel,
         isFirstUnread: index === firstUnreadIndex && unreadCount > 0,
+        isFirstInSeries,
       });
     });
 
     return result;
-  }, [
-    messages,
-    locale,
-    chatDict.dateLabels,
-    conversation?.unreadCount,
-  ]);
-
-  const wallpaperClass = getWallpaperClasses(preferences);
-  const effectiveTheme =
-    preferences.wallpaper === 'night_forest' ? 'dark' : preferences.theme;
+  }, [messages, locale, chatDict.dateLabels, conversation?.unreadCount]);
 
   return (
     <div className="relative flex-1 overflow-hidden">
@@ -177,85 +160,128 @@ export function MessageList({
         onScroll={handleScroll}
         aria-label={chatDict.messages.listAriaLabel}
         aria-live="polite"
-        className={`h-full space-y-3.5 overflow-y-auto px-3.5 py-4 sm:px-6 ${wallpaperClass}`}
+        className="wa-chat-wallpaper h-full space-y-1.5 overflow-y-auto px-3.5 py-3 sm:px-6"
       >
         {/* Pagination vers le haut : Charger les messages précédents */}
         {hasMoreOlderMessages && (
-          <div className="flex justify-center pb-1">
+          <div className="flex justify-center pb-2">
             <button
               type="button"
               onClick={onLoadOlderMessages}
-              className="rounded-full border border-brand-green/25 bg-white/95 px-4 py-1.5 text-xs font-extrabold text-brand-green shadow-xs transition-colors hover:bg-brand-green hover:text-white"
+              className="min-h-[36px] rounded-full bg-wa-system-bg px-4 py-1 text-wa-meta font-semibold text-wa-system-text shadow-wa-bubble transition-opacity duration-fast hover:opacity-90"
             >
               {chatDict.messages.loadOlderButton}
             </button>
           </div>
         )}
 
-        {/* Fil de messages avec séparateurs de date et séparateur non-lus */}
+        {/* Fil de messages avec séparateurs de date centrés dans une pastille arrondie */}
         {itemsWithDateGrouping.map(
-          ({ message, dateSeparatorLabel, isFirstUnread }) => (
-            <React.Fragment key={message.id}>
-              {dateSeparatorLabel && (
-                <div className="my-2 flex justify-center">
-                  <span className="rounded-full border border-black/10 bg-white/90 px-3.5 py-1 text-[11px] font-extrabold text-brand-ink shadow-2xs">
-                    {dateSeparatorLabel}
-                  </span>
-                </div>
-              )}
+          ({
+            message,
+            dateSeparatorLabel,
+            isFirstUnread,
+            isFirstInSeries,
+          }) => {
+            const isSelected = selectedMessage?.id === message.id;
+            const currentReaction = message.reactions?.find(
+              (r) => r.sender === 'customer'
+            )?.emoji;
 
-              {isFirstUnread && (
-                <div className="my-2.5 flex items-center justify-center">
-                  <span className="rounded-full border border-brand-gold bg-brand-gold/25 px-4 py-1 text-xs font-extrabold text-brand-ink shadow-2xs">
-                    {conversation?.unreadCount}{' '}
-                    {chatDict.messages.unreadSeparatorSuffix}
-                  </span>
-                </div>
-              )}
+            return (
+              <React.Fragment key={message.id}>
+                {dateSeparatorLabel && (
+                  <div className="my-2.5 flex justify-center">
+                    <span className="rounded-wa-bubble bg-wa-system-bg px-3 py-1 text-wa-meta font-medium text-wa-system-text shadow-wa-bubble">
+                      {dateSeparatorLabel}
+                    </span>
+                  </div>
+                )}
 
-              <MessageBubble
-                message={message}
-                locale={locale}
-                vendorAvatarUrl={
-                  conversation?.vendorAvatarUrl ?? '/images/avatars/vendor.jpg'
-                }
-                vendorName={
-                  conversation?.vendorName ?? chatDict.header.vendorName
-                }
-                product={
-                  message.productId
-                    ? productsMap.get(message.productId)
-                    : undefined
-                }
-                order={
-                  message.orderId ? ordersMap.get(message.orderId) : undefined
-                }
-                chatDict={chatDict}
-                statusDict={statusDict}
-                isBusy={isBusy}
-                isHighlighted={highlightedMessageId === message.id}
-                searchQuery={searchQuery}
-                themeMode={effectiveTheme}
-                fontSize={preferences.fontSize}
-                onAddToOrder={onAddToOrder}
-                onConfirmOrder={onConfirmOrder}
-                onAdvanceStep={onAdvanceStep}
-                onOpenContextMenu={onOpenContextMenu}
-                onReply={onReply}
-                onToggleReaction={onToggleReaction}
-                onJumpToMessage={onJumpToMessage}
-                onRetryMessage={onRetryMessage}
-                onOpenImageViewer={onOpenImageViewer}
-                onQuickReplyText={onQuickReplyText}
-              />
-            </React.Fragment>
-          )
+                {isFirstUnread && (
+                  <div className="my-2 flex items-center justify-center">
+                    <span className="rounded-full bg-wa-panel/90 px-4 py-1 text-wa-meta font-semibold text-wa-text-primary shadow-wa-bubble">
+                      {conversation?.unreadCount}{' '}
+                      {chatDict.messages.unreadSeparatorSuffix}
+                    </span>
+                  </div>
+                )}
+
+                <div
+                  className={`${isFirstInSeries ? 'pt-1.5' : 'pt-0'} ${
+                    isSelected
+                      ? '-mx-3.5 rounded-lg bg-wa-accent/20 px-3.5 py-1.5 transition-colors duration-fast sm:-mx-6 sm:px-6'
+                      : ''
+                  }`}
+                >
+                  {/* Barre de réactions flottante au-dessus du message sélectionné */}
+                  {isSelected && (
+                    <div
+                      className={`mb-2 flex ${
+                        message.sender === 'customer'
+                          ? 'justify-end'
+                          : 'justify-start'
+                      }`}
+                    >
+                      <ReactionBar
+                        selectedEmoji={currentReaction}
+                        onSelectEmoji={(emoji) =>
+                          onToggleReaction(message.id, emoji)
+                        }
+                        onOpenFullPicker={() => onToggleReaction(message.id, '❤️')}
+                      />
+                    </div>
+                  )}
+
+                  <MessageBubble
+                    message={message}
+                    isFirstInSeries={isFirstInSeries}
+                    locale={locale}
+                    vendorAvatarUrl={
+                      conversation?.vendorAvatarUrl ??
+                      '/images/avatars/vendor.jpg'
+                    }
+                    vendorName={
+                      conversation?.vendorName ?? chatDict.header.vendorName
+                    }
+                    product={
+                      message.productId
+                        ? productsMap.get(message.productId)
+                        : undefined
+                    }
+                    order={
+                      message.orderId
+                        ? ordersMap.get(message.orderId)
+                        : undefined
+                    }
+                    chatDict={chatDict}
+                    statusDict={statusDict}
+                    isBusy={isBusy}
+                    isHighlighted={highlightedMessageId === message.id}
+                    searchQuery={searchQuery}
+                    themeMode={preferences.theme}
+                    fontSize={preferences.fontSize}
+                    onAddToOrder={onAddToOrder}
+                    onConfirmOrder={onConfirmOrder}
+                    onAdvanceStep={onAdvanceStep}
+                    onOpenContextMenu={onOpenContextMenu}
+                    onReply={onReply}
+                    onToggleReaction={onToggleReaction}
+                    onJumpToMessage={onJumpToMessage}
+                    onRetryMessage={onRetryMessage}
+                    onOpenImageViewer={onOpenImageViewer}
+                    onQuickReplyText={onQuickReplyText}
+                  />
+                </div>
+              </React.Fragment>
+            );
+          }
         )}
 
         {/* Indicateur "est en train d'écrire…" / "enregistre un message vocal…" */}
         {(isVendorTyping || isVendorRecordingVoice) && (
-          <div className="flex items-center gap-2.5">
-            <div className="inline-flex items-center gap-2 rounded-2xl rounded-tl-none border border-brand-ink/10 bg-white px-4 py-2.5 text-xs font-bold text-brand-ink-muted shadow-xs">
+          <div className="flex items-center gap-2 pt-1.5">
+            <div className="inline-flex items-center gap-2 rounded-wa-bubble rounded-tl-none bg-wa-bubble-in px-3.5 py-2 text-wa-preview text-wa-text-secondary shadow-wa-bubble">
               {isVendorRecordingVoice ? (
                 <>
                   <span className="animate-pulse text-red-600">🎤</span>
@@ -264,9 +290,9 @@ export function MessageList({
               ) : (
                 <>
                   <span className="flex gap-1">
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-brand-green" />
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-brand-green [animation-delay:150ms]" />
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-brand-green [animation-delay:300ms]" />
+                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-wa-text-secondary" />
+                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-wa-text-secondary [animation-delay:150ms]" />
+                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-wa-text-secondary [animation-delay:300ms]" />
                   </span>
                   <span>{chatDict.messages.vendorTypingBubble}</span>
                 </>
@@ -278,22 +304,35 @@ export function MessageList({
         <div ref={bottomEndRef} />
       </div>
 
-      {/* Bouton flottant "Aller en bas" (↓) avec badge */}
-      {showScrollBottomButton && (
-        <button
-          type="button"
-          onClick={scrollToBottom}
-          aria-label={chatDict.messages.scrollToBottomAria}
-          className="absolute bottom-4 right-5 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-brand-ink/15 bg-white text-base font-extrabold text-brand-green shadow-card transition-transform hover:scale-105"
+      {/* Bouton flottant rond "Aller en bas" (⌄) en bas à droite de la conversation (comme sur image-1.png) */}
+      <button
+        type="button"
+        onClick={scrollToBottom}
+        aria-label={chatDict.messages.scrollToBottomAria}
+        className={`absolute bottom-3 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-wa-border bg-wa-panel text-wa-text-secondary shadow-wa-panel transition-all duration-fast hover:scale-105 hover:text-wa-text-primary ${
+          showScrollBottomButton ? 'opacity-100' : 'opacity-90'
+        }`}
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          className="h-5 w-5"
+          aria-hidden="true"
         >
-          <span>↓</span>
-          {(conversation?.unreadCount ?? 0) > 0 && (
-            <span className="absolute -right-1 -top-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[#25D366] px-1 text-[10px] font-extrabold text-brand-ink">
-              {conversation?.unreadCount}
-            </span>
-          )}
-        </button>
-      )}
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="m6 9 6 6 6-6"
+          />
+        </svg>
+        {(conversation?.unreadCount ?? 0) > 0 && (
+          <span className="absolute -right-1 -top-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-wa-accent px-1 text-wa-meta font-semibold text-white">
+            {conversation?.unreadCount}
+          </span>
+        )}
+      </button>
     </div>
   );
 }

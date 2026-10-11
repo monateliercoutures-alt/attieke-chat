@@ -1,0 +1,16 @@
+{
+  "name": "attieke-chat",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm --workspace=apps/web run dev",
+    "build": "npm --workspace=apps/web run build",
+    "start": "npm --workspace=apps/web run start",
+    "typecheck": "npm --workspace=apps/web run typecheck",
+    "test": "npm --workspace=apps/web run test"
+  }
+}

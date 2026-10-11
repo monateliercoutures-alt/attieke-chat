@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "title": "Mes commandes — Attiéké Abidjan"
+  },
+  "header": {
+    "badge": "Suivi logistique en 7 étapes",
+    "title": "Mes commandes & Suivi de livraison",
+    "subtitle": "Suivez en temps réel l'acheminement de vos colis depuis Abidjan jusqu'à votre domicile en Chine"
+  },
+  "filters": {
+    "all": "Toutes",
+    "active": "En cours",
+    "delivered": "Livrées"
+  },
+  "list": {
+    "orderNumber": "N° commande",
+    "createdAt": "Commandé le",
+    "itemsCount": "article(s)",
+    "total": "Total",
+    "trackingNumber": "Suivi SF Express",
+    "viewDetails": "Suivi détaillé (7 étapes)",
+    "confirmNow": "Confirmer la commande",
+    "simulateNextStep": "Simuler l'étape suivante",
+    "askInChat": "Discuter de cette commande"
+  },
+  "detail": {
+    "timelineTitle": "Frise de suivi des 7 étapes (Abidjan → Chine)",
+    "itemsTitle": "Articles commandés",
+    "addressTitle": "Adresse de livraison en Chine",
+    "subtotal": "Sous-total",
+    "shipping": "Frais de port (Chaîne du froid)",
+    "total": "Total TTC",
+    "stepCompleted": "Validé",
+    "stepCurrent": "En cours",
+    "stepUpcoming": "À venir",
+    "upcomingSteps": {
+      "pending": "Création du récapitulatif de commande dans le chat",
+      "confirmed": "Confirmation de l'adresse en Chine et réservation du lot frais",
+      "paid": "Validation du règlement WeChat Pay / Alipay",
+      "shipped": "Conditionnement sous vide et départ fret aérien d'Abidjan (ABJ)",
+      "customs": "Inspection sanitaire et dédouanement express en Chine (CAN)",
+      "in_china_transit": "Acheminement SF Express Cold Chain jusqu'à votre ville",
+      "delivered": "Remise en main propre à votre adresse en Chine"
+    }
+  },
+  "states": {
+    "loading": "Chargement de vos commandes…",
+    "error": "Impossible de charger vos commandes",
+    "retry": "Réessayer",
+    "emptyTitle": "Aucune commande trouvée",
+    "emptySubtitle": "Vous n'avez aucune commande dans cette catégorie. Lancez le chat pour commander !",
+    "goToChatCta": "Commander par chat"
+  }
+}

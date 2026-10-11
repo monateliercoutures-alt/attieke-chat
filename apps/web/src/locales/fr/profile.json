@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "title": "Mon profil & Adresses en Chine — Attiéké Abidjan"
+  },
+  "header": {
+    "badge": "Compte & Livraison en Chine",
+    "title": "Mon Profil",
+    "subtitle": "Gérez vos coordonnées, vos adresses de livraison en Chine et votre langue préférée"
+  },
+  "profileForm": {
+    "sectionTitle": "Informations personnelles",
+    "nameLabel": "Nom complet / Prénom",
+    "phoneLabel": "Téléphone en Chine (+86)",
+    "emailLabel": "E-mail (optionnel)",
+    "wechatLabel": "ID WeChat (optionnel)",
+    "languageLabel": "Langue de l'application",
+    "localeNames": {
+      "zh": "简体中文 (ZH)",
+      "fr": "Français (FR)",
+      "en": "English (EN)"
+    },
+    "saveButton": "Enregistrer les modifications",
+    "savingButton": "Enregistrement…",
+    "savedToast": "Profil mis à jour avec succès !",
+    "logoutButton": "Se déconnecter",
+    "resetDemoButton": "Réinitialiser les données démo",
+    "resetDemoToast": "Données démo initiales restaurées !"
+  },
+  "addresses": {
+    "sectionTitle": "Adresses de livraison en Chine",
+    "addNewButton": "+ Ajouter une adresse",
+    "editButton": "Modifier",
+    "deleteButton": "Supprimer",
+    "defaultBadge": "Par défaut",
+    "setDefaultLabel": "Définir comme adresse par défaut",
+    "emptyMessage": "Aucune adresse enregistrée. Ajoutez votre adresse en Chine pour accélérer vos commandes.",
+    "form": {
+      "addTitle": "Nouvelle adresse en Chine",
+      "editTitle": "Modifier l'adresse",
+      "labelField": "Libellé (ex : Domicile Pékin, Campus, Bureau Canton)",
+      "recipientField": "Nom du destinataire",
+      "phoneField": "Téléphone du destinataire",
+      "provinceField": "Province / Municipalité (ex : Beijing, Guangdong)",
+      "cityField": "Ville (ex : Pékin, Canton, Yiwu, Shanghai)",
+      "districtField": "District (ex : Chaoyang, Yuexiu)",
+      "streetField": "Adresse détaillée (rue, bâtiment, n° d'appartement)",
+      "postalCodeField": "Code postal (optionnel)",
+      "cancelButton": "Annuler",
+      "saveAddressButton": "Enregistrer l'adresse"
+    }
+  },
+  "auth": {
+    "badge": "Bienvenue chez Attiéké Abidjan",
+    "loginTab": "Connexion",
+    "registerTab": "Inscription",
+    "phoneOrEmailLabel": "Téléphone (+86) ou E-mail",
+    "phoneOrEmailPlaceholder": "+86 138 0013 8000",
+    "passwordLabel": "Mot de passe (libre en mode démo)",
+    "passwordPlaceholder": "••••••••",
+    "loginSubmit": "Se connecter",
+    "registerSubmit": "Créer mon compte",
+    "demoAccountTitle": "Connexion rapide (Compte Démo)",
+    "demoAccountSubtitle": "Pré-configuré avec 2 adresses en Chine, 5 commandes et l'historique de chat",
+    "useDemoAccountButton": "Se connecter avec le compte démo (Li Mei / Awa Koné)",
+    "validationError": "Veuillez remplir correctement tous les champs obligatoires (nom min. 2 caractères, téléphone min. 6 chiffres)."
+  }
+}

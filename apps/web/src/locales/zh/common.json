@@ -1,0 +1,27 @@
+{
+  "nav": {
+    "home": "首页",
+    "catalog": "商品目录",
+    "chat": "在线聊天",
+    "orders": "我的订单",
+    "profile": "个人中心",
+    "login": "登录",
+    "bottomNavAriaLabel": "移动端底部主导航",
+    "skipToContent": "跳转到主要内容"
+  },
+  "orderStatus": {
+    "pending": "待确认",
+    "confirmed": "已确认",
+    "paid": "已付款",
+    "shipped": "已从阿比让发货",
+    "customs": "中国海关清关中",
+    "in_china_transit": "中国境内派送中",
+    "delivered": "已签收"
+  },
+  "states": {
+    "loading": "正在加载...",
+    "error": "发生错误",
+    "retry": "重试",
+    "resetDemo": "重置演示数据"
+  }
+}

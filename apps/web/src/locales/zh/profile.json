@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "title": "个人中心与中国收货地址 — 阿比让阿提埃凯"
+  },
+  "header": {
+    "badge": "账户与中国收货管理",
+    "title": "个人中心",
+    "subtitle": "管理您的联系方式、中国境内顺丰收货地址及界面语言偏好"
+  },
+  "profileForm": {
+    "sectionTitle": "个人基本资料",
+    "nameLabel": "姓名 / 称呼",
+    "phoneLabel": "中国手机号码 (+86)",
+    "emailLabel": "电子邮箱（选填）",
+    "wechatLabel": "微信号 WeChat ID（选填）",
+    "languageLabel": "首选语言",
+    "localeNames": {
+      "zh": "简体中文 (ZH)",
+      "fr": "Français (FR)",
+      "en": "English (EN)"
+    },
+    "saveButton": "保存修改",
+    "savingButton": "正在保存…",
+    "savedToast": "个人资料已成功更新！",
+    "logoutButton": "退出登录",
+    "resetDemoButton": "重置演示数据",
+    "resetDemoToast": "初始演示数据已恢复！"
+  },
+  "addresses": {
+    "sectionTitle": "中国境内收货地址",
+    "addNewButton": "+ 新增收货地址",
+    "editButton": "编辑",
+    "deleteButton": "删除",
+    "defaultBadge": "默认地址",
+    "setDefaultLabel": "设为默认收货地址",
+    "emptyMessage": "暂无收货地址，请添加您的中国境内地址以便顺丰冷链派送。",
+    "form": {
+      "addTitle": "新增中国收货地址",
+      "editTitle": "编辑收货地址",
+      "labelField": "地址标签（如：北京公寓、广州档口、学校宿舍）",
+      "recipientField": "收件人姓名",
+      "phoneField": "收件人手机号",
+      "provinceField": "省份 / 直辖市（如：北京市、广东省）",
+      "cityField": "城市（如：北京市、广州市、义乌市）",
+      "districtField": "区 / 县（如：朝阳区、越秀区）",
+      "streetField": "详细街道、楼栋及门牌号",
+      "postalCodeField": "邮政编码（选填）",
+      "cancelButton": "取消",
+      "saveAddressButton": "保存地址"
+    }
+  },
+  "auth": {
+    "badge": "欢迎来到阿比让阿提埃凯",
+    "loginTab": "登录账号",
+    "registerTab": "新用户注册",
+    "phoneOrEmailLabel": "中国手机号 (+86) 或电子邮箱",
+    "phoneOrEmailPlaceholder": "+86 138 0013 8000",
+    "passwordLabel": "密码（演示模式任意输入即可）",
+    "passwordPlaceholder": "••••••••",
+    "loginSubmit": "立即登录",
+    "registerSubmit": "创建账号",
+    "demoAccountTitle": "一键体验演示账号",
+    "demoAccountSubtitle": "已预置 2 个中国收货地址、5 笔不同状态订单及聊天记录",
+    "useDemoAccountButton": "使用演示账号登录（李梅 / Awa Koné）",
+    "validationError": "请正确填写所有必填项（姓名至少2个字符，电话至少6位数字）。"
+  }
+}

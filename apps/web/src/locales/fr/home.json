@@ -1,0 +1,241 @@
+{
+  "meta": {
+    "title": "Attiéké Abidjan — Le vrai goût de la Côte d'Ivoire livré en Chine",
+    "description": "Attiéké authentique d'Abidjan livré partout en Chine (Pékin, Canton, Yiwu, Shanghai). Commandez en direct par chat aussi simplement que sur WhatsApp.",
+    "ogTitle": "Attiéké Abidjan — Commandez votre attiéké par chat en Chine",
+    "ogDescription": "Discutez en direct avec notre vendeuse et recevez votre attiéké frais en 3 à 5 jours partout en Chine.",
+    "siteName": "Attiéké Abidjan"
+  },
+  "header": {
+    "brandName": "Attiéké Abidjan",
+    "brandTagline": "Direct Côte d'Ivoire · Chat & Commande",
+    "logoAlt": "Logo Attiéké Abidjan",
+    "navAriaLabel": "Navigation principale",
+    "nav": {
+      "products": "Produits",
+      "howItWorks": "Comment ça marche",
+      "delivery": "Livraison",
+      "faq": "FAQ"
+    },
+    "languageSwitcher": {
+      "ariaLabel": "Choisir la langue",
+      "zh": "中文",
+      "fr": "FR",
+      "en": "EN"
+    },
+    "ctaChat": "Discuter pour commander",
+    "mobileMenuOpen": "Ouvrir le menu",
+    "mobileMenuClose": "Fermer le menu"
+  },
+  "hero": {
+    "badge": "Direct d'Abidjan · Commande instantanée par chat",
+    "title": "Le vrai goût du pays livré chez vous en Chine",
+    "subtitle": "De l'attiéké ivoirien authentique, préparé fraîchement et envoyé sous vide. Aucun formulaire compliqué : discutez simplement avec nous comme sur WhatsApp pour passer commande.",
+    "ctaPrimary": "Discuter avec nous pour commander",
+    "ctaSecondary": "Voir les 8 produits du catalogue",
+    "directNotice": "Échange direct FR / 中文 / EN · Paiement WeChat Pay, Alipay & Mobile Money",
+    "bowlImageAlt": "Bol en bois rempli d'attiéké ivoirien frais accompagné de poisson braisé et de crudités",
+    "trustBadges": {
+      "authentic": {
+        "title": "100% Authentique",
+        "subtitle": "Direct de Côte d'Ivoire"
+      },
+      "fresh": {
+        "title": "Fraîcheur garantie",
+        "subtitle": "Conditionné sous vide"
+      },
+      "fast": {
+        "title": "Livraison rapide",
+        "subtitle": "Partout en Chine"
+      },
+      "support": {
+        "title": "Service dédié",
+        "subtitle": "Chat humain 7j/7"
+      }
+    },
+    "chatPreview": {
+      "ariaLabel": "Aperçu d'une conversation de commande par chat",
+      "vendorName": "Attiéké Abidjan Officiel",
+      "vendorStatus": "En ligne · Répond en 30 s",
+      "vendorAvatarAlt": "Avatar de la vendeuse Attiéké Abidjan",
+      "msgCustomer1": "Bonjour ! Avez-vous du vrai attiéké d'Abidjan disponible aujourd'hui ? 👋",
+      "msgCustomer1Time": "14:20",
+      "msgVendor1": "Bonjour ! Oui bien sûr 😊 Voici notre attiéké fraîchement préparé, grain léger et goût authentique du pays :",
+      "msgVendor1Time": "14:22",
+      "productCardTitle": "Attiéké Classique",
+      "productCardWeight": "1 kg · Sachet sous vide",
+      "productCardPrice": "¥ 28.00",
+      "productCardButton": "Ajouter à la commande",
+      "productCardImageAlt": "Bol d'attiéké frais de 1 kg",
+      "msgCustomer2": "Parfait, j'en prends 1 kg ! Vous livrez à Pékin Chaoyang ?",
+      "msgCustomer2Time": "14:26",
+      "msgVendorReply2": "Oui ! Envoi express SF Express jusqu'à Pékin, je vous prépare le récapitulatif 🚚✨",
+      "msgVendorReply2Time": "14:27",
+      "inputPlaceholder": "Écrivez un message pour commander..."
+    }
+  },
+  "howItWorks": {
+    "sectionBadge": "Simple, rapide & humain",
+    "sectionTitle": "Commandez aussi simplement qu'en envoyant un message",
+    "sectionSubtitle": "Pas besoin de créer un compte : tout se passe en direct dans une conversation claire et chaleureuse",
+    "steps": {
+      "chat": {
+        "stepLabel": "01",
+        "title": "Discutez avec nous",
+        "description": "Ouvrez le chat et dites-nous les plats souhaités, le nombre de kilos et votre ville en Chine.",
+        "bubbleSample": "« Bonjour ! Je voudrais 2 kg d'attiéké + 1 tilapia braisé pour Canton svp »",
+        "bubbleTime": "14:20 ✓✓"
+      },
+      "confirm": {
+        "stepLabel": "02",
+        "title": "Confirmez votre commande",
+        "description": "Recevez votre fiche récapitulative dans le chat et réglez en un clic via WeChat Pay, Alipay ou Mobile Money.",
+        "bubbleSample": "Commande confirmée · Total ¥ 82.00 (Livraison fraîcheur incluse)",
+        "bubbleTime": "14:23 ✓✓"
+      },
+      "receive": {
+        "stepLabel": "03",
+        "title": "Recevez chez vous",
+        "description": "Suivez chaque étape du colis directement dans la discussion jusqu'à la remise en main propre chez vous.",
+        "bubbleSample": "📦 Colis dédouané ! Livraison SF Express prévue demain matin.",
+        "bubbleTime": "10:15 ✓✓"
+      }
+    }
+  },
+  "products": {
+    "sectionBadge": "Catalogue WhatsApp Direct",
+    "sectionTitle": "Nos produits phares d'attiéké",
+    "sectionSubtitle": "Choisissez votre formule : un clic ouvre la discussion avec le produit déjà prêt à être commandé",
+    "inStockBadge": "En stock · Réponse immédiate",
+    "weightUnit": "kg",
+    "currencySymbol": "¥",
+    "orderByChatCta": "Commander par chat",
+    "viewAllCatalogCta": "Voir tout le catalogue (8 produits)",
+    "popularBadge": "Le plus commandé",
+    "loadingLabel": "Chargement des spécialités...",
+    "emptyMessage": "Aucun produit mis en avant pour le moment.",
+    "errorMessage": "Impossible de charger les produits.",
+    "retryButton": "Réessayer",
+    "placeholderNote": "Photo de présentation",
+    "items": {
+      "attiekeSolo": {
+        "name": "Attiéké Nature Authentique",
+        "shortDesc": "Semoule de manioc ivoirienne fermentée et cuite à la vapeur selon la tradition, grains souples et parfumés, sachet sous vide.",
+        "imageAlt": "Bol en bois de 1 kg d'attiéké traditionnel de Côte d'Ivoire"
+      },
+      "attiekeTilapia": {
+        "name": "Tilapia Braisé + Attiéké",
+        "shortDesc": "Poisson tilapia mariné aux épices du pays et braisé à point, servi avec 1 kg d'attiéké frais, piment et moyo.",
+        "imageAlt": "Plat complet de tilapia braisé accompagné d'attiéké et de légumes frais"
+      },
+      "attiekeKedjenou": {
+        "name": "Kedjenou de Poulet + Attiéké",
+        "shortDesc": "Poulet mijoté à l'étouffée aux aromates ivoiriens avec une sauce onctueuse qui sublime votre attiéké.",
+        "imageAlt": "Bol d'attiéké accompagné d'un kedjenou de poulet en sauce"
+      }
+    }
+  },
+  "delivery": {
+    "sectionBadge": "Suivi en temps réel dans le chat",
+    "sectionTitle": "D'Abidjan jusqu'en Chine",
+    "sectionSubtitle": "De la préparation artisanale en Côte d'Ivoire jusqu'à votre porte en Chine, chaque étape est notifiée par message",
+    "originFlagAlt": "Drapeau de la Côte d'Ivoire",
+    "destinationFlagAlt": "Drapeau de la Chine",
+    "estimatedSummary": "Délai moyen : 3 à 5 jours ouvrés jusqu'aux principales villes chinoises",
+    "steps": {
+      "abidjan": {
+        "title": "Préparation à Abidjan",
+        "subtitle": "Cuisson vapeur artisanale & mise sous vide"
+      },
+      "departure": {
+        "title": "Départ d'Abidjan",
+        "subtitle": "Transfert réfrigéré vers le fret aéroportuaire"
+      },
+      "airFreight": {
+        "title": "Transport aérien international",
+        "subtitle": "Vol direct en soute à température contrôlée"
+      },
+      "customs": {
+        "title": "Dédouanement en Chine",
+        "subtitle": "Contrôle sanitaire rapide et conforme"
+      },
+      "chinaDelivery": {
+        "title": "Livré entre vos mains",
+        "subtitle": "Distribution express SF Express à votre adresse"
+      }
+    }
+  },
+  "testimonials": {
+    "sectionBadge": "Messages de nos clients",
+    "sectionTitle": "Ce que dit la diaspora dans notre chat",
+    "sectionSubtitle": "Des centaines d'étudiants, commerçants et familles africaines livrés chaque semaine en Chine",
+    "verifiedLabel": "Client livré",
+    "starsAriaLabel": "Note de 5 étoiles sur 5",
+    "items": {
+      "review1": {
+        "author": "Awa K.",
+        "city": "Pékin (Beijing), Chine",
+        "quote": "« Le goût de l'attiéké est incroyablement authentique ! Dès la première bouchée, j'ai retrouvé Abidjan. Emballage impeccable et livraison super rapide à Chaoyang. »"
+      },
+      "review2": {
+        "author": "Kouadio M.",
+        "city": "Canton (Guangzhou), Chine",
+        "quote": "« Première fois que je mange un attiéké poisson braisé aussi fidèle au pays depuis mon arrivée en Chine. Le service par chat est hyper réactif, je recommande à 100% ! »"
+      },
+      "review3": {
+        "author": "Fatou B.",
+        "city": "Yiwu, Chine",
+        "quote": "« Enfin les saveurs de la maison disponibles facilement en Chine ! Je commande chaque mois par chat et j'ai déjà partagé l'adresse à tous mes amis étudiants et commerçants. »"
+      }
+    }
+  },
+  "faq": {
+    "sectionBadge": "Questions fréquentes",
+    "sectionTitle": "Tout savoir avant de discuter avec nous",
+    "sectionSubtitle": "Une autre question ? Ouvrez simplement le chat, nous vous répondons en quelques secondes",
+    "askInChatCta": "Poser une question dans le chat",
+    "items": {
+      "shippingTime": {
+        "question": "1. Quels sont les délais de livraison en Chine ?",
+        "answer": "Pour nos stocks tampon déjà dédouanés en Chine, la livraison SF Express prend 24 à 48 heures. Pour les lots expédiés par avion depuis Abidjan, comptez 3 à 5 jours ouvrés jusqu'à votre domicile."
+      },
+      "storage": {
+        "question": "2. Comment conserver et réchauffer mon attiéké ?",
+        "answer": "L'attiéké est livré en sachet sous vide alimentaire. Il se conserve 10 jours au réfrigérateur (0–4 °C) et jusqu'à 3 mois au congélateur (-18 °C). Pour le déguster, réchauffez-le 5 minutes à la vapeur ou 2 minutes au micro-ondes avec quelques gouttes d'eau."
+      },
+      "paymentMethods": {
+        "question": "3. Quels moyens de paiement acceptez-vous ?",
+        "answer": "Nous acceptons WeChat Pay, Alipay, les virements bancaires locaux en RMB (¥), ainsi qu'Orange Money et Wave Côte d'Ivoire pour vos proches."
+      },
+      "deliveryZones": {
+        "question": "4. Dans quelles villes de Chine livrez-vous ?",
+        "answer": "Nous livrons dans toutes les provinces de Chine continentale : Pékin, Canton (Guangzhou), Yiwu, Shanghai, Shenzhen, Wuhan, Hangzhou, Nanjing, Chengdu, ainsi que sur tous les campus universitaires."
+      },
+      "orderTracking": {
+        "question": "5. Comment suivre ma commande après le paiement ?",
+        "answer": "Dès l'expédition, vous recevez votre numéro de suivi et une frise de progression en direct directement dans votre conversation de chat (Confirmée → Expédiée → En douane → En cours de livraison → Livrée)."
+      }
+    }
+  },
+  "footer": {
+    "ctaBannerTitle": "Envie d'un bon attiéké frais comme au pays ?",
+    "ctaBannerSubtitle": "Lancez la discussion maintenant et recevez votre commande chez vous partout en Chine.",
+    "ctaBannerButton": "Ouvrir le chat et commander",
+    "brandName": "Attiéké Abidjan",
+    "brandDescription": "Le vrai goût de la Côte d'Ivoire livré à la diaspora africaine dans toute la Chine.",
+    "navigationTitle": "Navigation",
+    "contactTitle": "Contact & Support",
+    "languageTitle": "Langues",
+    "phone": "+86 138 1234 5678",
+    "email": "contact@attieke.cn",
+    "address": "88 Jianguo Road, Chaoyang, Pékin / Hub logistique Yuexiu, Canton",
+    "hours": "Support chat : tous les jours de 09h00 à 22h00 (heure de Pékin)",
+    "slogan": "Bon goût · Partout dans le monde",
+    "copyright": "© 2026 Attiéké Abidjan. Tous droits réservés."
+  },
+  "floatingChat": {
+    "label": "Discuter",
+    "ariaLabel": "Ouvrir le chat avec le vendeur pour commander",
+    "badge": "En ligne"
+  }
+}

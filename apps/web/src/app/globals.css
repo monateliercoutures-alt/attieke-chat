@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Vert profond principal (esprit WhatsApp Business / Côte d'Ivoire) - #0F4C3A */
+  --color-brand-green: 15 76 58;
+  /* Vert très sombre / charbon WhatsApp (#111B21 / #0A2E23) */
+  --color-brand-green-dark: 10 46 35;
+  /* Vert vif WhatsApp accent (#1DA851) */
+  --color-brand-green-light: 29 168 81;
+  /* Vert menthe bulle WhatsApp (#D9FDD3) */
+  --color-brand-green-soft: 217 253 211;
+
+  /* Jaune doré (accent, boutons d'action) - #F4B41A */
+  --color-brand-gold: 244 180 26;
+  /* Jaune doré soutenu (hover) - #E09E07 */
+  --color-brand-gold-hover: 224 158 7;
+  /* Jaune doré très clair - #FEF6E0 */
+  --color-brand-gold-light: 254 246 224;
+
+  /* Blanc cassé signature WhatsApp.com (#FCF5EB) */
+  --color-brand-cream: 252 245 235;
+  /* Blanc pur carte (#FFFFFF) */
+  --color-brand-cream-card: 255 255 255;
+  /* Fond papier-peint chat WhatsApp (#EFEAE2) */
+  --color-brand-cream-subtle: 239 234 226;
+
+  /* Encre principale WhatsApp.com (#111B21) */
+  --color-brand-ink: 17 27 33;
+  /* Texte secondaire accessible (#4A555C) */
+  --color-brand-ink-muted: 74 85 92;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: rgb(var(--color-brand-cream));
+  color: rgb(var(--color-brand-ink));
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Typographie chinoise propre sans débordement */
+:lang(zh) {
+  line-break: strict;
+  word-break: normal;
+  letter-spacing: 0.01em;
+}

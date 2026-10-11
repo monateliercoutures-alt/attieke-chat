@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "title": "Catalogue des produits — Attiéké Abidjan"
+  },
+  "header": {
+    "badge": "Direct d'Abidjan · Chaîne du froid SF Express",
+    "title": "Catalogue Attiéké & Spécialités Ivoiriennes",
+    "subtitle": "8 spécialités authentiques en formats variés (de 250 g à 2,5 kg). Cliquez sur « Commander par chat » pour lancer votre commande pré-remplie."
+  },
+  "filters": {
+    "searchPlaceholder": "Rechercher attiéké, tilapia, kedjenou, piment…",
+    "categoriesAria": "Filtrer par catégorie de produit",
+    "all": "Tout voir (8)",
+    "attieke": "Attiéké seul",
+    "combo_fish": "Formules Poisson",
+    "combo_meat": "Formules Poulet & Bœuf",
+    "condiment": "Piment & Moyo"
+  },
+  "card": {
+    "inStock": "En stock",
+    "popular": "Populaire",
+    "viewDetailsButton": "Voir le détail",
+    "orderByChatButton": "Commander par chat",
+    "weightUnit": "kg"
+  },
+  "detailModal": {
+    "closeAria": "Fermer la fiche produit",
+    "formatLabel": "Conditionnement",
+    "weightLabel": "Poids net",
+    "prepTipsTitle": "Conseils de préparation & conservation",
+    "quantityLabel": "Quantité souhaitée",
+    "orderByChatCta": "Commander ce produit par chat",
+    "directChatNote": "Ouvre directement la conversation avec ce produit déjà mentionné au vendeur"
+  },
+  "states": {
+    "loading": "Chargement du catalogue…",
+    "error": "Impossible de charger le catalogue",
+    "retry": "Réessayer",
+    "emptyTitle": "Aucun produit ne correspond à votre recherche",
+    "emptySubtitle": "Essayez une autre catégorie ou effacez le filtre de recherche",
+    "resetFilters": "Afficher tous les produits"
+  }
+}

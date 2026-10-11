@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "title": "My Profile & China Addresses — Attiéké Abidjan"
+  },
+  "header": {
+    "badge": "Account & China Delivery",
+    "title": "My Profile",
+    "subtitle": "Manage your contact details, China delivery addresses, and preferred language"
+  },
+  "profileForm": {
+    "sectionTitle": "Personal Information",
+    "nameLabel": "Full Name",
+    "phoneLabel": "Phone Number in China (+86)",
+    "emailLabel": "Email (optional)",
+    "wechatLabel": "WeChat ID (optional)",
+    "languageLabel": "Preferred Language",
+    "localeNames": {
+      "zh": "简体中文 (ZH)",
+      "fr": "Français (FR)",
+      "en": "English (EN)"
+    },
+    "saveButton": "Save Changes",
+    "savingButton": "Saving…",
+    "savedToast": "Profile updated successfully!",
+    "logoutButton": "Sign Out",
+    "resetDemoButton": "Reset Demo Data",
+    "resetDemoToast": "Initial demo data restored!"
+  },
+  "addresses": {
+    "sectionTitle": "Delivery Addresses in China",
+    "addNewButton": "+ Add New Address",
+    "editButton": "Edit",
+    "deleteButton": "Delete",
+    "defaultBadge": "Default",
+    "setDefaultLabel": "Set as default delivery address",
+    "emptyMessage": "No saved addresses yet. Add your address in China to speed up checkout.",
+    "form": {
+      "addTitle": "New Address in China",
+      "editTitle": "Edit Address",
+      "labelField": "Address Label (e.g. Beijing Home, Campus, Guangzhou Office)",
+      "recipientField": "Recipient Name",
+      "phoneField": "Recipient Phone",
+      "provinceField": "Province / Municipality (e.g. Beijing, Guangdong)",
+      "cityField": "City (e.g. Beijing, Guangzhou, Yiwu, Shanghai)",
+      "districtField": "District (e.g. Chaoyang, Yuexiu)",
+      "streetField": "Detailed Street Address (building, room #)",
+      "postalCodeField": "Postal Code (optional)",
+      "cancelButton": "Cancel",
+      "saveAddressButton": "Save Address"
+    }
+  },
+  "auth": {
+    "badge": "Welcome to Attiéké Abidjan",
+    "loginTab": "Sign In",
+    "registerTab": "Create Account",
+    "phoneOrEmailLabel": "Phone (+86) or Email",
+    "phoneOrEmailPlaceholder": "+86 138 0013 8000",
+    "passwordLabel": "Password (any value in demo mode)",
+    "passwordPlaceholder": "••••••••",
+    "loginSubmit": "Sign In",
+    "registerSubmit": "Create My Account",
+    "demoAccountTitle": "Quick Demo Sign-In",
+    "demoAccountSubtitle": "Pre-loaded with 2 China addresses, 5 orders, and chat history",
+    "useDemoAccountButton": "Sign in with Demo Account (Li Mei / Awa Koné)",
+    "validationError": "Please fill in all required fields properly (name min. 2 chars, phone min. 6 digits)."
+  }
+}

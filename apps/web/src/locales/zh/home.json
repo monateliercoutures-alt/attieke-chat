@@ -1,0 +1,241 @@
+{
+  "meta": {
+    "title": "阿蒂耶克 (Attiéké Abidjan) — 把科特迪瓦家乡的味道带到中国",
+    "description": "正宗科特迪瓦阿蒂耶克（Attiéké）直发中国。像发微信/WhatsApp一样简单，在聊天窗口一键下单，顺丰/空运直达北京、广州、义乌、上海等全国城市。",
+    "ogTitle": "阿蒂耶克 (Attiéké Abidjan) — 聊天即刻预订正宗科特迪瓦美食",
+    "ogDescription": "只需在聊天中告诉我们您想要的产品和数量，3至5天新鲜送达中国各地。",
+    "siteName": "阿蒂耶克 Attiéké Abidjan"
+  },
+  "header": {
+    "brandName": "Attiéké Abidjan",
+    "brandTagline": "阿蒂耶克 · 科特迪瓦直发",
+    "logoAlt": "阿蒂耶克 Attiéké Abidjan 品牌标志",
+    "navAriaLabel": "主导航",
+    "nav": {
+      "products": "产品目录",
+      "howItWorks": "如何下单",
+      "delivery": "跨国物流",
+      "faq": "常见问题"
+    },
+    "languageSwitcher": {
+      "ariaLabel": "选择语言",
+      "zh": "中文",
+      "fr": "FR",
+      "en": "EN"
+    },
+    "ctaChat": "打开聊天订购",
+    "mobileMenuOpen": "打开菜单",
+    "mobileMenuClose": "关闭菜单"
+  },
+  "hero": {
+    "badge": "阿比让新鲜直发 · 聊天秒回接单",
+    "title": "把家乡的味道带到中国",
+    "subtitle": "正宗科特迪瓦阿蒂耶克（Attiéké），手工新鲜蒸制。无需繁琐注册，像和朋友聊天一样直接向卖家发消息即可下单。",
+    "ctaPrimary": "与我们聊天订购",
+    "ctaSecondary": "浏览全部 8 款美食",
+    "directNotice": "支持中文 / 法语 / 英语实时对话 · 微信与支付宝安全付款",
+    "bowlImageAlt": "盛在木碗中的正宗科特迪瓦阿蒂耶克配烤罗非鱼和新鲜蔬菜",
+    "trustBadges": {
+      "authentic": {
+        "title": "正宗食材",
+        "subtitle": "科特迪瓦直供"
+      },
+      "fresh": {
+        "title": "新鲜卫生",
+        "subtitle": "真空锁鲜包装"
+      },
+      "fast": {
+        "title": "快速配送",
+        "subtitle": "覆盖中国全境"
+      },
+      "support": {
+        "title": "用心服务",
+        "subtitle": "一对一聊天客服"
+      }
+    },
+    "chatPreview": {
+      "ariaLabel": "与卖家聊天订购界面预览",
+      "vendorName": "Attiéké Abidjan 官方店",
+      "vendorStatus": "在线 · 平均 30 秒回复",
+      "vendorAvatarAlt": "阿蒂耶克卖家头像",
+      "msgCustomer1": "你好！请问你们有正宗的阿蒂耶克 (Attiéké) 吗？ 👋",
+      "msgCustomer1Time": "14:20",
+      "msgVendor1": "你好！有的 😊 这是我们今天新鲜蒸制的科特迪瓦阿蒂耶克，颗粒饱满：",
+      "msgVendor1Time": "14:22",
+      "productCardTitle": "经典阿蒂耶克 (Attiéké)",
+      "productCardWeight": "1 kg · 真空保鲜装",
+      "productCardPrice": "¥ 28.00",
+      "productCardButton": "加入聊天订单",
+      "productCardImageAlt": "1公斤装新鲜阿蒂耶克木碗实拍图",
+      "msgCustomer2": "太好了！我要 1 公斤，可以发北京朝阳区吗？",
+      "msgCustomer2Time": "14:26",
+      "msgVendorReply2": "没问题！顺丰冷链直达北京，现在为您生成订单 🚚✨",
+      "msgVendorReply2Time": "14:27",
+      "inputPlaceholder": "输入消息直接下单..."
+    }
+  },
+  "howItWorks": {
+    "sectionBadge": "简单三步 · 对话式购物",
+    "sectionTitle": "像日常聊天一样轻松下单",
+    "sectionSubtitle": "告别复杂的购物车表单，只需打开对话框告诉我们您的口味与收货城市",
+    "steps": {
+      "chat": {
+        "stepLabel": "01",
+        "title": "与我们发起聊天",
+        "description": "点击页面上的聊天按钮，用中文、法语或英语告诉我们您想要的产品和份数。",
+        "bubbleSample": "“你好，我想要 2 公斤阿蒂耶克 + 1 份烤罗非鱼！”",
+        "bubbleTime": "14:20 ✓✓"
+      },
+      "confirm": {
+        "stepLabel": "02",
+        "title": "在对话中确认订单",
+        "description": "客服立即为您发送订单卡片与运费明细，确认无误后通过微信或支付宝完成付款。",
+        "bubbleSample": "订单已确认 · 合计 ¥ 82.00（含顺丰冷链）",
+        "bubbleTime": "14:23 ✓✓"
+      },
+      "receive": {
+        "stepLabel": "03",
+        "title": "坐享美味送达家中",
+        "description": "聊天窗口自动推送物流节点，从阿比让发出到中国清关、顺丰派送全程透明可查。",
+        "bubbleSample": "📦 您的包裹已清关放行，正在派送至北京！",
+        "bubbleTime": "10:15 ✓✓"
+      }
+    }
+  },
+  "products": {
+    "sectionBadge": "官方直营目录",
+    "sectionTitle": "我们的阿蒂耶克精选产品",
+    "sectionSubtitle": "点击任意美食卡片，系统将自动为您在聊天窗口准备好该商品",
+    "inStockBadge": "现货供应 · 聊天秒发",
+    "weightUnit": "kg",
+    "currencySymbol": "¥",
+    "orderByChatCta": "通过聊天订购",
+    "viewAllCatalogCta": "查看完整产品目录（共 8 款美食）",
+    "popularBadge": "热销推荐",
+    "loadingLabel": "正在加载精选美食...",
+    "emptyMessage": "暂无精选商品，请前往完整目录查看。",
+    "errorMessage": "无法加载商品列表，请重试。",
+    "retryButton": "重新加载",
+    "placeholderNote": "实拍美食预览",
+    "items": {
+      "attiekeSolo": {
+        "name": "经典原味阿蒂耶克 (Attiéké)",
+        "shortDesc": "100% 科特迪瓦木薯传统发酵蒸制，颗粒饱满松软，真空锁鲜袋装。",
+        "imageAlt": "木碗盛装的1公斤经典科特迪瓦阿蒂耶克配烤鱼点缀"
+      },
+      "attiekeTilapia": {
+        "name": "炭烤罗非鱼 (Tilapia) + 阿蒂耶克",
+        "shortDesc": "外焦里嫩的科特迪瓦风味烤鱼，搭配新鲜阿蒂耶克、特调辣椒酱与洋葱番茄。",
+        "imageAlt": "炭烤罗非鱼配科特迪瓦阿蒂耶克与彩椒番茄沙拉"
+      },
+      "attiekeKedjenou": {
+        "name": "科特迪瓦炖鸡 (Kedjenou) + 阿蒂耶克",
+        "shortDesc": "传统慢火陶罐香料炖鸡，肉质软烂入味，浓郁汤汁拌阿蒂耶克绝佳。",
+        "imageAlt": "科特迪瓦传统香料炖鸡配阿蒂耶克木碗套餐"
+      }
+    }
+  },
+  "delivery": {
+    "sectionBadge": "跨国专线实时追踪",
+    "sectionTitle": "从阿比让直达中国餐桌",
+    "sectionSubtitle": "每一个物流节点都会实时推送到您的聊天窗口，让您买得安心、吃得放心",
+    "originFlagAlt": "科特迪瓦国旗标志",
+    "destinationFlagAlt": "中国国旗标志",
+    "estimatedSummary": "平均时效：阿比让发出后 3–5 个工作日送达中国主要城市",
+    "steps": {
+      "abidjan": {
+        "title": "阿比让新鲜制作",
+        "subtitle": "当日手工蒸制与真空包装"
+      },
+      "departure": {
+        "title": "科特迪瓦阿比让出发",
+        "subtitle": "冷链送至机场货运中心"
+      },
+      "airFreight": {
+        "title": "国际空运直飞",
+        "subtitle": "恒温航空仓极速跨越洲际"
+      },
+      "customs": {
+        "title": "中国海关清关",
+        "subtitle": "正规检验检疫快速通关"
+      },
+      "chinaDelivery": {
+        "title": "送达您的手中",
+        "subtitle": "顺丰冷链派送至全国各城市"
+      }
+    }
+  },
+  "testimonials": {
+    "sectionBadge": "真实买家对话记录",
+    "sectionTitle": "客户在聊天里的真实好评",
+    "sectionSubtitle": "来自北京、广州、义乌等地在华非洲侨民与美食爱好者的反馈",
+    "verifiedLabel": "已送达买家",
+    "starsAriaLabel": "5星满分好评",
+    "items": {
+      "review1": {
+        "author": "Awa K. (王女士)",
+        "city": "中国 · 北京",
+        "quote": "“阿蒂耶克的味道太正宗了！一口就想起了阿比让家乡的味道，真空包装很用心，寄到北京朝阳区非常快。”"
+      },
+      "review2": {
+        "author": "Kouadio M. (陈先生)",
+        "city": "中国 · 广州",
+        "quote": "“第一次在中国吃到这么地道的阿蒂耶克和烤鱼！口感颗粒分明，客服在聊天里特别耐心地帮我安排了加急快递，强烈推荐！”"
+      },
+      "review3": {
+        "author": "Fatou B. (李小姐)",
+        "city": "中国 · 义乌",
+        "quote": "“家乡的味道终于在中国也能随时吃到了！现在每个月都要在聊天里订几公斤，已经推荐给在义乌和上海的同胞朋友了。”"
+      }
+    }
+  },
+  "faq": {
+    "sectionBadge": "帮助中心",
+    "sectionTitle": "常见问题解答",
+    "sectionSubtitle": "如果还有其他疑问，随时点击下方按钮与客服直接对话",
+    "askInChatCta": "在聊天中咨询客服",
+    "items": {
+      "shippingTime": {
+        "question": "1. 送货时间是多久？",
+        "answer": "订单确认并付款后，我们在中国境内的现货仓可实现 24–48 小时顺丰送达；阿比让空运直发批次通常在 3–5 个工作日内送达您手中。"
+      },
+      "storage": {
+        "question": "2. 阿蒂耶克收到后如何保存和加热？",
+        "answer": "所有产品均采用食品级真空密封包装。收到后冷藏（0–4°C）可保存 10 天，冷冻（-18°C）可保存 3 个月。食用前只需加少许水蒸 5 分钟或微波炉加热 2 分钟即可恢复蓬松口感。"
+      },
+      "paymentMethods": {
+        "question": "3. 你们支持哪些支付方式？",
+        "answer": "我们支持微信支付（WeChat Pay）、支付宝（Alipay）、中国境内银行卡转账以及科特迪瓦 Orange Money / Wave 移动支付。"
+      },
+      "deliveryZones": {
+        "question": "4. 可以送到中国哪些城市？",
+        "answer": "我们支持配送至中国大陆所有省市，包括北京、广州、上海、深圳、义乌、杭州、武汉、成都、南京等各大城市及高校园区。"
+      },
+      "orderTracking": {
+        "question": "5. 下单后如何跟踪我的包裹？",
+        "answer": "发货后，客服会立即在聊天窗口向您发送运单号与实时物流时间线（待处理 → 已确认 → 已发货 → 清关中 → 国内派送），您可以随时在聊天中查看进度。"
+      }
+    }
+  },
+  "footer": {
+    "ctaBannerTitle": "想念科特迪瓦家乡的阿蒂耶克了吗？",
+    "ctaBannerSubtitle": "现在打开聊天窗口，1 分钟内完成预订，新鲜直达中国各城。",
+    "ctaBannerButton": "立即开始聊天订购",
+    "brandName": "阿蒂耶克 Attiéké Abidjan",
+    "brandDescription": "来自科特迪瓦的家乡味道，连接阿比让与在华侨民的餐桌。",
+    "navigationTitle": "快速链接",
+    "contactTitle": "联系我们",
+    "languageTitle": "切换语言",
+    "phone": "+86 138 1234 5678",
+    "email": "contact@attieke.cn",
+    "address": "北京市朝阳区建国路88号 / 广州市越秀区环市东路分发中心",
+    "hours": "客服在线时间：每日 09:00 – 22:00（北京时间）",
+    "slogan": "好味道 · 连接世界",
+    "copyright": "© 2026 阿蒂耶克 (Attiéké Abidjan). 保留所有权利。"
+  },
+  "floatingChat": {
+    "label": "在线聊天订购",
+    "ariaLabel": "打开与卖家的聊天窗口进行订购",
+    "badge": "在线"
+  }
+}

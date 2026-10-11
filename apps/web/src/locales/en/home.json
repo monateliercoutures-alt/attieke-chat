@@ -1,0 +1,241 @@
+{
+  "meta": {
+    "title": "Attiéké Abidjan — Authentic Ivorian Attiéké Delivered Across China",
+    "description": "Order authentic Ivorian attiéké directly via chat, as easy as messaging on WhatsApp. Freshly steamed, vacuum-sealed, and delivered in 3–5 days across China.",
+    "ogTitle": "Attiéké Abidjan — Chat to Order Authentic Ivorian Food in China",
+    "ogDescription": "Message our seller in seconds to get fresh attiéké, grilled tilapia, and kedjenou delivered to your door in China.",
+    "siteName": "Attiéké Abidjan"
+  },
+  "header": {
+    "brandName": "Attiéké Abidjan",
+    "brandTagline": "Direct from Ivory Coast · Chat & Order",
+    "logoAlt": "Attiéké Abidjan brand logo",
+    "navAriaLabel": "Main navigation",
+    "nav": {
+      "products": "Products",
+      "howItWorks": "How It Works",
+      "delivery": "Delivery",
+      "faq": "FAQ"
+    },
+    "languageSwitcher": {
+      "ariaLabel": "Select language",
+      "zh": "中文",
+      "fr": "FR",
+      "en": "EN"
+    },
+    "ctaChat": "Chat to Order",
+    "mobileMenuOpen": "Open menu",
+    "mobileMenuClose": "Close menu"
+  },
+  "hero": {
+    "badge": "Direct from Abidjan · Instant Chat Ordering",
+    "title": "Bringing the Taste of Home to China",
+    "subtitle": "Authentic Ivorian attiéké, freshly handcrafted and vacuum-sealed. No complex checkout forms—simply message us just like on WhatsApp to place your order.",
+    "ctaPrimary": "Chat With Us to Order",
+    "ctaSecondary": "Browse All 8 Dishes",
+    "directNotice": "Live chat in 中文 / FR / EN · Easy payment via WeChat Pay & Alipay",
+    "bowlImageAlt": "Wooden bowl of authentic Ivorian attiéké with grilled tilapia and fresh vegetables",
+    "trustBadges": {
+      "authentic": {
+        "title": "Authentic Recipe",
+        "subtitle": "Direct from Ivory Coast"
+      },
+      "fresh": {
+        "title": "Fresh & Hygienic",
+        "subtitle": "Vacuum-sealed packs"
+      },
+      "fast": {
+        "title": "Fast Delivery",
+        "subtitle": "All cities in China"
+      },
+      "support": {
+        "title": "Direct Chat",
+        "subtitle": "1-on-1 human support"
+      }
+    },
+    "chatPreview": {
+      "ariaLabel": "Preview of ordering conversation in chat",
+      "vendorName": "Attiéké Abidjan Official",
+      "vendorStatus": "Online · Replies in 30s",
+      "vendorAvatarAlt": "Attiéké Abidjan seller avatar",
+      "msgCustomer1": "Hello! Do you have authentic Ivorian attiéké available today? 👋",
+      "msgCustomer1Time": "14:20",
+      "msgVendor1": "Hello! Yes we do 😊 Here is our freshly steamed attiéké with authentic texture straight from Ivory Coast:",
+      "msgVendor1Time": "14:22",
+      "productCardTitle": "Classic Attiéké",
+      "productCardWeight": "1 kg · Vacuum-sealed",
+      "productCardPrice": "¥ 28.00",
+      "productCardButton": "Add to Chat Order",
+      "productCardImageAlt": "1 kg bowl of fresh classic attiéké",
+      "msgCustomer2": "Great, I'll take 1 kg! Can you deliver to Beijing Chaoyang?",
+      "msgCustomer2Time": "14:26",
+      "msgVendorReply2": "Absolutely! Express cold-chain to Beijing—preparing your order summary now 🚚✨",
+      "msgVendorReply2Time": "14:27",
+      "inputPlaceholder": "Type a message to order..."
+    }
+  },
+  "howItWorks": {
+    "sectionBadge": "Conversational Ordering",
+    "sectionTitle": "Order as Easily as Sending a Message",
+    "sectionSubtitle": "Skip complicated sign-ups: everything happens inside one friendly, real-time conversation",
+    "steps": {
+      "chat": {
+        "stepLabel": "01",
+        "title": "Chat With Us",
+        "description": "Tap the chat button and tell us which dishes, how many kilos, and your delivery city in China.",
+        "bubbleSample": "“Hi! I'd like 2 kg of attiéké + 1 grilled tilapia delivered to Guangzhou please”",
+        "bubbleTime": "14:20 ✓✓"
+      },
+      "confirm": {
+        "stepLabel": "02",
+        "title": "Confirm Your Order",
+        "description": "Receive your instant order card in the chat and pay securely via WeChat Pay, Alipay, or Mobile Money.",
+        "bubbleSample": "Order Confirmed · Total ¥ 82.00 (Cold-chain shipping included)",
+        "bubbleTime": "14:23 ✓✓"
+      },
+      "receive": {
+        "stepLabel": "03",
+        "title": "Receive at Your Door",
+        "description": "Get live status updates right in your chat thread until your parcel arrives fresh at your door.",
+        "bubbleSample": "📦 Customs cleared! SF Express delivery scheduled for tomorrow morning.",
+        "bubbleTime": "10:15 ✓✓"
+      }
+    }
+  },
+  "products": {
+    "sectionBadge": "Direct Chat Catalog",
+    "sectionTitle": "Our Featured Attiéké Selection",
+    "sectionSubtitle": "Tap any dish below to open the chat with that item already prepared for your order",
+    "inStockBadge": "In Stock · Instant Chat Reply",
+    "weightUnit": "kg",
+    "currencySymbol": "¥",
+    "orderByChatCta": "Order via Chat",
+    "viewAllCatalogCta": "View Full Catalog (8 Dishes)",
+    "popularBadge": "Best Seller",
+    "loadingLabel": "Loading featured dishes...",
+    "emptyMessage": "No featured products available right now.",
+    "errorMessage": "Unable to load products.",
+    "retryButton": "Try Again",
+    "placeholderNote": "Dish photo preview",
+    "items": {
+      "attiekeSolo": {
+        "name": "Classic Attiéké (1 kg)",
+        "shortDesc": "100% traditional fermented & steamed Ivorian cassava couscous with light, fluffy grains in a vacuum-sealed pouch.",
+        "imageAlt": "Wooden bowl of 1 kg traditional Ivorian attiéké"
+      },
+      "attiekeTilapia": {
+        "name": "Grilled Tilapia + Attiéké",
+        "shortDesc": "Charcoal-style spiced tilapia served with 1 kg of fresh attiéké, house pepper sauce, onions, and tomatoes.",
+        "imageAlt": "Grilled tilapia served with Ivorian attiéké and fresh tomato pepper salad"
+      },
+      "attiekeKedjenou": {
+        "name": "Chicken Kedjenou + Attiéké",
+        "shortDesc": "Slow-simmered Ivorian spiced chicken stew with rich aromatic gravy paired with 1 kg of fluffy attiéké.",
+        "imageAlt": "Traditional Ivorian chicken kedjenou stew served over attiéké"
+      }
+    }
+  },
+  "delivery": {
+    "sectionBadge": "Live Chat Logistics",
+    "sectionTitle": "From Abidjan to China",
+    "sectionSubtitle": "Every transit milestone is pushed straight to your chat thread from departure to doorstep",
+    "originFlagAlt": "Flag of Ivory Coast",
+    "destinationFlagAlt": "Flag of China",
+    "estimatedSummary": "Average transit: 3–5 business days to major Chinese cities",
+    "steps": {
+      "abidjan": {
+        "title": "Freshly Made in Abidjan",
+        "subtitle": "Steamed by hand & vacuum-sealed daily"
+      },
+      "departure": {
+        "title": "Departs Abidjan",
+        "subtitle": "Cold-chain transfer to airport cargo hub"
+      },
+      "airFreight": {
+        "title": "International Air Freight",
+        "subtitle": "Temperature-controlled intercontinental flight"
+      },
+      "customs": {
+        "title": "China Customs Clearance",
+        "subtitle": "Fast, compliant inspection & release"
+      },
+      "chinaDelivery": {
+        "title": "Delivered to Your Hands",
+        "subtitle": "SF Express cold-chain delivery nationwide"
+      }
+    }
+  },
+  "testimonials": {
+    "sectionBadge": "Customer Chat Feedback",
+    "sectionTitle": "What Our Customers Say in Chat",
+    "sectionSubtitle": "Real messages from the African diaspora across Beijing, Guangzhou, and Yiwu",
+    "verifiedLabel": "Verified Order",
+    "starsAriaLabel": "Rated 5 out of 5 stars",
+    "items": {
+      "review1": {
+        "author": "Awa K.",
+        "city": "Beijing, China",
+        "quote": "“The attiéké tastes 100% authentic! One bite took me straight back to Abidjan. Careful vacuum packaging and super fast delivery to Chaoyang.”"
+      },
+      "review2": {
+        "author": "Kouadio M.",
+        "city": "Guangzhou, China",
+        "quote": "“First time eating such genuine attiéké and grilled tilapia in China! The grains are super fluffy and the seller on chat was very patient and helpful.”"
+      },
+      "review3": {
+        "author": "Fatou B.",
+        "city": "Yiwu, China",
+        "quote": "“A true taste of home is finally easy to order in China! I order several kilos every month via chat and have already recommended it to all my friends.”"
+      }
+    }
+  },
+  "faq": {
+    "sectionBadge": "Help Center",
+    "sectionTitle": "Frequently Asked Questions",
+    "sectionSubtitle": "Have another question? Tap the chat button anytime for an instant reply",
+    "askInChatCta": "Ask Us in Live Chat",
+    "items": {
+      "shippingTime": {
+        "question": "1. How long does delivery take?",
+        "answer": "Orders shipped from our local cold-storage hub in China arrive within 24–48 hours via SF Express. Direct air-freight batches from Abidjan take 3–5 business days to reach your door."
+      },
+      "storage": {
+        "question": "2. How should I store and reheat the attiéké?",
+        "answer": "All packs are food-grade vacuum-sealed. Keep refrigerated (0–4°C) for up to 10 days or frozen (-18°C) for up to 3 months. Steam for 5 minutes or microwave for 2 minutes with a splash of water before serving."
+      },
+      "paymentMethods": {
+        "question": "3. Which payment methods do you support?",
+        "answer": "We accept WeChat Pay, Alipay, domestic Chinese bank transfers (RMB ¥), as well as Orange Money and Wave Ivory Coast."
+      },
+      "deliveryZones": {
+        "question": "4. Which cities in China do you deliver to?",
+        "answer": "We deliver to all mainland Chinese cities and university campuses, including Beijing, Guangzhou, Yiwu, Shanghai, Shenzhen, Wuhan, Hangzhou, Chengdu, and Nanjing."
+      },
+      "orderTracking": {
+        "question": "5. How do I track my parcel after ordering?",
+        "answer": "As soon as your order ships, we send your tracking number and live milestone updates right inside your chat conversation (Pending → Confirmed → Shipped → Customs → Domestic Delivery → Delivered)."
+      }
+    }
+  },
+  "footer": {
+    "ctaBannerTitle": "Craving authentic Ivorian attiéké in China?",
+    "ctaBannerSubtitle": "Start a chat with us now and place your order in under a minute.",
+    "ctaBannerButton": "Start Chat to Order",
+    "brandName": "Attiéké Abidjan",
+    "brandDescription": "Bringing the authentic taste of Ivory Coast to the African diaspora across China.",
+    "navigationTitle": "Quick Links",
+    "contactTitle": "Contact Us",
+    "languageTitle": "Languages",
+    "phone": "+86 138 1234 5678",
+    "email": "contact@attieke.cn",
+    "address": "88 Jianguo Road, Chaoyang, Beijing / Yuexiu Dispatch Hub, Guangzhou",
+    "hours": "Chat hours: Daily 09:00 – 22:00 (Beijing Time)",
+    "slogan": "Great Taste · Connecting the World",
+    "copyright": "© 2026 Attiéké Abidjan. All rights reserved."
+  },
+  "floatingChat": {
+    "label": "Live Chat",
+    "ariaLabel": "Open chat with seller to place an order",
+    "badge": "Online"
+  }
+}

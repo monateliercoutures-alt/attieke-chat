@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "title": "Product Catalog — Attiéké Abidjan"
+  },
+  "header": {
+    "badge": "Direct from Abidjan · SF Express Cold-Chain",
+    "title": "Attiéké & Ivorian Specialties Catalog",
+    "subtitle": "8 authentic dishes in varied weights (250g to 2.5 kg). Tap 'Order via Chat' to open the conversation with your dish already prepared."
+  },
+  "filters": {
+    "searchPlaceholder": "Search attiéké, tilapia, kedjenou, pepper sauce…",
+    "categoriesAria": "Filter products by category",
+    "all": "All Dishes (8)",
+    "attieke": "Pure Attiéké",
+    "combo_fish": "Fish Combos",
+    "combo_meat": "Chicken & Beef Combos",
+    "condiment": "Pepper & Moyo"
+  },
+  "card": {
+    "inStock": "In Stock",
+    "popular": "Best Seller",
+    "viewDetailsButton": "View Details",
+    "orderByChatButton": "Order via Chat",
+    "weightUnit": "kg"
+  },
+  "detailModal": {
+    "closeAria": "Close product details",
+    "formatLabel": "Packaging Format",
+    "weightLabel": "Net Weight",
+    "prepTipsTitle": "Reheating & Serving Tips",
+    "quantityLabel": "Desired Quantity",
+    "orderByChatCta": "Order This Item via Chat",
+    "directChatNote": "Opens the live chat with this product already mentioned to the seller"
+  },
+  "states": {
+    "loading": "Loading catalog…",
+    "error": "Failed to load catalog",
+    "retry": "Try again",
+    "emptyTitle": "No dishes match your search",
+    "emptySubtitle": "Try switching categories or clearing your search query",
+    "resetFilters": "Show All Products"
+  }
+}

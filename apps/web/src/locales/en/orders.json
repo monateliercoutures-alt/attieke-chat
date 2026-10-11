@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "title": "My Orders — Attiéké Abidjan"
+  },
+  "header": {
+    "badge": "7-Step Cold-Chain Tracking",
+    "title": "My Orders & Delivery Tracking",
+    "subtitle": "Track your parcels in real time from our cooperative in Abidjan right to your doorstep in China"
+  },
+  "filters": {
+    "all": "All Orders",
+    "active": "In Progress",
+    "delivered": "Delivered"
+  },
+  "list": {
+    "orderNumber": "Order #",
+    "createdAt": "Ordered on",
+    "itemsCount": "item(s)",
+    "total": "Total",
+    "trackingNumber": "SF Express Tracking",
+    "viewDetails": "7-Step Tracking Details",
+    "confirmNow": "Confirm Order",
+    "simulateNextStep": "Simulate Next Step",
+    "askInChat": "Ask in Chat"
+  },
+  "detail": {
+    "timelineTitle": "7-Step Delivery Timeline (Abidjan → China)",
+    "itemsTitle": "Ordered Items",
+    "addressTitle": "Delivery Address in China",
+    "subtotal": "Subtotal",
+    "shipping": "Cold-Chain Shipping",
+    "total": "Total Paid",
+    "stepCompleted": "Completed",
+    "stepCurrent": "In Progress",
+    "stepUpcoming": "Upcoming",
+    "upcomingSteps": {
+      "pending": "Order summary created in chat",
+      "confirmed": "China delivery address confirmed and fresh batch reserved",
+      "paid": "WeChat Pay / Alipay payment verified",
+      "shipped": "Vacuum-packed and air-freighted from Abidjan (ABJ)",
+      "customs": "Food safety inspection and customs clearance in China (CAN)",
+      "in_china_transit": "SF Express Cold Chain domestic transit to your city",
+      "delivered": "Hand-delivered to your address in China"
+    }
+  },
+  "states": {
+    "loading": "Loading your orders…",
+    "error": "Unable to load your orders",
+    "retry": "Retry",
+    "emptyTitle": "No orders found",
+    "emptySubtitle": "You have no orders in this category yet. Start chatting to place an order!",
+    "goToChatCta": "Order via Chat"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "nav": {
+    "home": "Home",
+    "catalog": "Catalog",
+    "chat": "Chat",
+    "orders": "Orders",
+    "profile": "Profile",
+    "login": "Sign In",
+    "bottomNavAriaLabel": "Primary mobile navigation",
+    "skipToContent": "Skip to main content"
+  },
+  "orderStatus": {
+    "pending": "Pending",
+    "confirmed": "Confirmed",
+    "paid": "Paid",
+    "shipped": "Shipped",
+    "customs": "In Customs",
+    "in_china_transit": "In China Transit",
+    "delivered": "Delivered"
+  },
+  "states": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "resetDemo": "Reset demo data"
+  }
+}

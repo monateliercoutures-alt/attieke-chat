@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "title": "产品目录 — 阿蒂耶克 (Attiéké Abidjan)"
+  },
+  "header": {
+    "badge": "科特迪瓦直供 · 顺丰冷链全国派送",
+    "title": "阿蒂耶克与科特迪瓦美食目录",
+    "subtitle": "共 8 款正宗家乡美味，支持不同分量与套餐组合。点击“通过聊天订购”即可在对话中一键下单。"
+  },
+  "filters": {
+    "searchPlaceholder": "搜索阿蒂耶克、烤鱼、炖鸡、辣椒酱...",
+    "categoriesAria": "按类别筛选商品",
+    "all": "全部美食 (8)",
+    "attieke": "纯阿蒂耶克",
+    "combo_fish": "烤鱼套餐",
+    "combo_meat": "炖鸡 / 烤肉套餐",
+    "condiment": "秘制辣酱 / 调料"
+  },
+  "card": {
+    "inStock": "现货秒发",
+    "popular": "热销推荐",
+    "viewDetailsButton": "查看详情",
+    "orderByChatButton": "通过聊天订购",
+    "weightUnit": "kg"
+  },
+  "detailModal": {
+    "closeAria": "关闭商品详情",
+    "formatLabel": "包装规格",
+    "weightLabel": "净含量",
+    "prepTipsTitle": "加热与食用建议",
+    "quantityLabel": "预订份数",
+    "orderByChatCta": "在聊天中预订此商品",
+    "directChatNote": "点击后将打开聊天窗口，系统会自动为您向卖家发送该商品卡片"
+  },
+  "states": {
+    "loading": "正在加载产品目录...",
+    "error": "加载目录失败，请稍后重试",
+    "retry": "重新加载",
+    "emptyTitle": "没有找到匹配的美食",
+    "emptySubtitle": "请尝试切换分类标签或清空搜索关键词",
+    "resetFilters": "查看全部商品"
+  }
+}

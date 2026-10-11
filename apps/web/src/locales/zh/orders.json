@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "title": "我的订单 — 阿比让阿提埃凯 (Attiéké Abidjan)"
+  },
+  "header": {
+    "badge": "7步国际冷链物流追踪",
+    "title": "我的订单与物流追踪",
+    "subtitle": "实时查看您的阿提埃凯包裹从科特迪瓦阿比让直达中国收货地址的每一步动态"
+  },
+  "filters": {
+    "all": "全部订单",
+    "active": "进行中",
+    "delivered": "已签收"
+  },
+  "list": {
+    "orderNumber": "订单号",
+    "createdAt": "下单时间",
+    "itemsCount": "件商品",
+    "total": "总计",
+    "trackingNumber": "顺丰冷链单号",
+    "viewDetails": "查看7步追踪详情",
+    "confirmNow": "立即确认订单",
+    "simulateNextStep": "模拟推进下一物流状态",
+    "askInChat": "在聊天中咨询此单"
+  },
+  "detail": {
+    "timelineTitle": "7步物流状态时间轴（阿比让 → 中国）",
+    "itemsTitle": "商品明细",
+    "addressTitle": "中国收货地址",
+    "subtotal": "商品小计",
+    "shipping": "顺丰冷链运费",
+    "total": "实付总额",
+    "stepCompleted": "已完成",
+    "stepCurrent": "当前阶段",
+    "stepUpcoming": "待进行",
+    "upcomingSteps": {
+      "pending": "聊天中生成订单摘要待确认",
+      "confirmed": "确认中国收货地址并锁定新鲜批次",
+      "paid": "微信支付 / 支付宝付款核验完成",
+      "shipped": "真空锁鲜包装并由阿比让机场 (ABJ) 空运发出",
+      "customs": "抵达中国广州白云机场 (CAN) 进行食品检疫与清关",
+      "in_china_transit": "转交顺丰冷链 (SF Express) 干线派送至您所在城市",
+      "delivered": "顺丰快递员送货上门并完成签收"
+    }
+  },
+  "states": {
+    "loading": "正在加载您的订单…",
+    "error": "无法加载订单列表",
+    "retry": "重试",
+    "emptyTitle": "暂无相关订单",
+    "emptySubtitle": "当前分类下还没有订单，立即前往聊天窗口下单吧！",
+    "goToChatCta": "前往聊天点单"
+  }
+}
